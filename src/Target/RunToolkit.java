@@ -116,6 +116,10 @@ public class RunToolkit
 		String rootDir = "..";
 		rootDir = "/home/kerryn/Documents/Work/Toolkit2-Runs/Sunbury3ExtremeB";
 		String lcFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/LC/" + cfm.getValue("inpt_lc_file");
+		String domainDim = cfm.getValue("domainDim");
+		String[] domainDimArray = domainDim.split(",");
+		int xDim = new Integer(domainDimArray[0]).intValue();
+		int yDim = new Integer(domainDimArray[1]).intValue();
 		LCData lcDataClass = new LCData(lcFilename);
 		ArrayList<ArrayList<Double>> lc_data = lcDataClass.getlcData();
 		double maxH = lcDataClass.getMaxH();
@@ -134,7 +138,7 @@ public class RunToolkit
 //
 //		mod_rslts,mod_rslts_utci = tkmd.modelRun(nt, cfM, lc_data, met_data_all, date1A, Dats)
 		TargetModule tkmd = new TargetModule();
-		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW);
+		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, xDim, yDim);
 //
 //		outdir= os.path.join('..','output',cfM['site_name'])     //  ## defines a director for outputing plot
 //		if not os.path.exists(outdir):          

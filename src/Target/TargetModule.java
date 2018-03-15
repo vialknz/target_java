@@ -73,23 +73,23 @@ public class TargetModule
 	private UTCI utciInstance = new UTCI();
 	private TbRurSolver tbRurSolver = new TbRurSolver();
 	
-	private static final int FOR_TAB_FID_INDEX = 0;
-	private static final int FOR_TAB_Ucan_INDEX = 1;
-	private static final int FOR_TAB_Tsurf_horz_INDEX = 2;
-	private static final int FOR_TAB_Tsurf_can_INDEX = 3;
-	private static final int FOR_TAB_Tsurf_wall_INDEX = 4;
-	private static final int FOR_TAB_Tac_INDEX = 5;
-	private static final int FOR_TAB_dte_INDEX = 6;
-	private static final int FOR_TAB_httc_urb_new_INDEX = 7;
-	private static final int FOR_TAB_httc_can_INDEX = 8;
-	private static final int FOR_TAB_Tb_rur_INDEX = 9;
-	private static final int FOR_TAB_mod_U_TaRef_INDEX = 10;
-	private static final int FOR_TAB_UTb_INDEX = 11;
+	public static final int FOR_TAB_FID_INDEX = 0;
+	public static final int FOR_TAB_Ucan_INDEX = 1;
+	public static final int FOR_TAB_Tsurf_horz_INDEX = 2;
+	public static final int FOR_TAB_Tsurf_can_INDEX = 3;
+	public static final int FOR_TAB_Tsurf_wall_INDEX = 4;
+	public static final int FOR_TAB_Tac_INDEX = 5;
+	public static final int FOR_TAB_dte_INDEX = 6;
+	public static final int FOR_TAB_httc_urb_new_INDEX = 7;
+	public static final int FOR_TAB_httc_can_INDEX = 8;
+	public static final int FOR_TAB_Tb_rur_INDEX = 9;
+	public static final int FOR_TAB_mod_U_TaRef_INDEX = 10;
+	public static final int FOR_TAB_UTb_INDEX = 11;
 	
-	private static final int FOR_TAB_UTCI_FID_INDEX = 0;
-	private static final int FOR_TAB_UTCI_tmrt_INDEX = 1;
-	private static final int FOR_TAB_UTCI_utci_INDEX = 2;
-	private static final int FOR_TAB_UTCI_dte_INDEX = 3;
+	public static final int FOR_TAB_UTCI_FID_INDEX = 0;
+	public static final int FOR_TAB_UTCI_tmrt_INDEX = 1;
+	public static final int FOR_TAB_UTCI_utci_INDEX = 2;
+	public static final int FOR_TAB_UTCI_dte_INDEX = 3;
 
 	private static final String ROOF_KEY = "roof";
 	private static final String ROAD_KEY = "road";
@@ -138,8 +138,14 @@ public class TargetModule
 	private static final int MOD_DATA_AVG_INDEX = 9;
 	private static final int MOD_DATA_DATE_INDEX = 10;
 	
-			
 	
+			
+	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
+	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_tmrt_utci_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
+    String loc = "/tmp/testWrite.nc";
+	int y = 344; //lon
+	int x = 235; //lat
+	NetCdfOutput netCdfOutput = new NetCdfOutput(loc);
 
 
 //	######## SELECTS MAIN CONTROL FILE (uses Tkinter package) ####
@@ -199,7 +205,7 @@ public class TargetModule
 
 
 	public void modelRun(Cfm cfm, ArrayList<ArrayList<Double>> lc_data, ArrayList<ArrayList<Object>> met_data_all, TreeMap<String,Date> Dats,
-			double maxH, double maxW)
+			double maxH, double maxW, int xDim, int yDim)
 	{
 		ArrayList<Double> mod_rslts_prev = new ArrayList<Double>();
 		
@@ -319,7 +325,8 @@ public class TargetModule
 	        //ArrayList<Double> mod_rslts_prev=ArrayList<Double>();
 	        
 	        // # begin looping through the met forcing data file
-	        for (int i=0;i<met_data_all.size();i++)
+	        //for (int i=0;i<met_data_all.size();i++)
+		    for (int i=0;i<nt;i++)
 	        //for i in range(0, len(met_data_all))
 	        {
                 long t10 = System.currentTimeMillis();
@@ -498,7 +505,8 @@ public class TargetModule
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN)
 	                {
 	                	System.out.println("Error with Tb_rur");
-	                	System.exit(1);
+	                	Tb_rur = 21.0;
+	                	//System.exit(1);
 	                }
 	                
 	                //# always use iterative solution for rural Tb
@@ -706,10 +714,20 @@ public class TargetModule
 	                    //for_tab_tmrt_utci     = (lc_data.ix[grid]['FID'],tmrt,utci,dte) ;
 	                    //#print (wS_Ta['Ta_f'],met_d['RH'][i],Ucan,met_d['Kd'][i],tS_can,met_d['Ld'][i], cs.cs['sb']*(met_d['Ta'][i]  +273.15)**4 ,yd_actual, TM, lat,tmrt,utci)
 	                	//mod_rslts_tmrt_utci.set(grid, for_tab_tmrt_utci);
-	                	mod_rslts_tmrt_utci.add(for_tab_tmrt_utci);
+	                	mod_rslts_tmrt_utci.add(for_tab_tmrt_utci);	          
 	                //t7 = time() 
 	                //print 'function for grid takes %f' %(t7-t6)
 	                }
+	                
+	                
+	                
+
+	        		
+	        		
+	        		mod_rslts_all_timesteps.add(mod_rslts);
+	        		mod_rslts_tmrt_utci_all_timesteps.add(mod_rslts_tmrt_utci);
+
+	                //System.out.println(mod_rslts); 
 	            }
 //	            dateString =str(dte)
 //	            dateString=dateString.replace(" ", "_")
@@ -727,6 +745,7 @@ public class TargetModule
                 System.out.println("int i=0;i<met_data_all.size() loop takes " + (t11-t10) + " " + new Date(System.currentTimeMillis()));
 	            
 	        }
+	        netCdfOutput.outputNetcdf(loc, x, y, mod_rslts_all_timesteps, mod_rslts_tmrt_utci_all_timesteps);
 	   // ##########################################################################################
 	        //mod_rslts = mod_rslts[1:] ;//### THIS IS THE FINAL DATA ARRAY WITH MODEL OUTPUTS  ######
 	        //return mod_rslts   ;                     
