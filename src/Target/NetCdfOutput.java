@@ -21,41 +21,42 @@ import ucar.nc2.Variable;
 public class NetCdfOutput
 {
 	NetcdfFileWriter writer = null;
-	String location = "/tmp/testWrite.nc";
+//	String location = "/tmp/testWrite.nc";
 
 	public static void main(String[] args)
 	{
 		// TODO Auto-generated method stub
-		String loc = "/tmp/testWrite.nc";
-		int y = 64; //lon
-		int x = 128; //lat
-		NetCdfOutput netCdfOutput = new NetCdfOutput(loc);
-		//netCdfOutput.process();
-		//netCdfOutput.createNetcdf(x, y);
-		
-		try
-		{
-			netCdfOutput.testWriteRecordOneAtaTime3(loc);
-		}
-		catch (IOException | InvalidRangeException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		String loc = "/tmp/testWrite.nc";
+//		int y = 64; //lon
+//		int x = 128; //lat
+//		NetCdfOutput netCdfOutput = new NetCdfOutput(loc);
+//		//netCdfOutput.process();
+//		//netCdfOutput.createNetcdf(x, y);
+//		
+//		try
+//		{
+//			netCdfOutput.testWriteRecordOneAtaTime3(loc);
+//		}
+//		catch (IOException | InvalidRangeException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 	
 
-	public NetCdfOutput(String location)
-	{
-		super();
-		this.location = location;
-	}
+//	public NetCdfOutput(String location)
+//	{
+//		super();
+//		this.location = location;
+//	}
 	
 	public void outputNetcdf2(String filename, int latX, int lonY, 
 			ArrayList<TreeMap<Integer,Double>> mod_rslts,
 			ArrayList<TreeMap<Integer,Double>> mod_rslts_tmrt_utci, 
-			int timeIdx, int timestep, String date1ADateStr) 
+			int timeIdx, int timestep, String date1ADateStr,
+			double latEdge, double latResolution, double lonEdge, double lonResolution) 
 	{
 		int minutes = (int)timestep / 60;
 		NetcdfFileWriter writer = null;
@@ -115,13 +116,13 @@ public class NetCdfOutput
 		float[] latArray = new float[latX];
 		for (int i=0;i<latX;i++)
 		{
-			float value = (float) (-34.81425315 + (.00004294 * i));
+			float value = (float) (latEdge + (latResolution * i));
 			latArray[i]=value;
 		}
 		float[] lonArray = new float[lonY];
 		for (int i=0;i<lonY;i++)
 		{
-			float value = (float) (138.6066486 + (.0021849 * i));
+			float value = (float) (lonEdge + (lonResolution * i));
 			lonArray[i]=value;
 		}
 	

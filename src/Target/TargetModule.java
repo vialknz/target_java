@@ -87,12 +87,7 @@ public class TargetModule
 			
 //	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
 //	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_tmrt_utci_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
-    String loc = "/tmp/testWrite.nc";
-	int y = 344; //lon
-	int x = 235; //lat
-	NetCdfOutput netCdfOutput = new NetCdfOutput(loc);
-
-
+	//NetCdfOutput netCdfOutput = new NetCdfOutput(loc);
 
 	public static int getSurfIndex(String surf)
 	{
@@ -141,7 +136,8 @@ public class TargetModule
 
 
 	public void modelRun(Cfm cfm, ArrayList<ArrayList<Double>> lc_data, ArrayList<ArrayList<Object>> met_data_all, TreeMap<String,Date> Dats,
-			double maxH, double maxW, int xDim, int yDim)
+			double maxH, double maxW, int xDim, int yDim,
+			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
 		ArrayList<Double> mod_rslts_prev = new ArrayList<Double>();
 		
@@ -485,8 +481,9 @@ public class TargetModule
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_dte_INDEX,dteDouble);
 	                	mod_rslts_tmrt_utci.add(for_tab_tmrt_utci);	          
 	                }
-	                
-	                netCdfOutput.outputNetcdf2(loc, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,date1ADateStr);
+	                NetCdfOutput netCdfOutput = new NetCdfOutput();
+	                netCdfOutput.outputNetcdf2(outputFile, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,date1ADateStr,
+	                		latEdge, latResolution, lonEdge, lonResolution);
 	            }
      
                 long t11 = System.currentTimeMillis();

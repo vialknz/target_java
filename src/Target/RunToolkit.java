@@ -7,10 +7,23 @@ import java.util.TreeMap;
 
 public class RunToolkit
 {
-	
+	//TODO all of these need to eventually come from the configuration file
+	//domain dimension and resolution of each grid
+	public double latEdge = -34.81425315;
+	public double latResolution = .00004294;
+	public double lonEdge = 138.6066486;
+	public double lonResolution = .0021849;	
+	//location to save output
+    public String loc = "/tmp/testWrite.nc";
+    //domain dimensions
+	public int y = 344; //lon
+	public int x = 235; //lat
 
 	public static void main(String[] args)
 	{
+		
+		RunToolkit runtoolkit = new RunToolkit();
+		runtoolkit.run(args);
 		
 //		This is the main script that runs the toolkit air temperature module 
 //
@@ -25,6 +38,9 @@ public class RunToolkit
 //		Developed in Windows with Python 2.7.12 Anaconda 4.1.1 (32-bit)
 //
 //		Tested with Python 2.7.9 (Linux)
+	}
+	 public void run(String[] args)
+	 {
 
 		String controlFileName;
 		Cfm cfm = null;  //control file data structure
@@ -56,6 +72,8 @@ public class RunToolkit
 		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 //		System.out.println(rootDir);
 //		System.exit(1);
+		
+		String outputFile = rootDir + "/output/" + cfm.getValue("site_name") + "/" + cfm.getValue("site_name") + ".nc";
 
 		// # parse dates for input met file using format defined in control file
 		//String dateparse = cfm.getValue("date_fmt");
@@ -92,7 +110,8 @@ public class RunToolkit
 		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
 		ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
 		TargetModule tkmd = new TargetModule();
-		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, xDim, yDim);
+		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, xDim, yDim,
+				x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
 	}
 
 }
