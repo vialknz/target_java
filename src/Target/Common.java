@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.TreeMap;
 
 //import org.apache.commons.io.FileUtils;
@@ -518,7 +519,22 @@ public class Common
 		int year = new Integer(yearStr).intValue();	
 
 	    return getDayOfYearFromDayAndMonth(year, day, month);
-	}		
+	}
+	
+	// "1990-01-01"
+	public String getYearMonthDayStrFromDate(Date date)
+	{
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(date);
+	    
+	    int day = calendar.get(Calendar.DAY_OF_MONTH);
+	    String dayStr = padLeft(day+"", 2, '0');
+	    int month = calendar.get(Calendar.MONTH) + 1 ;
+	    String monthStr = padLeft(month+"", 2, '0');
+	    int year = calendar.get(Calendar.YEAR)  ;
+	    
+	    return year + "-" + monthStr + "-" + dayStr;
+	}
 	
 	public int getDayOfYearFromDayAndMonth(int year, int day, int month)
 	{

@@ -9,59 +9,11 @@ import java.util.TreeMap;
 public class TargetModule
 {
 
-//	# -*- coding:utf-8 -*-
-//
-//	"""
-//	This is the main script that runs the toolkit air temperature module 
-//
-//	Developed by Ashley Broadbent, Andrew Coutts, and Matthias Demuzere.
-//
-//	This script should be run from the ./scripts directory
-//
-//	see ./documents/Toolkit-2_tech-description.docx for full description of the module
-//
-//	These scripts should run in Windows and Linux - however the gis function (arcpy) can't be used in Linux
-//
-//	Developed in Windows with Python 2.7.12 Anaconda 4.1.1 (32-bit)
-//
-//	Tested with Python 2.7.9 (Linux)
-//
-//
-//	"""
-//	import time
-//	from configobj import ConfigObj
-//	import pandas
-//	import numpy as np
-//	import datetime
-//	from datetime import timedelta
-//	import os
-//
-//	#import Tkinter, tkFileDialog
-//	#from confirm import confirm
-//	import math
-//	from sympy import solve, Eq, Symbol
-//	######################################################
-//	import constants2 as cs     # This is the main constants file where constants are defined. Contains dictionary called cs
-//	################## functions used by the code
-//	from rn_calc_3a import rn_calc_new   # net radiation calcs  (3.1 tech notes)
-//	from LUMPS import LUMPS       # energy balance calcs (3.2 tech notes)
-//	from force_restore import Ts_calc_surf   # force restore calcs (3.3 tech notes)
-//	from simple_water import Ts_EB_W     # simple water body model (3.4 tech notes)
-//	from ld_mod import ld_mod            # model ldown (appendix tech notes)
-//	from Ta_module_new import calc_ta    # air temperature module (3.5 tech notes)
-//	#from plotting import val_ts, val_ta, gis    # Ash Broadbent's plotting functions 
-//	from lc_sort import lc_sort          # lc_sorting and SVFs
-//	from sfc_ri import sfc_ri # Richardson's number calc
-//	from httc import httc # heat transfer coefficient
-//	from cd import CD 
-//	from utci import getTmrtForGrid_RH,getUTCIForGrid_RH
-//	from time import time
-
-	private TreeMap<String,Double> tmrtCache=new TreeMap<String,Double>();
-	private TreeMap<String,Double> utciCache=new TreeMap<String,Double>();
-	private TreeMap<String,Double> Tb_rurCache=new TreeMap<String,Double>();
-	private TreeMap<String,Double> calcLoopCache=new TreeMap<String,Double>();
-	private double Tb_rur_prev=21.8093381484548;
+//	private TreeMap<String,Double> tmrtCache=new TreeMap<String,Double>();
+//	private TreeMap<String,Double> utciCache=new TreeMap<String,Double>();
+//	private TreeMap<String,Double> Tb_rurCache=new TreeMap<String,Double>();
+//	private TreeMap<String,Double> calcLoopCache=new TreeMap<String,Double>();
+//	private double Tb_rur_prev=21.8093381484548;
 	
 	private RnCalcNew rnCalcNew = new RnCalcNew();
 	private Lumps lumps = new Lumps();
@@ -104,7 +56,12 @@ public class TargetModule
 	private static final int numberOfSurfaces = 11;
 			
 	public static ArrayList<String> surfs  = new ArrayList<String>()
-	{{this.add(ROOF_KEY);
+	{/**
+		 * 
+		 */
+		private static final long serialVersionUID = -615901337445318075L;
+
+	{this.add(ROOF_KEY);
 	this.add(ROAD_KEY);
 	this.add(WATR_KEY);
 	this.add(CONC_KEY);
@@ -140,8 +97,8 @@ public class TargetModule
 	
 	
 			
-	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
-	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_tmrt_utci_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
+//	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
+//	ArrayList<ArrayList<TreeMap<Integer,Double>>> mod_rslts_tmrt_utci_all_timesteps =new ArrayList<ArrayList<TreeMap<Integer,Double>>>();
     String loc = "/tmp/testWrite.nc";
 	int y = 344; //lon
 	int x = 235; //lat
@@ -215,6 +172,10 @@ public class TargetModule
 		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 //	    ######### DEFINE START AND FINISH DATES HERE ########
 		Date date1A = cfm.getDateValue("date1A");
+		
+		Common common = new Common();
+		String date1ADateStr = common.getYearMonthDayStrFromDate(date1A);
+		
 //		date1A=datetime.datetime(int(cfM['date1A'][0]), int(cfM['date1A'][1]),int(cfM['date1A'][2]), int(cfM['date1A'][3]))  // ## the date/time that the simulation starts
 		Date date1 = cfm.getDateValue("date1");
 //		date1=datetime.datetime(int(cfM['date1'][0]), int(cfM['date1'][1]),int(cfM['date1'][2]), int(cfM['date1'][3]))      //  ## the date/time for period of interest (i.e. before this will not be saved)
@@ -643,6 +604,7 @@ public class TargetModule
 	                    
 	                    // # need yd_actual, TM, lat
 	                    // # hardcoded for now
+	                    //TODO
 	                    double lat = -37.8136;
 	                    
 	            	    Calendar calendar = Calendar.getInstance();
@@ -724,10 +686,11 @@ public class TargetModule
 
 	        		
 	        		
-	        		mod_rslts_all_timesteps.add(mod_rslts);
-	        		mod_rslts_tmrt_utci_all_timesteps.add(mod_rslts_tmrt_utci);
+//	        		mod_rslts_all_timesteps.add(mod_rslts);
+//	        		mod_rslts_tmrt_utci_all_timesteps.add(mod_rslts_tmrt_utci);
 
 	                //System.out.println(mod_rslts); 
+	                netCdfOutput.outputNetcdf2(loc, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,date1ADateStr);
 	            }
 //	            dateString =str(dte)
 //	            dateString=dateString.replace(" ", "_")
@@ -745,7 +708,7 @@ public class TargetModule
                 System.out.println("int i=0;i<met_data_all.size() loop takes " + (t11-t10) + " " + new Date(System.currentTimeMillis()));
 	            
 	        }
-	        netCdfOutput.outputNetcdf(loc, x, y, mod_rslts_all_timesteps, mod_rslts_tmrt_utci_all_timesteps);
+//	        netCdfOutput.outputNetcdf(loc, x, y, mod_rslts_all_timesteps, mod_rslts_tmrt_utci_all_timesteps);
 	   // ##########################################################################################
 	        //mod_rslts = mod_rslts[1:] ;//### THIS IS THE FINAL DATA ARRAY WITH MODEL OUTPUTS  ######
 	        //return mod_rslts   ;                     
