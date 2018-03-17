@@ -57,6 +57,11 @@ public class Cfm
 	{
 		return cfmData.get(key);
 	}
+	public double getDoubleValue(String key)
+	{
+		String value = cfmData.get(key);
+		return new Double(value).doubleValue();
+	}
 	
 	public Date getDateValue(String key)
 	{

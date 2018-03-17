@@ -136,7 +136,7 @@ public class TargetModule
 
 
 	public void modelRun(Cfm cfm, ArrayList<ArrayList<Double>> lc_data, ArrayList<ArrayList<Object>> met_data_all, TreeMap<String,Date> Dats,
-			double maxH, double maxW, int xDim, int yDim,
+			double maxH, double maxW, 
 			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
 		ArrayList<Double> mod_rslts_prev = new ArrayList<Double>();
@@ -447,7 +447,8 @@ public class TargetModule
 	                    // # need yd_actual, TM, lat
 	                    // # hardcoded for now
 	                    //TODO
-	                    double lat = -37.8136;
+	                    //double lat = -37.8136;
+	                    double lat = latEdge;
 	                    
 	            	    Calendar calendar = Calendar.getInstance();
 	            	    calendar.setTime(dte);	
