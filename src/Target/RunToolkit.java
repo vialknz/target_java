@@ -100,12 +100,15 @@ lonResolution=.0021849
 	 public void run(String[] args)
 	 {
 
+		 System.out.println(args[0]);
+//		 System.exit(1);
+		 
 		String controlFileName;
 		Cfm cfm = null;  //control file data structure
 		//### This is the dictionary that contains all the control file information 
-		if (args.length > 1)
+		if (args.length > 0)
 		{
-			controlFileName = args[1];
+			controlFileName = args[0];
 			cfm = new Cfm(controlFileName);
 		}
 		else 
@@ -119,18 +122,16 @@ lonResolution=.0021849
 		String[] controlFileNameSplit = controlFileName.split(regex);
 		int lengthOfSplit = controlFileNameSplit.length;
 		String controlTextFile = controlFileNameSplit[lengthOfSplit-1];
-//		System.out.println(controlFileName);
+
 		String controlTextFileSubpath = File.separator
 				+ controlFileNameSplit[lengthOfSplit-3]
 				+ File.separator
 				+ controlFileNameSplit[lengthOfSplit-2]
 				+ File.separator
 				+ controlFileNameSplit[lengthOfSplit-1];
-//		System.out.println(controlTextFileSubpath);
+
 		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
-//		System.out.println(rootDir);
-//		System.exit(1);
-		
+	
 		String outputFile = rootDir + "/output/" + cfm.getValue("site_name") + "/" + cfm.getValue("site_name") + ".nc";
 		
 		lonResolution = cfm.getDoubleValue("lonResolution");
