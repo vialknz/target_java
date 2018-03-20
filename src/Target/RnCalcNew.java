@@ -35,7 +35,7 @@ public class RnCalcNew
 //	"""
 
 	public TreeMap<String,Double> rn_calc_new(Cfm cfm, ArrayList<ArrayList<Object>> met, String surf, TreeMap<String,Date> Dats, 
-			ArrayList<Double> mod_ts,int i, double svf)
+			ArrayList<Double> mod_ts, int i, double svf)
 	{
 		TreeMap<String,Double> returnValues = new TreeMap<String,Double> ();
 		
@@ -95,6 +95,9 @@ public class RnCalcNew
 				Rnprev = ((metKdMinus1*(1.0-albedo))*svf) + ((emiss*(metLdMinus1 - (cs_sb*Math.pow((Ta_srfp+273.15),4))))*svf);
 				Rnnext = ((metKdPlus1*(1.0-albedo))*svf) + ((emiss*(metLdPlus1 - (cs_sb*Math.pow((Ta_srfn+273.15),4))))*svf);
 				Rnstar = 0.5*(Rnnext - Rnprev);
+				
+//				System.out.println(metKdPlus1 + " " + albedo + " " + svf + " " + emiss + " " + metLdPlus1 + " " + cs_sb + " " + Ta_srfn + " ");
+//				System.out.println(Rn + " " + Rnnext + " " + Rnprev + " not roof");
 			}
 				
 			if (surf.equals("roof"))
@@ -104,6 +107,8 @@ public class RnCalcNew
 				Rnprev = metKdMinus1*(1.0-albedo) + (emiss*(metLdMinus1 - (cs_sb*Math.pow((Ta_srfp+273.15),4))));
 				Rnnext = metKdPlus1*(1.0-albedo) + (emiss*(metLdPlus1 - (cs_sb*Math.pow((Ta_srfn+273.15),4))));
 				Rnstar = 0.5*(Rnnext - Rnprev);
+//				System.out.println(metKdPlus1 + " " + albedo + " " + svf + " " + emiss + " " + metLdPlus1 + " " + cs_sb + " " + Ta_srfn + " ");
+//				System.out.println(" " + Rn + " " + Rnnext + " " + Rnprev + " roof");
 			}
 	            
 //			# if (surf == 'wall'):

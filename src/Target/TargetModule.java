@@ -13,7 +13,7 @@ public class TargetModule
 //	private TreeMap<String,Double> utciCache=new TreeMap<String,Double>();
 //	private TreeMap<String,Double> Tb_rurCache=new TreeMap<String,Double>();
 //	private TreeMap<String,Double> calcLoopCache=new TreeMap<String,Double>();
-//	private double Tb_rur_prev=21.8093381484548;
+	private double Tb_rur_prev=0.0;
 	
 	private RnCalcNew rnCalcNew = new RnCalcNew();
 	private Lumps lumps = new Lumps();
@@ -180,11 +180,11 @@ public class TargetModule
 		int timedelta = tmstpInt*1000;
 		
 		double[][][] mod_data_ts_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
-		double[][][]  mod_data_tm_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
-		double[][][]  mod_data_qh_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
-		double[][][]  mod_data_qe_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
-		double[][][]  mod_data_qg_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
-		double[][][]  mod_data_rn_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
+		double[][][] mod_data_tm_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
+		double[][][] mod_data_qh_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
+		double[][][] mod_data_qe_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
+		double[][][] mod_data_qg_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
+		double[][][] mod_data_rn_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
 		  
 		//## NB: "TSOIL" is the soil temperature below the water layer
 		double[] mod_fm = new double[nt];
@@ -225,7 +225,8 @@ public class TargetModule
 	                ArrayList<Double> prevTsRef2 = new ArrayList<Double>();	
 	                ArrayList<Double> prevTmRefForce1 = new ArrayList<Double>();
 	                ArrayList<Double> prevTmRefForce2 = new ArrayList<Double>();
-	                if (i < 3)
+//	                System.out.println(mod_data_ts_.toString());
+	                if (i < 1)
 	                {
 		                prevTsRef1.add(0.);
 		                prevTsRef1.add(0.);
@@ -233,6 +234,26 @@ public class TargetModule
 		                
 		                prevTsRef2.add(0.);
 		                prevTsRef2.add(0.);
+		                prevTsRef2.add(0.);
+	                }
+	                else if (i < 2)
+	                {
+	                	prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf1)]);
+		                prevTsRef1.add(0.);
+		                prevTsRef1.add(0.);
+		                
+		                prevTsRef2.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf2)]);
+		                prevTsRef2.add(0.);
+		                prevTsRef2.add(0.);
+	                }
+	                else if (i < 3)
+	                {
+	                	prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf1)]);
+	                	prevTsRef1.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf1)]);
+		                prevTsRef1.add(0.);
+		                
+		                prevTsRef2.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf2)]);
+		                prevTsRef2.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf2)]);
 		                prevTsRef2.add(0.);
 	                }
 	                else
@@ -245,9 +266,17 @@ public class TargetModule
 		                prevTsRef2.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf2)]);
 		                prevTsRef2.add(mod_data_ts_[i-3][9][getSurfIndex(ref_surf2)]);
 	                }
+//	                System.out.println("Mmmbop1");
 	                TreeMap<String,Double> rad_rur1  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf1,Dats,prevTsRef1,i,1.0);  // # creates dictionary with radiation variables for current timestep and surface type
-	                                
+//	                System.out.println(i + " " + rad_rur1.toString()); 
+//	                if (i > 15)
+//	                {
+//	                	//TODO
+//	                	 System.exit(1);
+//	                }
+	               
 
+//	                System.out.println("Mmmbop2");
 	                TreeMap<String,Double> rad_rur2  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf2,Dats,prevTsRef2,i,1.0); // # creates dictionary with radiation variables for current timestep and surface type                             
 	                //##################### ENG BALANCE for "reference" site #######################
 	                TreeMap<String,Double> eng_bals_rur1=lumps.lumps(rad_rur1,cfm,met_d,ref_surf1,Dats,i);            // # creates dictionary with energy balance for current timestep and surface type
@@ -329,26 +358,44 @@ public class TargetModule
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN)
 	                {
 	                	System.out.println("Error with Tb_rur");
-	                	Tb_rur = 21.0;
+	                	Tb_rur = Tb_rur_prev;
+	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
 	                	//System.exit(1);
 	                }
+	                else
+	                {
+	                	System.out.println("Tb_rur=" + Tb_rur);
+	                }
+	                Tb_rur_prev = Tb_rur;
 	                
 	                //# always use iterative solution for rural Tb
 	                
 	                //###### Begin calculating modelled variables for 10 different SVF values... 
 	                for (int vf=0;vf<=10;vf++)
 	                {
-	                    double svfg = vf+1/10.0;
+	                    double svfg = (vf+1)/10.0;
 	                    for (String surf : surfs)
 	                    {
 	                    	// # cycle through surface type for current timestep
 	                    	if ( !(surf.equals(WATR_KEY) || surf.equals(VEG_KEY)) )
 	                        {
 	                    		ArrayList<Double> prevTsRef = new ArrayList<Double>();	
-	                    		if (i<3)
+	                    		if (i<1)
 	                    		{
 		        	                prevTsRef.add(0.);
 		        	                prevTsRef.add(0.);
+		        	                prevTsRef.add(0.);
+	                    		}
+	                    		else if (i<2)
+	                    		{
+	                    			prevTsRef.add(mod_data_ts_[i-1][9][getSurfIndex(surf)]);
+		        	                prevTsRef.add(0.);
+		        	                prevTsRef.add(0.);
+	                    		}
+	                    		else if (i<3)
+	                    		{
+	                    			prevTsRef.add(mod_data_ts_[i-1][9][getSurfIndex(surf)]);
+	                    			prevTsRef.add(mod_data_ts_[i-2][9][getSurfIndex(surf)]);
 		        	                prevTsRef.add(0.);
 	                    		}
 	                    		else
@@ -368,7 +415,7 @@ public class TargetModule
 	        	                	prevTmRefForce.add(mod_data_tm_[i-1][9][getSurfIndex(surf)]);
 	        	                }
 	        	                
-	                    		
+//	        	                System.out.println("Mmmbop3");
 	                    		TreeMap<String,Double> rad = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                    		// # creates dictionary with radiation variables for current timestep and surface type                             
 	                            //##################### ENG BALANCE non-water #######################
@@ -390,10 +437,22 @@ public class TargetModule
 	                        if (surf.equals(WATR_KEY))
 	                        {
 	                        	ArrayList<Double> prevTsRef = new ArrayList<Double>();	
-	                        	if (i < 3)
+	                        	if (i < 1)
 	                        	{
 		        	                prevTsRef.add(0.);
 		        	                prevTsRef.add(0.);
+		        	                prevTsRef.add(0.);
+	                        	}
+	                        	else if (i < 2)
+	                        	{
+	                        		prevTsRef.add(mod_data_ts_[i-1][9][getSurfIndex(surf)]);
+		        	                prevTsRef.add(0.);
+		        	                prevTsRef.add(0.);
+	                        	}
+	                        	else if (i < 3)
+	                        	{
+	                        		prevTsRef.add(mod_data_ts_[i-1][9][getSurfIndex(surf)]);
+	                        		prevTsRef.add(mod_data_ts_[i-2][9][getSurfIndex(surf)]);
 		        	                prevTsRef.add(0.);
 	                        	}
 	                        	else
@@ -404,7 +463,7 @@ public class TargetModule
 	                        	}
 
 	        	                
-	        	                
+//	                        	System.out.println("Mmmbop4");
 	                        	TreeMap<String,Double> rad  = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                        	// # creates dictionary with radiation variables for current timestep and surface type                             
 	                        	TreeMap<String,Double> wtr_stf = tsEbW.ts_EB_W(met_d,cfm,mod_data_ts_,Dats,i,rad,vf); 
