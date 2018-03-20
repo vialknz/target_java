@@ -23,7 +23,7 @@ public class LcSort
 	public static final String LC_KEY ="LC";
 	public static final String LC_woRoofAvg_KEY ="LC_woRoofAvg";
 	public static final String LC_woRoofAvgN_KEY ="LC_woRoofAvgN";
-	public static final String LC_wRoofavg_KEY ="LC_wRoofavg";
+	public static final String LC_wRoofAvg_KEY ="LC_wRoofavg";
 	public static final String H_KEY ="H";
 	public static final String W_KEY ="W";
 	public static final String Wtree_KEY ="Wtree";
@@ -63,11 +63,15 @@ public class LcSort
 	    }
 	                        
 	    double LCgrndSum = LC.get(LCData.road) + LC.get(LCData.watr) + LC.get(LCData.conc) + LC.get(LCData.dry) + LC.get(LCData.irr);
+//	    System.out.println(LC.get(LCData.road) +" "+ LC.get(LCData.watr) +" "+ LC.get(LCData.conc) +" "+ LC.get(LCData.dry) +" "+ LC.get(LCData.irr));
+//	    System.out.println("LCgrndSum "+ LCgrndSum);
 	    		
 	    //# this part add the surface below trees...
 	    
 	    if (LCgrndSum > 0.)
 	    {
+//	    	System.out.println("LCData.road, LC.get(LCData.road)+((LC.get(LCData.road)/LCgrndSum)*LC.get(LCData.Veg)) "
+//	           + (LC.get(LCData.road)+((LC.get(LCData.road)/LCgrndSum)*LC.get(LCData.Veg))) );
 	    	LC.set(LCData.road, LC.get(LCData.road)+((LC.get(LCData.road)/LCgrndSum)*LC.get(LCData.Veg)));
 	    	LC.set(LCData.watr, LC.get(LCData.watr)+((LC.get(LCData.watr)/LCgrndSum)*LC.get(LCData.Veg)) );
 	    	LC.set(LCData.conc, LC.get(LCData.conc)+((LC.get(LCData.conc)/LCgrndSum)*LC.get(LCData.Veg)) );
@@ -160,6 +164,7 @@ public class LcSort
 	            
 	            
 	    double LC_wRoofAvgSum = sumSurfaces(LC_wRoofAvg);
+	    //System.out.println("LC_wRoofAvgSum="+LC_wRoofAvgSum);
 	    if (! (LC_wRoofAvgSum == 0.))
 	    {
 	        //LCsum = sum(LC_wRoofAvg.values());
@@ -168,7 +173,11 @@ public class LcSort
 //	            LC_wRoofAvg[key] = value/LCsum;
 //	        }
 	        
-	    	double value = LC_wRoofAvg.get(LCData.road);	    	
+	    	double value = LC_wRoofAvg.get(LCData.road);	
+	    	
+	    	value = LC_wRoofAvg.get(LCData.roof) ;
+	    	LC_wRoofAvg.set(LCData.roof, value/LC_wRoofAvgSum);
+	    	
 	    	value = LC_wRoofAvg.get(LCData.road) ;
 	    	LC_wRoofAvg.set(LCData.road, value/LC_wRoofAvgSum);
 	    	
@@ -277,7 +286,7 @@ public class LcSort
 	    returnValues.put(LC_KEY, LC);
 	    returnValues.put(LC_woRoofAvg_KEY, LC_woRoofAvg);
 	    returnValues.put(LC_woRoofAvgN_KEY, LC_woRoofAvgN);
-	    returnValues.put(LC_wRoofavg_KEY, LC);
+	    returnValues.put(LC_wRoofAvg_KEY, LC_wRoofAvg);
 	    returnValues.put(H_KEY, H);
 	    returnValues.put(W_KEY, W);
 	    returnValues.put(Wtree_KEY, Wtree);
