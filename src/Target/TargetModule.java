@@ -144,6 +144,9 @@ public class TargetModule
 			double maxH, double maxW, 
 			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
+		String[] disableOutput = cfm.getValues("disableOutput");
+		
+		
 		//ArrayList<Double> mod_rslts_prev = new ArrayList<Double>();
 		
 		// # parse dates for input met file using format defined in control file
@@ -563,6 +566,7 @@ public class TargetModule
 	                
 	                previousTacValues.add(timestepsTacValues);
 	                NetCdfOutput netCdfOutput = new NetCdfOutput();
+	                netCdfOutput.setDisabled(disableOutput);
 	                netCdfOutput.outputNetcdf2(outputFile, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,date1ADateStr,
 	                		latEdge, latResolution, lonEdge, lonResolution);
 	            }

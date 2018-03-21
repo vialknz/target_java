@@ -57,6 +57,16 @@ public class Cfm
 	{
 		return cfmData.get(key);
 	}
+	public String[] getValues(String key)
+	{
+		String keyValue = cfmData.get(key);
+		if (keyValue == null)
+		{
+			return new String[]{""};
+		}
+		String[] keyValueSplit = keyValue.split(",");
+		return keyValueSplit;
+	}
 	public double getDoubleValue(String key)
 	{
 		String value = cfmData.get(key);

@@ -73,6 +73,7 @@ latEdge=-37.505054
 lonEdge=144.647901
 latResolution=.00004294
 lonResolution=.0021849
+disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,TsurfHorz,Ucan   # these variables will not be output in the netcdf
 	 
 	 */
 

@@ -21,7 +21,28 @@ import ucar.nc2.Variable;
 public class NetCdfOutput
 {
 	NetcdfFileWriter writer = null;
-//	String location = "/tmp/testWrite.nc";
+	public static final String UTB = "Utb";
+	public static final String FID = "Fid";
+	public static final String MODUTAREF = "modUTaRef";	
+	public static final String TBRUR = "TbRur";
+	public static final String HTTCCAN = "HttcCan";
+	public static final String HTTCURBNEW = "HttcUrbNew";
+	public static final String TSURFWALL = "TsurfWall";
+	public static final String TSURFCAN = "TsurfCan";
+	public static final String TSURFHORZ = "TsurfHorz";
+	public static final String UCAN = "Ucan";
+	
+	private boolean disableUtb = false;
+	private boolean disableFid = false;
+	private boolean disableModUTaRef = false;	
+	private boolean disableTbRur = false;
+	private boolean disableHttcCan = false;
+	private boolean disableHttcUrbNew = false;
+	private boolean disableTsurfWall = false;
+	private boolean disableTsurfCan = false;
+	private boolean disableTsurfHorz = false;
+	private boolean disableUcan = false;
+
 
 	public static void main(String[] args)
 	{
@@ -51,6 +72,48 @@ public class NetCdfOutput
 //		super();
 //		this.location = location;
 //	}
+	
+	public void setDisabled(String[] disabled)
+	{
+		for (String value : disabled)
+		{
+			switch(value)
+			{
+				case UTB: 
+					disableUtb = true;
+					break;
+				case FID:
+					disableFid = true;
+					break;
+				case MODUTAREF:
+					disableModUTaRef = true;
+					break;
+				case TBRUR:
+					disableTbRur = true;
+					break;
+				case HTTCCAN:
+					disableHttcCan = true;
+					break;
+				case HTTCURBNEW:
+					disableHttcUrbNew = true;
+					break;
+				case TSURFWALL:
+					disableTsurfWall = true;
+					break;
+				case TSURFCAN:
+					disableTsurfCan = true;
+					break;
+				case TSURFHORZ:
+					disableTsurfHorz = true;
+					break;
+				case UCAN:
+					disableUcan = true;
+					break;
+					
+			}
+				
+		}
+	}
 	
 	public void outputNetcdf2(String filename, int latX, int lonY, 
 			ArrayList<TreeMap<Integer,Double>> mod_rslts,
@@ -97,45 +160,90 @@ public class NetCdfOutput
 		utci.addAttribute(new Attribute("long_name", "UTCI temperature"));
 		utci.addAttribute(new Attribute("units", "degC"));
 		
-		Variable ucan = writer.addVariable(null, "UCAN", DataType.DOUBLE, "time lat lon");
-		ucan.addAttribute(new Attribute("long_name", "Wind speed canopy"));
-		ucan.addAttribute(new Attribute("units", "m/s"));
-		
-		Variable tsurfHorz = writer.addVariable(null, "TSURF_HORZ", DataType.DOUBLE, "time lat lon");
-		tsurfHorz.addAttribute(new Attribute("long_name", "Surface temperature horizontal"));
-		tsurfHorz.addAttribute(new Attribute("units", "degC"));
-		
-		Variable tsurfCan = writer.addVariable(null, "TSURF_CAN", DataType.DOUBLE, "time lat lon");
-		tsurfCan.addAttribute(new Attribute("long_name", "Surface temperature canyon"));
-		tsurfCan.addAttribute(new Attribute("units", "degC"));
-		
-		Variable tsurfWall = writer.addVariable(null, "TSURF_WALL", DataType.DOUBLE, "time lat lon");
-		tsurfWall.addAttribute(new Attribute("long_name", "Surface temperature wall"));
-		tsurfWall.addAttribute(new Attribute("units", "degC"));
+		Variable ucan = null;
+		if (!disableUcan)
+		{
+			ucan = writer.addVariable(null, "UCAN", DataType.DOUBLE, "time lat lon");
+			ucan.addAttribute(new Attribute("long_name", "Wind speed canopy"));
+			ucan.addAttribute(new Attribute("units", "m/s"));
+		}
 
-		Variable httcUrbNew = writer.addVariable(null, "httcUrbNew", DataType.DOUBLE, "time lat lon");
-		httcUrbNew.addAttribute(new Attribute("long_name", "heat transfer coefficient for convection"));
-		httcUrbNew.addAttribute(new Attribute("units", "W/(m2•K)"));
+		Variable tsurfHorz = null;
+		if (!disableTsurfHorz)
+		{
+			tsurfHorz = writer.addVariable(null, "TSURF_HORZ", DataType.DOUBLE, "time lat lon");
+			tsurfHorz.addAttribute(new Attribute("long_name", "Surface temperature horizontal"));
+			tsurfHorz.addAttribute(new Attribute("units", "degC"));
+		}
+
+		Variable tsurfCan = null;
+		if (!disableTsurfCan)
+		{
+			tsurfCan = writer.addVariable(null, "TSURF_CAN", DataType.DOUBLE, "time lat lon");
+			tsurfCan.addAttribute(new Attribute("long_name", "Surface temperature canyon"));
+			tsurfCan.addAttribute(new Attribute("units", "degC"));
+		}
+
 		
-		Variable httcCan = writer.addVariable(null, "httcCan", DataType.DOUBLE, "time lat lon");
-		httcCan.addAttribute(new Attribute("long_name", "heat transfer coefficient for convection"));
-		httcCan.addAttribute(new Attribute("units", "W/(m2•K)"));
+		Variable tsurfWall = null;
+		if (!disableTsurfWall)
+		{
+			tsurfWall = writer.addVariable(null, "TSURF_WALL", DataType.DOUBLE, "time lat lon");
+			tsurfWall.addAttribute(new Attribute("long_name", "Surface temperature wall"));
+			tsurfWall.addAttribute(new Attribute("units", "degC"));
+		}
+
+
+		Variable httcUrbNew = null;
+		if (!disableHttcUrbNew)
+		{
+			httcUrbNew = writer.addVariable(null, "httcUrbNew", DataType.DOUBLE, "time lat lon");
+			httcUrbNew.addAttribute(new Attribute("long_name", "heat transfer coefficient for convection"));
+			httcUrbNew.addAttribute(new Attribute("units", "W/(m2•K)"));
+		}
+
 		
-		Variable tbRur = writer.addVariable(null, "tbRur", DataType.DOUBLE, "time lat lon");
-		tbRur.addAttribute(new Attribute("long_name", "Richardson's number eq for \"high temperature\" aka Tb_rur "));
-		tbRur.addAttribute(new Attribute("units", "-"));
+		Variable httcCan = null;
+		if (!disableHttcCan)
+		{
+			httcCan = writer.addVariable(null, "httcCan", DataType.DOUBLE, "time lat lon");
+			httcCan.addAttribute(new Attribute("long_name", "heat transfer coefficient for convection"));
+			httcCan.addAttribute(new Attribute("units", "W/(m2•K)"));
+		}
+
 		
-		Variable modUTaRef = writer.addVariable(null, "modUTaRef", DataType.DOUBLE, "time lat lon");
-		modUTaRef.addAttribute(new Attribute("long_name", "uTopHeight"));
-		modUTaRef.addAttribute(new Attribute("units", "m"));
+		Variable tbRur = null;
+		if (!disableTbRur)
+		{
+			tbRur = writer.addVariable(null, "tbRur", DataType.DOUBLE, "time lat lon");
+			tbRur.addAttribute(new Attribute("long_name", "Richardson's number eq for \"high temperature\" aka Tb_rur "));
+			tbRur.addAttribute(new Attribute("units", "-"));
+		}
 		
-		Variable utb = writer.addVariable(null, "utb", DataType.DOUBLE, "time lat lon");
-		utb.addAttribute(new Attribute("long_name", "utb"));
-		utb.addAttribute(new Attribute("units", "-"));
+		Variable modUTaRef = null;
+		if (!disableModUTaRef)
+		{
+			modUTaRef = writer.addVariable(null, "modUTaRef", DataType.DOUBLE, "time lat lon");
+			modUTaRef.addAttribute(new Attribute("long_name", "uTopHeight"));
+			modUTaRef.addAttribute(new Attribute("units", "m"));
+		}
+
 		
-		Variable fid = writer.addVariable(null, "fid", DataType.DOUBLE, "time lat lon");
-		fid.addAttribute(new Attribute("long_name", "fid"));
-		fid.addAttribute(new Attribute("units", "-"));
+		Variable utb = null;
+		if (!disableUtb)
+		{
+			utb = writer.addVariable(null, "utb", DataType.DOUBLE, "time lat lon");
+			utb.addAttribute(new Attribute("long_name", "utb"));
+			utb.addAttribute(new Attribute("units", "-"));
+		}
+		Variable fid = null;
+		if (!disableFid)
+		{
+			fid = writer.addVariable(null, "fid", DataType.DOUBLE, "time lat lon");
+			fid.addAttribute(new Attribute("long_name", "fid"));
+			fid.addAttribute(new Attribute("units", "-"));
+		}
+
 
 
 
@@ -146,14 +254,8 @@ public class NetCdfOutput
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		-34.81425315    138.6066486     0.12185321017843
-//		-34.81429613    138.6088335     0.410331603879865
-//		-34.81433907    138.6110184     0.32056195573247
-//		.00004294		.0021849
 		
 		float[] latArray = new float[latX];
 		for (int i=0;i<latX;i++)
@@ -313,16 +415,55 @@ public class NetCdfOutput
 				writer.write(tempmrt, origin, tmrtData);
 				writer.write(utci, origin, utciData);
 				
-				writer.write(ucan, origin, ucanData);
-				writer.write(tsurfHorz, origin, tsurfHorzData);
-				writer.write(tsurfCan, origin, tsurfCanData);
-				writer.write(tsurfWall, origin, tsurfWallData);
-				writer.write(httcUrbNew, origin, httcUrbNewData);
-				writer.write(httcCan, origin, httcCanData);
-				writer.write(tbRur, origin, tbRurData);
-				writer.write(modUTaRef, origin, modUTaRefData);
-				writer.write(utb, origin, utbData);
-				writer.write(fid, origin, fidData);
+				if (!disableUcan)
+				{
+					writer.write(ucan, origin, ucanData);
+				}
+				
+				if (!disableTsurfHorz)
+				{
+					writer.write(tsurfHorz, origin, tsurfHorzData);
+				}
+				
+				if (!disableTsurfCan)
+				{
+					writer.write(tsurfCan, origin, tsurfCanData);
+				}
+				
+				if (!disableTsurfWall)
+				{
+					writer.write(tsurfWall, origin, tsurfWallData);
+				}
+				
+				if (!disableHttcUrbNew)
+				{
+					writer.write(httcUrbNew, origin, httcUrbNewData);
+				}
+				
+				if (!disableHttcCan)
+				{
+					writer.write(httcCan, origin, httcCanData);
+				}
+				
+				if (!disableTbRur)
+				{
+					writer.write(tbRur, origin, tbRurData);
+				}
+				
+				if (!disableModUTaRef)
+				{
+					writer.write(modUTaRef, origin, modUTaRefData);
+				}
+				
+				if (!disableUtb)
+				{
+					writer.write(utb, origin, utbData);
+				}
+				
+				if (!disableFid)
+				{
+					writer.write(fid, origin, fidData);
+				}
 				
 				writer.write(time, time_origin, timeData);
 			}
@@ -395,7 +536,6 @@ public class NetCdfOutput
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
