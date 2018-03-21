@@ -209,6 +209,7 @@ public class TargetModule
 	            	double metKd0 = (double)met0.get(MetData.Kd);
 	            	double metWS0 = (double)met0.get(MetData.WS);
 	            	double metRH0 = (double)met0.get(MetData.RH);
+	            	double metLD0 = (double)met0.get(MetData.Ld);
 	                
 	            	ArrayList<TreeMap<Integer,Double>> mod_rslts =new ArrayList<TreeMap<Integer,Double>>();
 	            	// # this is the main data array where surface averaged outputs are stored
@@ -274,7 +275,7 @@ public class TargetModule
 //	                System.out.println("Mmmbop1");
 	                TreeMap<String,Double> rad_rur1  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf1,Dats,prevTsRef1,i,1.0);  // # creates dictionary with radiation variables for current timestep and surface type
 //	                System.out.println(i + " " + rad_rur1.toString()); 
-//	                if (i > 1)
+//	                if (i > 15)
 //	                {
 //	                	//TODO
 //	                	 System.exit(1);
@@ -523,7 +524,7 @@ public class TargetModule
 	                    
 	            	    Calendar calendar = Calendar.getInstance();
 	            	    calendar.setTime(dte);	
-	            	    int yd_actual = calendar.get(Calendar.YEAR);
+	            	    int yd_actual = calendar.get(Calendar.DAY_OF_YEAR);
 	            	    int TM = calendar.get(Calendar.HOUR_OF_DAY);
 	                    
 	                    double tmrt;
@@ -540,8 +541,14 @@ public class TargetModule
 	                    {
 	                        	                        
 	                        double lup = Constants.cs_sb*Math.pow((metTa0  +273.15),4);
-	                        tmrt = utciInstance.getTmrtForGrid_RH(Tac,metRH0,Ucan,metKd0,Tsurf_can,metTa0, lup ,yd_actual, TM, lat);
+	                        
+	                        tmrt = utciInstance.getTmrtForGrid_RH(Tac,metRH0,Ucan,metKd0,Tsurf_can,metLD0, lup ,yd_actual, TM, lat);
+	                                          
 	                        utci = utciInstance.getUTCIForGrid_RH(Tac,Ucan,metRH0,tmrt);
+	                        
+//	                        System.out.println("getTmrtForGrid_RH "+ grid+ " " + i + " " + tmrt+ " " + Tac + " " + metRH0 + " " + Ucan + " " + metKd0 + " " 
+//	                        + Tsurf_can + " " + metLD0 + " " + lup + " " + yd_actual + " " + TM + " " + lat);
+//	                        System.out.println("getUTCIForGrid_RH " + utci +" " + Tac + " " + Ucan + " " + metRH0 + " " + tmrt );	      
 	                    }
 	    	                    
 	                	TreeMap<Integer,Double> for_tab_tmrt_utci = new TreeMap<Integer,Double>();

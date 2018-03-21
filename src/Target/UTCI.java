@@ -1335,6 +1335,8 @@ public double fTg_withdiam(double Ta, double relh, double speed, double solar, d
 
 		double fdir = getFdir(zenith, solar);
 		double Tg = fTg4(Ta, relh, Pair, speed, solar, fdir, zenith, speedMin, tsfc, emisAtmValue, ldown, lup);
+//		System.out.println("Tg " + " " + Tg + " " + Ta + " " + relh + " " + Pair + " " + speed + " " + solar + " " 
+//				+ fdir + " " + zenith + " " + speedMin + " " + tsfc + " " + emisAtmValue + " " + ldown + " " + lup);
 		double tmrtC = fTmrtD(Ta, Tg, speed);
 		double getTmrtForGrid = tmrtC;
 
