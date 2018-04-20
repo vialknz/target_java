@@ -107,7 +107,7 @@ public class MetData
 			Double ldownDouble;
 			if (mod_ldown.equals("Y"))
 			{
-				ldownDouble = ldModClass.ld_mod(dataLine);
+				ldownDouble = ldModClass.ld_mod_(dataLine);
 			}
 			else
 			{

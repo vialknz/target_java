@@ -475,7 +475,7 @@ public class TargetModule
 //	                        	System.out.println("Mmmbop4");
 	                        	TreeMap<String,Double> rad  = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                        	// # creates dictionary with radiation variables for current timestep and surface type                             
-	                        	TreeMap<String,Double> wtr_stf = tsEbW.ts_EB_W(met_d,cfm,mod_data_ts_,Dats,i,rad,vf); 
+	                        	TreeMap<String,Double> wtr_stf = tsEbW.ts_EB_W(met_d,cfm,mod_data_ts_,mod_data_tm_,Dats,i,rad,vf); 
 	                        	// # creates dictionary with water surface temperature and energy balance 
 	                            //### append modelled water variables to dataframes below...
 	                        	

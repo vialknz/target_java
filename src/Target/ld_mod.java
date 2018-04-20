@@ -15,7 +15,7 @@ public class ld_mod
 //
 //	"""
 
-	public double ld_mod(ArrayList<Object> met)
+	public double ld_mod_(ArrayList<Object> met)
 	{	
 		double Ta = (double) met.get(MetData.Ta);
 		double RH = (double) met.get(MetData.RH);

@@ -21,7 +21,7 @@ public class TsEbW
 	public static final String QGW_KEY = "QgW";
 	public static final String TM_KEY = "TM";	
 
-	public TreeMap<String,Double> ts_EB_W(ArrayList<ArrayList<Object>> met_d,Cfm cfm, double[][][] mod_ts, 
+	public TreeMap<String,Double> ts_EB_W(ArrayList<ArrayList<Object>> met_d,Cfm cfm, double[][][] mod_ts, double[][][] mod_tm,
 			 TreeMap<String,Date> Dats, int i, TreeMap<String,Double> rad, int vf)
 	{
 		TreeMap<String,Double> returnValues = new TreeMap<String,Double>();
@@ -81,7 +81,8 @@ public class TsEbW
 			
 			//TreeMap<String,Double> modTsMinus1 = mod_ts[i-1][vf][surfIndex];	
 			double modTsMinus1Watr = mod_ts[i-1][vf][TargetModule.getSurfIndex("watr")];	
-			double modTsMinus1TSOIL = mod_ts[i-1][vf][TargetModule.getSurfIndex("TSOIL")];	
+			double modTsMinus1TSOIL = mod_ts[i-1][vf][TargetModule.getSurfIndex("TSOIL")];
+			double modTmMinus1Watr = mod_tm[i-1][vf][TargetModule.getSurfIndex("watr")];
 			
 	        double RnW = rn;											//# net radiation water surface 
 	        
@@ -89,9 +90,9 @@ public class TsEbW
 	        Hs  =  cs_pa * (cs_cp*1000000.)*cs_hv *metWS0* (metTa0 - modTsMinus1Watr)	;		//# The sensible heat flux is given by Martinez et al. (2006)
 	                
 	        Gw      = -cs_c_watr * cs_kw * ((modTsMinus1TSOIL-modTsMinus1Watr)/cs_zw)	;				//# the convective heat flux at the bottom of the water layer (and into the soil below)
-	        double Gwpls   = -cs_c_watr * cs_kw * ((modTsMinus1TSOIL-modTsMinus1Watr)/cs_zw) + ((metKd0*(1-0.08))-Sab);					//# the convective heat flux at the bottom of the water layer (and into the soil below)
+	        //double Gwpls   = -cs_c_watr * cs_kw * ((modTsMinus1TSOIL-modTsMinus1Watr)/cs_zw) + ((metKd0*(1-0.08))-Sab);					//# the convective heat flux at the bottom of the water layer (and into the soil below)
 	        
-	        double dlt_soil = ((2/(cs_c_soilW*cs_dw)*Gwpls))-(cs_ww*(modTsMinus1TSOIL-modTsMinus1Watr));				//# force restore calc -- change soil temperature change 
+	        double dlt_soil = ((2/(cs_c_soilW*cs_dw)*Gw))-(cs_ww*(modTsMinus1TSOIL-modTmMinus1Watr));				//# force restore calc -- change soil temperature change 
 	        Tsoil = modTsMinus1TSOIL+(dlt_soil*tmstpInt);											//# soil layer temperature (C)
 	        
 	        double es = 0.611*Math.exp(17.27*modTsMinus1Watr/(237.3+modTsMinus1Watr));							//# saturation vapour pressure (es) (kPA) at the water surface
@@ -107,8 +108,9 @@ public class TsEbW
 
 	        double D = Math.sqrt((2*cs_k_watr)/((2*Math.PI)/86400.));	//# the damping depth for the annual temperature cycle
 	        double Dy = D * Math.sqrt(365.);											//#  surface water temperature (C) 
-	        double delta_Tm = Gwpls/(cs_c_soilW*Dy);		//## change in Tm per second
-	        tM = modTsMinus1Watr + (delta_Tm*tmstpInt);
+	        double delta_Tm = Gw/(cs_c_soilW*Dy);		//## change in Tm per second
+	        tM = modTmMinus1Watr + (delta_Tm*tmstpInt);
+	        
 	    }
 
 
