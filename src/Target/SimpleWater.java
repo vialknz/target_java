@@ -45,7 +45,7 @@ public class SimpleWater
 	public static final String QGW_KEY = "QgW";
 	public static final String TM_KEY = "TM";	
 	
-	public TreeMap<String,Double> Ts_EB_W(ArrayList<ArrayList<Object>> met_d, Cfm cfm, ArrayList<TreeMap<String,Object>> mod_ts, 
+	public TreeMap<String,Double> Ts_EB_W_no_longer_used(ArrayList<ArrayList<Object>> met_d, Cfm cfm, ArrayList<TreeMap<String,Object>> mod_ts, 
 			ArrayList<TreeMap<String,Object>> mod_tm, TreeMap<String,Date> Dats, int i,TreeMap<String,Double> rad)
 	{
 		TreeMap<String,Double> returnValues = new TreeMap<String,Double>();
