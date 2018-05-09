@@ -60,7 +60,7 @@ public class TestTargetCD
 		 
 		 
 		 TreeMap<Integer,Double> returnValues ;
-		 TargetModule targetModule = new TargetModule();
+		 TargetModule targetModule = new TargetModule("");
 
 		 
 		 
@@ -2338,4 +2338,6 @@ public class TestTargetCD
 
 
 	}
+	 
+	 
 }

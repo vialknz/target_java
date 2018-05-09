@@ -28,6 +28,9 @@ public class RunToolkit
 	public int y = 0; //lon
 	public int x = 0; //lat
 	
+	Common common = new Common();
+	public static String workingDirectory;
+	
 	
 	/*
 	config file should include (although none of the validation info section is used in this version):
@@ -100,8 +103,11 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 	}
 	 public void run(String[] args)
 	 {
+//		 System.out.println(System.getProperty("user.dir"));
+		 workingDirectory = System.getProperty("user.dir");
+		 
 
-		 System.out.println(args[0]);
+		 //System.out.println(args[0]);
 //		 System.exit(1);
 		 
 		String controlFileName;
@@ -123,6 +129,14 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		String[] controlFileNameSplit = controlFileName.split(regex);
 		int lengthOfSplit = controlFileNameSplit.length;
 		String controlTextFile = controlFileNameSplit[lengthOfSplit-1];
+		
+		System.out.println(controlTextFile);
+		
+		for (String filepathelement : controlFileNameSplit)
+		{
+			System.out.println(filepathelement);
+		}
+		
 
 		String controlTextFileSubpath = File.separator
 				+ controlFileNameSplit[lengthOfSplit-3]
@@ -130,10 +144,19 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 				+ controlFileNameSplit[lengthOfSplit-2]
 				+ File.separator
 				+ controlFileNameSplit[lengthOfSplit-1];
+		
+		controlTextFileSubpath = controlFileName.replace(controlTextFile, "");
+		
+		System.out.println(controlTextFileSubpath);
 
 		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
+		rootDir = controlTextFileSubpath + ".."  + File.separator;
+		
+		System.out.println(rootDir);
 	
 		String outputFile = rootDir + "/output/" + cfm.getValue("site_name") + "/" + cfm.getValue("site_name") + ".nc";
+		common.createDirectory(rootDir + "/output/" + cfm.getValue("site_name") + "/");
+		
 		
 		lonResolution = cfm.getDoubleValue("lonResolution");
 		latResolution = cfm.getDoubleValue("latResolution");
@@ -181,7 +204,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
 		ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
-		TargetModule tkmd = new TargetModule();
+		TargetModule tkmd = new TargetModule(workingDirectory);
 		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, 
 				x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
 	}

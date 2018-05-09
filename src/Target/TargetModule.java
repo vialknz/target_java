@@ -11,6 +11,11 @@ import java.util.TreeMap;
 public class TargetModule
 {
 	
+	public TargetModule(String workingDirectory)
+	{
+		this.workingDirectory = workingDirectory;
+	}
+	
 	private ArrayList<ArrayList<Double>> previousTacValues = new ArrayList<ArrayList<Double>>();
 
 //	private TreeMap<String,Double> tmrtCache=new TreeMap<String,Double>();
@@ -27,7 +32,9 @@ public class TargetModule
 	private CD cd = new CD();
 	private TsEbW tsEbW = new TsEbW();
 	private UTCI utciInstance = new UTCI();
-	private TbRurSolver tbRurSolver = new TbRurSolver();
+	//private TbRurSolver tbRurSolver = new TbRurSolver();
+	private String workingDirectory;
+	private TbRurSolver_python tbRurSolver = new TbRurSolver_python();
 	
 	public static final int FOR_TAB_FID_INDEX = 0;
 	public static final int FOR_TAB_Ucan_INDEX = 1;
@@ -363,7 +370,10 @@ public class TargetModule
 	                //###### Solve Richardson's number eq for "high temperature" aka Tb_rur 
 	                double dz = z_Hx2 - z_TaRef ;
 //	                System.out.println("dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = "   + dz + " " + ref_ta + " " + UTb + " " + mod_U_TaRef[i] + " " + i + " " + Ri_rur);
-	                double Tb_rur = tbRurSolver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+	                //double Tb_rur = tbRurSolver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+	                //   tbRurSolver.converge(String i, String dz, String ref_ta, String UTb, String mod_U_TaRef, String Ri_rur)
+	                tbRurSolver.setWorkingDirectory(this.workingDirectory);
+	                double Tb_rur = tbRurSolver.converge(" "+i+" ", dz+" ", ref_ta+" ", UTb+" ", mod_U_TaRef[i]+" ", Ri_rur+" ");
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN)
 	                {
 	                	System.out.println("Error with Tb_rur");
