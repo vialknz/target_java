@@ -342,11 +342,11 @@ public class TargetModule
 	                //####### calculate Richardson's number and heat transfer coefficient for rural site 
 	                double Ri_rur = sfcRi.sfc_ri(z_TaRef-z0m_rur,ref_ta,Tlow_surf,mod_U_TaRef[i]);   //## calculate Richardson's number for Rural site   
 //	                System.out.println("Ri_rur " + " " +z_TaRef+ " " +z0m_rur+ " " +ref_ta+ " " +Tlow_surf+ " " +mod_U_TaRef[i] + " " + Ri_rur);
-	                if (Ri_rur > .25)
-	                {
-	                	System.out.println("bad value for Ri_rur of " + Ri_rur + " changing to 0.25");
-	                	Ri_rur = 0.25;
-	                }
+//	                if (Ri_rur > .25)
+//	                {
+//	                	System.out.println("bad value for Ri_rur of " + Ri_rur + " changing to 0.25");
+//	                	Ri_rur = 0.25;
+//	                }
 	                TreeMap<String,Double> httc_rural = httc.httc(Ri_rur,mod_U_TaRef[i],z_TaRef-z0m_rur,z0m_rur,z0h_rur, met_d,i,Tlow_surf,ref_ta) ;      //## calculate httc for Rural site           
 	                double httc_rur = httc_rural.get(Httc.HTTC_KEY);
 	                
