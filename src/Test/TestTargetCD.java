@@ -82,7 +82,7 @@ public class TestTargetCD
 			String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 			String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 			MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-			ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+			ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 			
 	        String tmstp = cfm.getValue("timestep");  
 	        int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
@@ -583,7 +583,7 @@ public class TestTargetCD
 			String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 			String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 			MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-			ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+			ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 			
 	        String tmstp = cfm.getValue("timestep");  
 	        int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
@@ -838,7 +838,7 @@ public class TestTargetCD
 			String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 			String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 			MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-			ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+			ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 			
 	        String tmstp = cfm.getValue("timestep");  
 	        int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
@@ -1156,7 +1156,7 @@ public class TestTargetCD
 			String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 			String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 			MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-			ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+			ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 			
 	        String tmstp = cfm.getValue("timestep");  
 	        int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
@@ -1576,7 +1576,7 @@ public class TestTargetCD
 			String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 			String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 			MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-			ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+			ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 			
 	        String tmstp = cfm.getValue("timestep");  
 	        int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
@@ -1938,7 +1938,7 @@ public class TestTargetCD
 		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 		String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
 		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-		ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+		ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 		//TreeMap<String,Double> returnValues;
 		Httc httc = new Httc();
 		

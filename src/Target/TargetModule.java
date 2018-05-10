@@ -23,6 +23,7 @@ public class TargetModule
 //	private TreeMap<String,Double> Tb_rurCache=new TreeMap<String,Double>();
 //	private TreeMap<String,Double> calcLoopCache=new TreeMap<String,Double>();
 	private double Tb_rur_prev=0.0;
+	private double Ri_rur_prev=0.0;
 	
 	private RnCalcNew rnCalcNew = new RnCalcNew();
 	private Lumps lumps = new Lumps();
@@ -35,6 +36,7 @@ public class TargetModule
 	//private TbRurSolver tbRurSolver = new TbRurSolver();
 	private String workingDirectory;
 	private TbRurSolver_python tbRurSolver = new TbRurSolver_python();
+	private TbRurSolver tbRurSolverOld = new TbRurSolver();
 	
 	public static final int FOR_TAB_FID_INDEX = 0;
 	public static final int FOR_TAB_Ucan_INDEX = 1;
@@ -151,6 +153,7 @@ public class TargetModule
 			double maxH, double maxW, 
 			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
+		
 		String[] disableOutput = cfm.getValues("disableOutput");
 		
 		
@@ -342,10 +345,14 @@ public class TargetModule
 	                //####### calculate Richardson's number and heat transfer coefficient for rural site 
 	                double Ri_rur = sfcRi.sfc_ri(z_TaRef-z0m_rur,ref_ta,Tlow_surf,mod_U_TaRef[i]);   //## calculate Richardson's number for Rural site   
 //	                System.out.println("Ri_rur " + " " +z_TaRef+ " " +z0m_rur+ " " +ref_ta+ " " +Tlow_surf+ " " +mod_U_TaRef[i] + " " + Ri_rur);
-//	                if (Ri_rur > .25)
+//	                if (Ri_rur > 5 || Ri_rur < -5)
 //	                {
-//	                	System.out.println("bad value for Ri_rur of " + Ri_rur + " changing to 0.25");
-//	                	Ri_rur = 0.25;
+//	                	System.out.println("bad value for Ri_rur of " + Ri_rur + " changing to previous value of "  + Ri_rur_prev);
+//	                	Ri_rur = Ri_rur_prev;
+//	                }
+//	                else 
+//	                {
+//	                	Ri_rur_prev = Ri_rur;
 //	                }
 	                TreeMap<String,Double> httc_rural = httc.httc(Ri_rur,mod_U_TaRef[i],z_TaRef-z0m_rur,z0m_rur,z0h_rur, met_d,i,Tlow_surf,ref_ta) ;      //## calculate httc for Rural site           
 	                double httc_rur = httc_rural.get(Httc.HTTC_KEY);
@@ -370,11 +377,22 @@ public class TargetModule
 	                //###### Solve Richardson's number eq for "high temperature" aka Tb_rur 
 	                double dz = z_Hx2 - z_TaRef ;
 //	                System.out.println("dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = "   + dz + " " + ref_ta + " " + UTb + " " + mod_U_TaRef[i] + " " + i + " " + Ri_rur);
-	                //double Tb_rur = tbRurSolver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
-	                //   tbRurSolver.converge(String i, String dz, String ref_ta, String UTb, String mod_U_TaRef, String Ri_rur)
+//	                System.out.println("dz"+dz);
+//	                System.out.println("ref_ta"+ref_ta);
+//	                System.out.println("UTb"+UTb);
+//	                System.out.println("mod_U_TaRef[i]"+mod_U_TaRef[i]);
+//	                System.out.println("Ri_rur"+Ri_rur);
+//	                System.out.println("i"+i);
+//	                System.out.println("met_data_all.get(i)"+met_data_all.get(i));
+	                //System.exit(1);
+	                
+	                double Tb_rur ;
+	                
+	                	                
 	                tbRurSolver.setWorkingDirectory(this.workingDirectory);
-	                double Tb_rur = tbRurSolver.converge(" "+i+" ", dz+" ", ref_ta+" ", UTb+" ", mod_U_TaRef[i]+" ", Ri_rur+" ");
-	                if (Tb_rur == TbRurSolver.ERROR_RETURN)
+	                Tb_rur = tbRurSolver.converge(" "+i+" ", dz+" ", ref_ta+" ", UTb+" ", mod_U_TaRef[i]+" ", Ri_rur+" ");
+	                
+	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
 	                {
 	                	System.out.println("Error with Tb_rur");
 	                	Tb_rur = Tb_rur_prev;
@@ -384,8 +402,22 @@ public class TargetModule
 	                else
 	                {
 	                	System.out.println("Tb_rur=" + Tb_rur);
+	                	Tb_rur_prev = Tb_rur;
 	                }
-	                Tb_rur_prev = Tb_rur;
+	                
+	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+	                System.out.println("Tb_rurOld=" + Tb_rur);
+	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
+	                {
+	                	System.out.println("Error with java Tb_rur");
+	                	Tb_rur = Tb_rur_prev;
+	                }
+	                
+	                Tb_rur = Tb_rur - 9.806/1004.67*dz;
+	                System.out.println("Tb_rur after=" + Tb_rur);
+	                
+	                
+//	                System.exit(1);
 	                
 	                //# always use iterative solution for rural Tb
 	                

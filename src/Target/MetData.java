@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class MetData
 {
+	private Date startDate,endDate = null;
 	
 	private Common common = new Common();
 	private ArrayList<ArrayList<Object>> metDataArrays = new ArrayList<ArrayList<Object>>();
@@ -35,8 +36,15 @@ public class MetData
 		super();
 		readFile(file, mod_ldown);
 	}
+	public MetData(String file, String mod_ldown, Date date1A, Date date2)
+	{
+		super();
+		this.startDate=date1A;
+		this.endDate=date2;
+		readFile(file, mod_ldown);
+	}
 	
-	public ArrayList<ArrayList<Object>> getlcData()
+	public ArrayList<ArrayList<Object>> getMetData()
 	{
 		return metDataArrays;
 	}
@@ -45,7 +53,7 @@ public class MetData
 	{
 //		datetime,Ta,RH,WS,P,Kd,Ld
 //		05/02/2009 0:00, 21.9, 57,  5,1008.0,0.0,386.77
-		
+				
 		int count = 0;
 		ArrayList<String> cfmFile = common.readTextFileToArray(file);
 		for (String line : cfmFile)
@@ -89,6 +97,21 @@ public class MetData
 			cal.set(Calendar.MILLISECOND,0);
 
 			Date d = cal.getTime();	
+			
+			
+			if (startDate != null)
+			{
+				//System.out.println(d.getTime() + " "  + d.toString());
+				if ( d.getTime() <  startDate.getTime() )
+				{
+					continue;
+				}
+				if ( d.getTime() >  endDate.getTime() )
+				{
+					continue;
+				}
+				//System.out.println("Used these");
+			}
 			
 
 			

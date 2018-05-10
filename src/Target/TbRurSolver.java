@@ -34,6 +34,13 @@ public class TbRurSolver
 		mod_U_TaRef[0] = 10.39989511;
 		Ri_rur = -0.10326334;
 		
+		dz=15.0 ;
+		ref_ta =23.5 ;
+		UTb =  0.21266443039771887 ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] =  0.1  ;
+		Ri_rur = -370.55369919381894;
+		
 		
 		double value = solver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 		System.out.println(value);
@@ -75,11 +82,12 @@ public class TbRurSolver
 	{
 		
 		double convergeValue= ERROR_RETURN;
-		double converge = 0.05;
+		double converge = 0.000001;
 		
 		double Thi_tb_prevResult= 0.0;
-		double Thi_tb_result;
-		double Thi_tb = 0.;
+		double Thi_tb_result=0.0;
+//		double Thi_tb_result2=0.0;
+		double Thi_tb = 15.0;
 		double dTPrev = 0.0;
 		double increment = 1.0;
 		int direction = 1;
@@ -88,57 +96,39 @@ public class TbRurSolver
 		int testno = 1;
 		boolean continueLoop = true;
 		//double Tglobe = 0.0;
+		double factor1 = Math.pow((UTb - mod_U_TaRef[i]), 2.0);
+		double factor2 = 9.806 * dz;
+		double factor3 = (2.0 * factor2 * ref_ta);
+		double factor4 = 2.0 * factor2;
 
 		while (continueLoop)
 		{
 			testno = testno + 1;
 			if (testno > 4000)
 			{
-				System.out.println("No convergence: values too extreme");
+				System.out.println("                      No convergence: values too extreme");
 				convergeValue = ERROR_RETURN;
 				return convergeValue;
 			}
+//			Thi_tb_result = 9.806 * dz * (Thi_tb - ref_ta) * 2.0 / (Thi_tb + ref_ta) / Math.pow((UTb - mod_U_TaRef[i]), 2.0) - Ri_rur;
+			//Thi_tb_result2 = factor2 * (Thi_tb - ref_ta) * 2.0 / (Thi_tb + ref_ta) / factor1 - Ri_rur;
+//			Thi_tb_result2 =  (2.0 * factor2 * Thi_tb - factor3)  / (Thi_tb + ref_ta) / factor1 - Ri_rur;
+			Thi_tb_result =  (factor4 * Thi_tb - factor3)  / (Thi_tb + ref_ta) / factor1 - Ri_rur;
 
-			Thi_tb_result = 9.806 * dz * (Thi_tb - ref_ta) * 2.0 / (Thi_tb + ref_ta) / Math.pow((UTb - mod_U_TaRef[i]), 2.0) - Ri_rur;
 			double dT = Thi_tb_result - Thi_tb_prevResult;
 			dTPrev = dTPrev - dT;
 
 //			System.out.println(Thi_tb_result + " " + Thi_tb_prevResult + " " + dT + " " + dTPrev  + " " + increment + " " + testno + " " + Thi_tb);
-
+			
 			if (Math.abs(Thi_tb_result) < converge)
 			{
-//				System.out.println("Converge");
-				convergeValue = Thi_tb - 9.806/1004.67*dz;
+//				System.out.println("Converge " +  dT + " " + testno);
 				continueLoop = false;
 			}
 			else
 			{	
-				double Thi_tb_result_compare = Math.abs(Thi_tb_result);
-				
-				if (Thi_tb_result_compare < 15)
-				{
-					increment = 0.20;
-				}
-				if (Thi_tb_result_compare < 3)
-				{
-					increment = 0.15;
-				}
-				if (Thi_tb_result_compare < 2)
-				{
-					increment = 0.10;
-				}
-				if (Thi_tb_result_compare < 1)
-				{
-					increment = 0.05;
-				}
-				if (Thi_tb_result_compare < 0.5)
-				{
-					increment = 0.01;
-				}
-				if (Thi_tb_result_compare < 0.1)
-				{
-					increment = 0.005;
-				}
+				double Thi_tb_result_compare = Math.abs(Thi_tb_result);				
+				increment = getIncrement(Thi_tb_result_compare);				
 				if (dT>0)
 				{
 					direction = -1;					
@@ -146,31 +136,77 @@ public class TbRurSolver
 				else
 				{
 					direction = 1;	
-					//increment = increment * 0.9;
 				}
-				//increment = increment * 0.95;
 				increment = increment * direction;
 				Thi_tb_prevResult = Thi_tb_result;
 				Thi_tb = Thi_tb + increment;
 				//fail safe, gone way too far, start again
-				if (Thi_tb > 50)
+				if (Thi_tb > 50 || Thi_tb < -50)
 				{
 					Thi_tb = 8.;
 				}
-				
-				
-//				//Thi_tb_prev = (0.9 * Thi_tb_prev + 0.1 * Thi_tb_itr);
-//				Thi_tb_prev = Thi_tb_prev + 0.01;
-				//System.out.println(Thi_tb_prev + " " + Thi_tb_itr);
-//				Thi_tb = Thi_tb_itr;
+				if (dT == 0.0)
+				{
+					Thi_tb = 22.760359533246;
+				}
 				continueLoop = true;
 			}
-		}
-				
+		}			
+		convergeValue = Thi_tb - 9.806/1004.67*dz;
 		return convergeValue;
 	}
+	
+	public double getIncrement(double Thi_tb_result_compare)
+	{
+		double increment = 0.0;
+		
+		increment = Thi_tb_result_compare * 0.5;
+		
+		
+//		if (Thi_tb_result_compare > 100.)
+//		{
+//			increment = 100;
+//		}
+//		
+//		System.out.println("getIncrement=" + Thi_tb_result_compare + " " + increment);
+		
+		return increment;
+	}
 
+	public double getIncrement2(double Thi_tb_result_compare)
+	{
+		double increment = 0;
+		if (Thi_tb_result_compare < 15)
+		{
+			increment = 0.20;
+		}
+		if (Thi_tb_result_compare < 3)
+		{
+			increment = 0.15;
+		}
+		if (Thi_tb_result_compare < 2)
+		{
+			increment = 0.10;
+		}
+		if (Thi_tb_result_compare < 1)
+		{
+			increment = 0.05;
+		}
+		if (Thi_tb_result_compare < 0.5)
+		{
+			increment = 0.01;
+		}
+		if (Thi_tb_result_compare < 0.1)
+		{
+			increment = 0.005;
+		}
+		return increment;
+	}
+	
+	
 }
+
+
 
 
 /*

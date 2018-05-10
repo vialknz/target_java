@@ -13,16 +13,16 @@ if (len(sys.argv) > 1):
   Ri_rur = float(sys.argv[6])
 
 ###### Solve Richardson's number eq for "high temperature" aka Tb_rur 
-Tb_rur_temp=0.0
+#Tb_rur_temp=0.0
 Thi_tb = Symbol('Thi_tb')
 
 
 try:
-    Tb_rur = solve(9.806*dz*(Thi_tb-ref_ta)*2.0/(Thi_tb+ref_ta)/(UTb-mod_U_TaRef[i])**2.0-Ri_rur, Thi_tb,quick=True)[0]    
-    Tb_rur_prev = Tb_rur
+    Tb_rur = solve(9.806*dz*(Thi_tb-ref_ta)*2.0/(Thi_tb+ref_ta)/(UTb-mod_U_TaRef[i])**2.0-Ri_rur, Thi_tb,quick=False)[0]    
+    #Tb_rur_prev = Tb_rur
 except ValueError:
     print (-9999.)   
-Tb_rur = Tb_rur_prev   
-Tb_rur_temp=Tb_rur
-Tb_rur = Tb_rur - 9.806/1004.67*dz
+#Tb_rur = Tb_rur_prev   
+#Tb_rur_temp=Tb_rur
+#Tb_rur = Tb_rur - 9.806/1004.67*dz
 print (Tb_rur)

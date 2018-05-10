@@ -202,8 +202,8 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		double maxW = lcDataClass.getMaxW();
 
 		String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
-		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"));
-		ArrayList<ArrayList<Object>> met_data = metDataClass.getlcData();
+		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"), date1A, date2);
+		ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 		TargetModule tkmd = new TargetModule(workingDirectory);
 		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, 
 				x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
