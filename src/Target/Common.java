@@ -2637,5 +2637,17 @@ public class Common
 //		return returnVariables;
 //	}
 
+    public boolean verifyFileExists(String filePathString)
+    { 
+    	boolean fileExists = false;
+    	File f = new File(filePathString);
+    	if(f.exists() && !f.isDirectory()) 
+    	{ 
+    	    fileExists = true;
+    	}
+
+    	return fileExists;
+
+    }
 
 }
