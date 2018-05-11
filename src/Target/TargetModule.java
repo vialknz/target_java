@@ -285,17 +285,9 @@ public class TargetModule
 		                prevTsRef2.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf2)]);
 		                prevTsRef2.add(mod_data_ts_[i-3][9][getSurfIndex(ref_surf2)]);
 	                }
-//	                System.out.println("Mmmbop1");
 	                TreeMap<String,Double> rad_rur1  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf1,Dats,prevTsRef1,i,1.0);  // # creates dictionary with radiation variables for current timestep and surface type
 //	                System.out.println(i + " " + rad_rur1.toString()); 
-//	                if (i > 15)
-//	                {
-//	                	//TODO
-//	                	 System.exit(1);
-//	                }
-	               
-
-//	                System.out.println("Mmmbop2");
+	            
 	                TreeMap<String,Double> rad_rur2  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf2,Dats,prevTsRef2,i,1.0); // # creates dictionary with radiation variables for current timestep and surface type                             
 	                //##################### ENG BALANCE for "reference" site #######################
 	                TreeMap<String,Double> eng_bals_rur1=lumps.lumps(rad_rur1,cfm,met_d,ref_surf1,Dats,i);            // # creates dictionary with energy balance for current timestep and surface type
@@ -394,31 +386,29 @@ public class TargetModule
 	                
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
 	                {
-	                	System.out.println("Error with Tb_rur");
+//	                	System.out.println("Error with Tb_rur");
 	                	Tb_rur = Tb_rur_prev;
 	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
 	                	//System.exit(1);
 	                }
 	                else
 	                {
-	                	System.out.println("Tb_rur=" + Tb_rur);
+//	                	System.out.println("Tb_rur=" + Tb_rur);
 	                	Tb_rur_prev = Tb_rur;
 	                }
 	                
-	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
-	                System.out.println("Tb_rurOld=" + Tb_rur);
-	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
-	                {
-	                	System.out.println("Error with java Tb_rur");
-	                	Tb_rur = Tb_rur_prev;
-	                }
+	                //this is the java version of the convergence. Mostly works but not for every case. So, disable for now.
+//	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+//	                System.out.println("Tb_rurOld=" + Tb_rur);
+//	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
+//	                {
+//	                	System.out.println("Error with java Tb_rur");
+//	                	Tb_rur = Tb_rur_prev;
+//	                }
 	                
 	                Tb_rur = Tb_rur - 9.806/1004.67*dz;
-	                System.out.println("Tb_rur after=" + Tb_rur);
-	                
-	                
-//	                System.exit(1);
-	                
+//	                System.out.println("Tb_rur after=" + Tb_rur);
+	        	                
 	                //# always use iterative solution for rural Tb
 	                
 	                //###### Begin calculating modelled variables for 10 different SVF values... 
@@ -466,7 +456,6 @@ public class TargetModule
 	        	                	prevTmRefForce.add(mod_data_tm_[i-1][9][getSurfIndex(surf)]);
 	        	                }
 	        	                
-//	        	                System.out.println("Mmmbop3");
 	                    		TreeMap<String,Double> rad = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                    		// # creates dictionary with radiation variables for current timestep and surface type                             
 	                            //##################### ENG BALANCE non-water #######################
@@ -512,9 +501,7 @@ public class TargetModule
 		        	                prevTsRef.add(mod_data_ts_[i-2][9][getSurfIndex(surf)]);
 		        	                prevTsRef.add(mod_data_ts_[i-3][9][getSurfIndex(surf)]);
 	                        	}
-
-	        	                
-//	                        	System.out.println("Mmmbop4");
+	        	             
 	                        	TreeMap<String,Double> rad  = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                        	// # creates dictionary with radiation variables for current timestep and surface type                             
 	                        	TreeMap<String,Double> wtr_stf = tsEbW.ts_EB_W(met_d,cfm,mod_data_ts_,mod_data_tm_,Dats,i,rad,vf); 
@@ -793,28 +780,6 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     double httc_urb_new =  httcReturn.get(Httc.HTTC_KEY);      
 
     //## calculate Tsurf of the canyon... this inclues walls
-  
-    
-//    double Tsurf_can  = (mod_data_ts_[i][roofIndex][9]*LC.get(LCData.roof)) 
-//    		+ (mod_data_ts_[i][concIndex][fg]*LC.get(LCData.conc)) 
-//    		+  (mod_data_ts_[i][roadIndex][fg]*LC.get(LCData.road)) 
-//    		+ (mod_data_ts_[i][watrIndex][fg]*LC.get(LCData.watr)) 
-//    		+ (mod_data_ts_[i][dryIndex][fg]*LC.get(LCData.dry))  
-//    		+  (mod_data_ts_[i][irrIndex][fg]*LC.get(LCData.irr)) 
-//    		+ (mod_data_ts_[i][wallIndex][fw]*LC.get(LCData.wall))  
-//    		+ (mod_data_ts_[i][VegIndex][9]*LC.get(LCData.Veg)) ; 
-    //System.out.println(LC.get(LCData.road));
-    //System.out.println(LC.get(LCData.Veg));
-//    System.out.println(mod_data_ts_[i][9][VegIndex]);
-//    System.out.println(mod_data_ts_[i][9][roofIndex]*LC.get(LCData.roof));
-//    System.out.println(mod_data_ts_[i][fg][concIndex]*LC.get(LCData.conc));
-//    System.out.println(mod_data_ts_[i][fg][roadIndex]*LC.get(LCData.road));
-//    System.out.println(mod_data_ts_[i][fg][watrIndex]*LC.get(LCData.watr));
-//    System.out.println(mod_data_ts_[i][fg][dryIndex]*LC.get(LCData.dry));
-//    System.out.println(mod_data_ts_[i][fg][irrIndex]*LC.get(LCData.irr));
-//    System.out.println(mod_data_ts_[i][fw][wallIndex]*LC.get(LCData.wall));
-    //System.out.println(mod_data_ts_[i][9][VegIndex]*LC.get(LCData.Veg));
-
     double Tsurf_can  = (mod_data_ts_[i][9][roofIndex]*LC.get(LCData.roof)) 
     		+ (mod_data_ts_[i][fg][concIndex]*LC.get(LCData.conc)) 
     		+  (mod_data_ts_[i][fg][roadIndex]*LC.get(LCData.road)) 
@@ -825,13 +790,6 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     		+ (mod_data_ts_[i][9][VegIndex]*LC.get(LCData.Veg)) ; 
     //# calculate average horizontal surface temperature (excludes walls) -- Tsurf = 1.0
     ArrayList<Double> LcH  = LC_wRoofAvg ;
-//    double Tsurf_horz = (mod_data_ts_[i][roofIndex][9]*LcH.get(LCData.roof)) 
-//    		+ (mod_data_ts_[i][concIndex][fg]*LcH.get(LCData.conc)) 
-//    		+  (mod_data_ts_[i][roadIndex][fg]*LcH.get(LCData.road)) 
-//    		+ (mod_data_ts_[i][watrIndex][fg]*LcH.get(LCData.watr)) 
-//    		+ (mod_data_ts_[i][dryIndex][fg]*LcH.get(LCData.dry))  
-//    		+  (mod_data_ts_[i][irrIndex][fg]*LcH.get(LCData.irr)) 
-//    		+ (mod_data_ts_[i][VegIndex][9]*LcH.get(LCData.Veg));
     double Tsurf_horz = (mod_data_ts_[i][9][roofIndex]*LcH.get(LCData.roof)) 
     		+ (mod_data_ts_[i][fg][concIndex]*LcH.get(LCData.conc)) 
     		+  (mod_data_ts_[i][fg][roadIndex]*LcH.get(LCData.road)) 
@@ -839,7 +797,6 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     		+ (mod_data_ts_[i][fg][dryIndex]*LcH.get(LCData.dry))  
     		+  (mod_data_ts_[i][fg][irrIndex]*LcH.get(LCData.irr)) 
     		+ (mod_data_ts_[i][9][VegIndex]*LcH.get(LCData.Veg));
-//    double Tsurf_wall = mod_data_ts_[i][wallIndex][fw];
     double Tsurf_wall = mod_data_ts_[i][fw][wallIndex];
 
     
@@ -853,21 +810,6 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
         if (cfm.getValue("direct roofs").equals("Y"))
         {
 //            ## this connects the roofs directly to the canyon via 2 resistances [this one works best]
-//            Tac =  ((mod_data_ts_[i][concIndex][fg]*httc_can*LC.get(LCData.conc)) 
-//            		+ (mod_data_ts_[i][roofIndex][9]/((1./httc_can)+(1./httc_urb_new))*LC.get(LCData.roof)) 
-//            		+  (mod_data_ts_[i][roadIndex][fg]*httc_can*LC.get(LCData.road)) 
-//            		+ (mod_data_ts_[i][watrIndex][fg]*httc_can*LC.get(LCData.watr)) 
-//            		+ (mod_data_ts_[i][dryIndex][fg]*httc_can*LC.get(LCData.dry))  
-//            		+  (mod_data_ts_[i][irrIndex][fg]*httc_can*LC.get(LCData.irr)) 
-//            		+ (mod_data_ts_[i][wallIndex][fw]*httc_can*LC.get(LCData.wall))  
-//            		+ (mod_data_ts_[i][VegIndex][9]*httc_can*LC.get(LCData.Veg)) 
-//            		+ (Tb_rur* httc_urb_new*PlanCan) )   / ((httc_can*LC.get(LCData.conc)) 
-//            				+ (LC.get(LCData.roof)/((1./httc_can)+(1./httc_urb_new))) 
-//            				+ (httc_can*LC.get(LCData.road)) + (httc_can*LC.get(LCData.watr)) 
-//            				+ (httc_can*LC.get(LCData.dry))  +  (httc_can*LC.get(LCData.irr)) 
-//            				+ (httc_can*LC.get(LCData.wall))  
-//            				+ (httc_can*LC.get(LCData.Veg)) 
-//            				+ (httc_urb_new*PlanCan));   
             Tac =  ((mod_data_ts_[i][fg][concIndex]*httc_can*LC.get(LCData.conc)) 
             		+ (mod_data_ts_[i][9][roofIndex]/((1./httc_can)+(1./httc_urb_new))*LC.get(LCData.roof)) 
             		+  (mod_data_ts_[i][fg][roadIndex]*httc_can*LC.get(LCData.road)) 
@@ -891,18 +833,6 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     
     if (cfm.getValue("include roofs").equals("N"))
     {
-//        Tac =  ((mod_data_ts_[i][concIndex][fg]*httc_can*LC.get(LCData.conc)) 
-//        		+  (mod_data_ts_[i][roadIndex][fg]*httc_can*LC.get(LCData.road)) 
-//        		+ (mod_data_ts_[i][watrIndex][fg]*httc_can*LC.get(LCData.watr)) 
-//        		+ (mod_data_ts_[i][dryIndex][fg]*httc_can*LC.get(LCData.dry))  
-//        		+  (mod_data_ts_[i][irrIndex][fg]*httc_can*LC.get(LCData.irr)) 
-//        		+ (mod_data_ts_[i][wallIndex][fw]*httc_can*LC.get(LCData.wall))  
-//        		+ (mod_data_ts_[i][VegIndex][9]*httc_can*LC.get(LCData.Veg)) 
-//        		+ (Tb_rur* httc_rur*PlanCan) )   
-//        		/ ((httc_can*LC.get(LCData.conc)) +  (httc_can*LC.get(LCData.road)) 
-//        				+ (httc_can*LC.get(LCData.watr)) + (httc_can*LC.get(LCData.dry))  
-//        				+  (httc_can*LC.get(LCData.irr)) + (httc_can*LC.get(LCData.wall))  
-//        				+ (httc_can*LC.get(LCData.Veg)) + (httc_rur*PlanCan));
         Tac =  ((mod_data_ts_[i][fg][concIndex]*httc_can*LC.get(LCData.conc)) 
         		+  (mod_data_ts_[i][fg][roadIndex]*httc_can*LC.get(LCData.road)) 
         		+ (mod_data_ts_[i][fg][watrIndex]*httc_can*LC.get(LCData.watr)) 
