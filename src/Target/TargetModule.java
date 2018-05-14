@@ -386,28 +386,33 @@ public class TargetModule
 	                
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
 	                {
-//	                	System.out.println("Error with Tb_rur");
+	                	System.out.println("Error with Python Tb_rur solver, returned value=" + Tb_rur);
 	                	Tb_rur = Tb_rur_prev;
 	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
 	                	//System.exit(1);
 	                }
 	                else
 	                {
-//	                	System.out.println("Tb_rur=" + Tb_rur);
+	                	System.out.println("Python Tb_rur=" + Tb_rur);
 	                	Tb_rur_prev = Tb_rur;
 	                }
 	                
 	                //this is the java version of the convergence. Mostly works but not for every case. So, disable for now.
-//	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 //	                System.out.println("Tb_rurOld=" + Tb_rur);
-//	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
-//	                {
-//	                	System.out.println("Error with java Tb_rur");
-//	                	Tb_rur = Tb_rur_prev;
-//	                }
+	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
+	                {
+	                	System.out.println("Error with java Tb_rur, returned value=" + Tb_rur);
+	                	Tb_rur = Tb_rur_prev;
+	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
+	                }
+	                else
+	                {
+	                	System.out.println("Java Tb_rur=" + Tb_rur);
+	                }
 	                
 	                Tb_rur = Tb_rur - 9.806/1004.67*dz;
-//	                System.out.println("Tb_rur after=" + Tb_rur);
+	                System.out.println("Tb_rur after=" + Tb_rur);
 	        	                
 	                //# always use iterative solution for rural Tb
 	                

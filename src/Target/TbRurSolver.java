@@ -4,7 +4,7 @@ public class TbRurSolver
 {
 
 	public static final double ERROR_RETURN = -9999.;
-	public static final int ITERATIONS = 400;
+	public static final int ITERATIONS = 40000;
 	
 	public static void main(String[] args)
 	{
@@ -19,12 +19,13 @@ public class TbRurSolver
 		double Ri_rur = 0.24555776;
 		
 		//  ('Tb_rur=', 31.4718836061206, 26, '-1.0_30.7_[ 8.94329807]_[ 10.39989511]_[-0.11332934]', 31.4621231872766)
-//		dz=-1.0;
-//		ref_ta = 30.7;
-//		UTb = 8.94329807;
-//		mod_U_TaRef = new double[1];
-//		mod_U_TaRef[0] = 10.39989511;
-//		Ri_rur = -0.11332934;
+		dz=-1.0;
+		ref_ta = 30.7;
+		UTb = 8.94329807;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] = 10.39989511;
+		Ri_rur = -0.11332934;
+
 		
 //		('Ok calculating Tb_rur', 0.471325730671747*(-19.612*Thi_tb + 594.2436)/(Thi_tb + 30.3) + 0.103263339976444)
 //		('Tb_rur=', 30.9943884684212, 24, '-1.0_30.3_[ 8.94329807]_[ 10.39989511]_[-0.10326334]', 30.9846280495772)
@@ -35,12 +36,7 @@ public class TbRurSolver
 		mod_U_TaRef[0] = 10.39989511;
 		Ri_rur = -0.10326334;
 		
-		dz=15.0 ;
-		ref_ta =23.5 ;
-		UTb =  0.21266443039771887 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.1  ;
-		Ri_rur = -370.55369919381894;
+
 		
 		dz=15.0 ;
 		ref_ta =16.5 ;
@@ -48,6 +44,7 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] =  1.8692621937604166  ;
 		Ri_rur = -1.3626911282063752;
+		//  15.8356754268024
 		
 		//15.0 16.5 3.975255797000494 1.8692621937604166 0 -1.3626911282063752
 		
@@ -58,6 +55,7 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] =  2.8888597534372273 ;
 		Ri_rur = -0.5326357056213218;
+		//   16.1676869029464
 		//  dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = 15.0 16.8 6.143577139636226 2.8888597534372273 7 -0.5326357056213218
 
 		
@@ -67,6 +65,7 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] =  0.1 ;
 		Ri_rur = -602.7585857212;
+		// TODO   23.1629904161214
 		//  15.0 24.4 0.21266443039771887 0.1 38 -602.7585857212
 
 		dz=15.0 ;
@@ -75,11 +74,28 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] =  0.8496646334718477 ;
 		Ri_rur = -6.956094923672547;
+		// 15.8958756964009
 		// dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = 15.0 16.6 1.8069344530637708 0.8496646334718477 12 -6.956094923672547
 
 		
+		dz=15.0 ;
+		ref_ta =23.5 ;
+		UTb =  0.21266443039771887 ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] =  0.1  ;
+		Ri_rur = -370.55369919381894;
+		//TODO this should be 22.760359533246
+		
 		double value = solver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 		System.out.println(value);
+		
+//		TbRurSolver_python solverPython = new TbRurSolver_python();
+//		String workingDirectory = System.getProperty("user.dir");
+//		solverPython.setWorkingDirectory(workingDirectory);
+//		double value2 = solverPython.converge(i+"", dz+"", ref_ta+"", UTb+"", mod_U_TaRef+"", Ri_rur+"");
+//		System.out.println(value2);
+		
+		
 //  ('Tb_rur=', 21.8093381484548, 0, '-1.0_21.9_[ 2.63038178]_[ 3.05879268]_[ 0.24555776]', 21.7995777296108)
 //('Tb_rur=', 21.8093381484548, 0, '-1.0_21.9_[ 2.63038178]_[ 3.05879268]_[ 0.24555776]', 21.7995777296108)
 //		2009-02-05 00:30:00 1
@@ -113,8 +129,81 @@ public class TbRurSolver
 //		double Tb_rur_itr = 9.806 * dz * (Thi_tb - ref_ta) * 2.0 / (Thi_tb + ref_ta)
 //				/ Math.pow((UTb - mod_U_TaRef[i]), 2.0) - Ri_rur;
 //	}
-
+	
+	
 	public double converge(double dz, double ref_ta, double UTb, double[] mod_U_TaRef, int i, double Ri_rur)
+	{
+	
+		
+//		double dz=-1.0;
+//		double ref_ta = 21.9;
+//		double UTb = 2.63038178;
+//		double mod_U_TaRef = 3.05879268;
+//		int i=0;
+//		double Ri_rur = 0.24555776;
+		
+//		1 -1.0 21.9 2.63038178 3.05879268 0.24555776
+//		21.7995777279967
+		
+		//String ExpressionString = generateExpressionStr(dz, ref_ta, UTb, mod_U_TaRef, Ri_rur);
+		double previousValue = 0.0;
+		double testValue = 15.0;
+		int count = 0;
+		while (count < ITERATIONS)
+		{
+//			double returnValue = eval(testValue, ExpressionString);
+			double returnValue = calculateExpression(dz, ref_ta, UTb, mod_U_TaRef[i], Ri_rur, testValue);
+			double scale = Math.abs(returnValue/testValue);
+			double previousValueDifference =  returnValue - previousValue;
+			if (previousValueDifference < 0)
+			{
+				scale = scale * -1.;
+			}
+//			System.out.println(count + "\t" + returnValue + "\t" + testValue + "\t" + scale + "\t" + previousValueDifference);
+			if (returnValue > 0)
+			{
+				if (scale > 1000)
+				{
+					scale = 1.0;
+				}
+				testValue = testValue + 1.0 * scale;
+			}
+			else
+			{
+				if (scale < -1000)
+				{
+					scale = -1.0;
+				}
+				testValue = testValue - 1.0 * scale;
+			}
+			
+			
+			if (Math.abs(returnValue) < 1.0E-12)
+			{
+				break;
+			}
+			if (count == ITERATIONS-1)
+			{
+				testValue = ERROR_RETURN;
+				break;
+			}
+			
+			count ++;
+		}
+		return testValue;
+		
+		
+	}
+	
+	public double calculateExpression(double dz, double ref_ta, double UTb, double mod_U_TaRef, double Ri_rur, double Thi_tb)
+	{
+		
+		double expressionValue = 9.806 * dz *(Thi_tb- ref_ta)*2.0/(Thi_tb + ref_ta )/ Math.pow((UTb-mod_U_TaRef),2.0) -  Ri_rur;
+		
+		return expressionValue;
+	}
+
+	public double converge_obsolete(double dz, double ref_ta, double UTb, double[] mod_U_TaRef, int i, double Ri_rur)
 	{
 		boolean bigRi_rur = false;
 		boolean mediumRi_rur = false;

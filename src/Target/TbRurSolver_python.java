@@ -19,6 +19,48 @@ public class TbRurSolver_python
 		String mod_U_TaRef="3.05879268";
 		String Ri_rur="0.24555776";
 		
+		dz="-1.0";
+		ref_ta = "30.7";
+		UTb = "8.94329807";
+		mod_U_TaRef = "10.39989511";
+		Ri_rur = "-0.11332934";
+		
+		dz="-1.0";
+		ref_ta = "30.3";
+		UTb = "8.94329807";
+		mod_U_TaRef = "10.39989511";
+		Ri_rur = "-0.10326334";
+		
+		dz="15.0" ;
+		ref_ta ="23.5" ;
+		UTb =  "0.21266443039771887" ;
+		mod_U_TaRef =  "0.1"  ;
+		Ri_rur = "-370.55369919381894";
+		
+		dz="15.0" ;
+		ref_ta ="16.5" ;
+		UTb =  "3.975255797000494" ;
+		mod_U_TaRef =  "1.8692621937604166"  ;
+		Ri_rur = "-1.3626911282063752";
+		
+		dz="15.0" ;
+		ref_ta ="16.8" ;
+		UTb =  "6.143577139636226" ;
+		mod_U_TaRef =  "2.8888597534372273" ;
+		Ri_rur = "-0.5326357056213218";
+		
+		dz="15.0" ;
+		ref_ta ="24.4" ;
+		UTb =  "0.21266443039771887" ;
+		mod_U_TaRef =  "0.1" ;
+		Ri_rur = "-602.7585857212";
+		
+		dz="15.0" ;
+		ref_ta ="16.6" ;
+		UTb =  "1.8069344530637708" ;
+		mod_U_TaRef = "0.8496646334718477" ;
+		Ri_rur = "-6.956094923672547";
+		
 		TbRurSolver_python solver = new TbRurSolver_python();
 		solver.setWorkingDirectory("/home/kerryn/git/Target_Java/bin");
 		double returnValue = solver.converge(i, dz, ref_ta, UTb, mod_U_TaRef, Ri_rur);
@@ -50,7 +92,7 @@ public class TbRurSolver_python
 			String returnValue = in.readLine();
 //			System.out.println(returnValue);
 			ret = new Double(returnValue).doubleValue();
-			//System.out.println("value is : " + ret);
+//			System.out.println("value is : " + ret);
 		}
 		catch (Exception e)
 		{
