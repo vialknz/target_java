@@ -78,10 +78,10 @@ public class TbRurSolver_python
 		try
 		{
 			String solverLocation = this.workingDirectory + "/../" + "TbRurSolver.py";
-			System.out.println("solverLocation="+solverLocation);
+//			System.out.println("solverLocation="+solverLocation);
 			
 			solverLocation = findTbRurPython(this.workingDirectory);
-			System.out.println("Final solverLocation="+solverLocation);
+//			System.out.println("Final solverLocation="+solverLocation);
 			
 			ProcessBuilder pb = new ProcessBuilder("/usr/bin/python", solverLocation,i,dz,ref_ta,UTb,mod_U_TaRef,Ri_rur);
 //			ProcessBuilder pb = new ProcessBuilder("python","/home/kerryn/git/Target_Java/TbRurSolver.py",

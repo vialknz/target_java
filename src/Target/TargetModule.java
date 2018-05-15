@@ -233,7 +233,7 @@ public class TargetModule
 	                dte   = new Date(dte.getTime() + i*timedelta);  // # current timestep 
 	                Dats.put("dte", dte);
 	                ArrayList<ArrayList<Object>> met_d = met_data_all ;
-	                System.out.println(dte + " " + i);
+	                System.out.println( "\t"+"\t"+"\t"+"\t"+dte + " " + i);
 	                
 	                //## BEGIN CALCULATION OF Tb_rur
 	                String ref_surf1 = LCData.DRY_SURF;
@@ -368,7 +368,7 @@ public class TargetModule
 	                
 	                //###### Solve Richardson's number eq for "high temperature" aka Tb_rur 
 	                double dz = z_Hx2 - z_TaRef ;
-//	                System.out.println("dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = "   + dz + " " + ref_ta + " " + UTb + " " + mod_U_TaRef[i] + " " + i + " " + Ri_rur);
+	                System.out.println("dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = "   + dz + " " + ref_ta + " " + UTb + " " + mod_U_TaRef[i] + " " + i + " " + Ri_rur);
 //	                System.out.println("dz"+dz);
 //	                System.out.println("ref_ta"+ref_ta);
 //	                System.out.println("UTb"+UTb);
@@ -379,6 +379,7 @@ public class TargetModule
 	                //System.exit(1);
 	                
 	                double Tb_rur ;
+	                double pythonTbRur=0,javaTbRur=0;
 	                
 	                	                
 	                tbRurSolver.setWorkingDirectory(this.workingDirectory);
@@ -393,8 +394,9 @@ public class TargetModule
 	                }
 	                else
 	                {
-	                	System.out.println("Python Tb_rur=" + Tb_rur);
+	                	System.out.println("Python Tb_rur=" + "\t" + Tb_rur);
 	                	Tb_rur_prev = Tb_rur;
+	                	pythonTbRur = Tb_rur;
 	                }
 	                
 	                //this is the java version of the convergence. Mostly works but not for every case. So, disable for now.
@@ -408,11 +410,13 @@ public class TargetModule
 	                }
 	                else
 	                {
-	                	System.out.println("Java Tb_rur=" + Tb_rur);
+	                	System.out.println("Java Tb_rur=" + "\t" + Tb_rur);
+	                	javaTbRur = Tb_rur;
 	                }
 	                
 	                Tb_rur = Tb_rur - 9.806/1004.67*dz;
-	                System.out.println("Tb_rur after=" + Tb_rur);
+	                System.out.println("Tb_rur difference between python and java=" + (pythonTbRur - javaTbRur));
+	                System.out.println("Tb_rur after="+"\t" +"\t"+ Tb_rur);
 	        	                
 	                //# always use iterative solution for rural Tb
 	                

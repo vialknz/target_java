@@ -4,7 +4,7 @@ public class TbRurSolver
 {
 
 	public static final double ERROR_RETURN = -9999.;
-	public static final int ITERATIONS = 40000;
+	public static final int ITERATIONS = 900000;
 	
 	public static void main(String[] args)
 	{
@@ -35,7 +35,6 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] = 10.39989511;
 		Ri_rur = -0.10326334;
-		
 
 		
 		dz=15.0 ;
@@ -59,14 +58,7 @@ public class TbRurSolver
 		//  dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = 15.0 16.8 6.143577139636226 2.8888597534372273 7 -0.5326357056213218
 
 		
-		dz=15.0 ;
-		ref_ta =24.4 ;
-		UTb =  0.21266443039771887 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.1 ;
-		Ri_rur = -602.7585857212;
-		// TODO   23.1629904161214
-		//  15.0 24.4 0.21266443039771887 0.1 38 -602.7585857212
+
 
 		dz=15.0 ;
 		ref_ta =16.6 ;
@@ -84,7 +76,93 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] =  0.1  ;
 		Ri_rur = -370.55369919381894;
-		//TODO this should be 22.760359533246
+//		//TODO this should be 22.760359533246
+		
+		dz=15.0 ;
+		ref_ta =24.4 ;
+		UTb =  0.21266443039771887 ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] =  0.1 ;
+		Ri_rur = -602.7585857212;
+		//  23.1629904161214
+		//  15.0 24.4 0.21266443039771887 0.1 38 -602.7585857212
+		
+		dz=15.0 ;
+		ref_ta =18.4  ;
+		UTb =  1.445547562190818  ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] =  0.6797317066551265  ;
+		Ri_rur = -9.705888769990096;
+//		 15.0 18.4 1.445547562190818 0.6797317066551265 59 -9.705888769990096
+//		 Python Tb_rur=	17.7014531204627
+		
+		
+		
+		
+		
+		
+		
+		
+		dz=15.0 ;
+		ref_ta =20.4  ;
+		UTb =   0.7227737817459052  ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] =  0.33986585363344246   ;
+		Ri_rur = -22.889685313478864;		
+//		15.0 20.4 0.7227737817459052 0.33986585363344246 50 -22.889685313478864
+//		Python Tb_rur=	19.9397973578936
+		//TODO
+		
+		dz=15.0 ;
+		ref_ta =19.6   ;
+		UTb =   0.7227737817459055   ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] = 0.33986585363344246  ;
+		Ri_rur = -29.853963929463763;	
+//		15.0 19.6 0.7227737817459055 0.33986585363344246 51 -29.853963929463763
+//		Python Tb_rur=	19.0252892485087
+		
+		dz=15.0 ;
+		ref_ta =18.7   ;
+		UTb =   0.7227737817459053   ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] = 0.33986585363344246   ;
+		Ri_rur =  -36.639661688103196;	
+//		15.0 18.7 0.7227737817459053 0.33986585363344246 56 -36.639661688103196
+//		Python Tb_rur=	18.0292827501739
+		
+//		15.0 18.6 0.7227737817459053 0.33986585363344246 57 -38.06643036395199
+//		Python Tb_rur=	17.9073747333698
+		
+//		15.0 18.4 0.7227737817459053 0.33986585363344246 58 -39.80777369502297
+//		Python Tb_rur=	17.6840887203085
+		
+//		15.0 18.2 0.21266443039771887 0.1 60 -477.5169573455006
+//		Python Tb_rur=	17.4651588495703
+		
+//		 15.0 18.2 0.7227737817459051 0.33986585363344246 61 -45.041233210330724
+//		 Python Tb_rur=	17.4008177671521
+		
+//		15.0 20.2 0.7227737817459055 0.33986585363344246 100 -27.733286267304386
+//		Python Tb_rur=	19.649196768224
+		
+//		15.0 19.6 0.7227737817459053 0.33986585363344246 107 -28.76141635260905
+//		Python Tb_rur=	19.046024362753
+		
+//		 15.0 18.2 0.21266443039771887 0.1 60 -477.5169573455006
+//		 Python Tb_rur=	17.4651588495703
+		
+		
+		dz=15.0 ;
+		ref_ta =18.2    ;
+		UTb =   0.21266443039771887    ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] = 0.1    ;
+		Ri_rur =  -477.5169573455006;	
+//		15.0 18.2 0.21266443039771887 0.1 60 -477.5169573455006
+//		Python Tb_rur=	17.4651588495703
+		
+		
 		
 		double value = solver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 		System.out.println(value);
@@ -146,8 +224,63 @@ public class TbRurSolver
 //		21.7995777279967
 		
 		//String ExpressionString = generateExpressionStr(dz, ref_ta, UTb, mod_U_TaRef, Ri_rur);
+		boolean lowRiRur = false;
 		double previousValue = 0.0;
 		double testValue = 15.0;
+		if (Ri_rur < -400)
+		{
+			testValue = 17.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -200)
+		{
+			testValue = 22.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -50)
+		{
+			testValue = 20.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -44)
+		{
+			testValue = 17.4;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -37)
+		{
+			testValue = 17.9;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -34)
+		{
+			testValue = 18.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -28)
+		{
+			testValue = 19.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -23)
+		{
+			testValue = 19.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
+		else if (Ri_rur < -20)
+		{
+			testValue = 20.0;
+			lowRiRur = true;
+//			System.out.println("Ri_rur is low="+ Ri_rur);
+		}
 		int count = 0;
 		while (count < ITERATIONS)
 		{
@@ -155,44 +288,178 @@ public class TbRurSolver
 			double returnValue = calculateExpression(dz, ref_ta, UTb, mod_U_TaRef[i], Ri_rur, testValue);
 			double scale = Math.abs(returnValue/testValue);
 			double previousValueDifference =  returnValue - previousValue;
+			double scaleIncrement =  0.01;
 			if (previousValueDifference < 0)
 			{
 				scale = scale * -1.;
 			}
 //			System.out.println(count + "\t" + returnValue + "\t" + testValue + "\t" + scale + "\t" + previousValueDifference);
-			if (returnValue > 0)
+//			if (Ri_rur < -200 && Math.abs(returnValue) < 50)
+//			{
+//				scaleIncrement = 0.000001;
+//			}
+//			if (lowRiRur)
+//			{
+//				testValue = getAlternativeIncrement(returnValue, testValue, scaleIncrement);
+//			}
+//			else if (returnValue > 0)
+//			{
+//				testValue = testValue + (1.0 * scale);		
+//			}
+//			else
+//			{
+//				testValue = testValue - (1.0 * scale);	
+//			}
+			
+			if (lowRiRur)
 			{
-				if (scale > 1000)
-				{
-					scale = 1.0;
-				}
-				testValue = testValue + 1.0 * scale;
+				testValue = getAlternativeIncrement(returnValue, testValue, scaleIncrement, Ri_rur);
 			}
-			else
+			else 
 			{
-				if (scale < -1000)
-				{
-					scale = -1.0;
-				}
-				testValue = testValue - 1.0 * scale;
+				testValue = testValue - (1.0 * scale);		
 			}
 			
-			
+				
 			if (Math.abs(returnValue) < 1.0E-12)
 			{
 				break;
 			}
 			if (count == ITERATIONS-1)
 			{
+				if (lowRiRur && (Math.abs(returnValue) < 1.0E-2))
+				{
+					//calling it close enough
+					break;
+				}
 				testValue = ERROR_RETURN;
 				break;
 			}
 			
 			count ++;
+			}
+			return testValue;
+	}
+	
+	public double getAlternativeIncrement(double returnValue, double testValue, double scaleIncrement, double Ri_rur)
+	{
+		double absReturnValue = Math.abs(returnValue);
+		double newTestValue = testValue;
+		
+		if (Ri_rur > -50)
+		{
+			if (returnValue > 0)
+			{
+				scaleIncrement = scaleIncrement * -1;
+			}
+
+			if (absReturnValue > 10 )
+			{
+				newTestValue = testValue + scaleIncrement;
+			}
+			else if (absReturnValue > 5 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.5;
+			}
+			else if (absReturnValue > 2.5 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.25;
+			}
+			else if (absReturnValue > 1 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.25 * 0.5;
+			}
+			else if (absReturnValue > 0.1 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.25 * 0.5 * 0.5 * 0.5;
+			}
+			else  if (absReturnValue > 0.001 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.000001;
+			}
+			else  
+			{
+				newTestValue = testValue + scaleIncrement * 0.00000001;
+			}
+			return newTestValue;
 		}
-		return testValue;
-		
-		
+	
+		if (Ri_rur > -500)
+		{
+			
+			if (returnValue > 0)
+			{
+				scaleIncrement = scaleIncrement * -1;
+			}
+
+			if (absReturnValue > 10 )
+			{
+				newTestValue = testValue + scaleIncrement;
+			}
+			else if (absReturnValue > 5 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.5;
+			}
+			else if (absReturnValue > 2.5 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.25;
+			}
+			else if (absReturnValue > 1 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.001;
+			}
+			else if (absReturnValue > 0.1 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.00001;
+			}
+			else  if (absReturnValue > 0.001 )
+			{
+				newTestValue = testValue + scaleIncrement * 0.0000001;
+			}
+			else  
+			{
+				newTestValue = testValue + scaleIncrement * 0.000000001;
+			}
+//			System.out.println(newTestValue);
+			return newTestValue;
+		}
+
+
+		if (returnValue > 0)
+		{
+			scaleIncrement = scaleIncrement * -1;
+		}
+
+		if (absReturnValue > 10 )
+		{
+			newTestValue = testValue + scaleIncrement;
+		}
+		else if (absReturnValue > 5 )
+		{
+			newTestValue = testValue + scaleIncrement * 0.5;
+		}
+		else if (absReturnValue > 2.5 )
+		{
+			newTestValue = testValue + scaleIncrement * 0.25;
+		}
+		else if (absReturnValue > 1 )
+		{
+			newTestValue = testValue + scaleIncrement * 0.25 * 0.5;
+		}
+		else if (absReturnValue > 0.1 )
+		{
+			newTestValue = testValue + scaleIncrement * 0.25 * 0.5 * 0.5 * 0.5;
+		}
+		else  if (absReturnValue > 0.001 )
+		{
+			newTestValue = testValue + scaleIncrement * 0.0000001;
+		}
+		else  
+		{
+			newTestValue = testValue + scaleIncrement * 0.0000000001;
+		}
+
+		return newTestValue;
 	}
 	
 	public double calculateExpression(double dz, double ref_ta, double UTb, double mod_U_TaRef, double Ri_rur, double Thi_tb)
