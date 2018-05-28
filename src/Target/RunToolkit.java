@@ -120,7 +120,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		}
 		else 
 		{
-			controlFileName = "/home/kerryn/Documents/Work/Toolkit2-Runs/Sunbury3ExtremeB/controlfiles/Sunbury3ExtremeB/Sunbury3ExtremeB.txt";
+			controlFileName = "/home/kerryn/Documents/Work/Toolkit2-Runs/Target_python/toolkit2/controlfiles/Mawson/Mawson_stations.txt";
 			cfm = new Cfm(controlFileName);
 		}
 		
@@ -150,7 +150,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		System.out.println(controlTextFileSubpath);
 
 		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
-		rootDir = controlTextFileSubpath + ".."  + File.separator;
+		rootDir = controlTextFileSubpath + ".."  + File.separator + ".."  + File.separator;
 		
 		System.out.println(rootDir);
 	

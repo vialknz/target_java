@@ -49,8 +49,8 @@ public class RnCalcNew
 		double Rnnext = 0.;
 		double Rnstar = 0.;
 		
-		String tmstp = cfm.getValue("timestep");                            // # time step (minutes)
-		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
+//		String tmstp = cfm.getValue("timestep");                            // # time step (minutes)
+//		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 		Date dte = Dats.get("dte");
 		Date date1A = Dats.get("date1A");
 				
@@ -87,7 +87,7 @@ public class RnCalcNew
 			ArrayList<Object> metMinus1 = met.get(i-1);			
 			double metKdMinus1 = (double)metMinus1.get(MetData.Kd);
 			double metLdMinus1 = (double)metMinus1.get(MetData.Ld);
-		
+			
 			if (!surf.equals("roof"))
 			{
 			
@@ -121,6 +121,10 @@ public class RnCalcNew
 //				# Rnprev = (met['Kd'][i-1]* (1.0 - svf) * (1.0-albedo))	 + ((emiss*(met['Ld'][i-1]   - (cs.cs['sb']*(Ta_srfp+273.15)**4)))*(1.0-svf)) #/ 2.
 //				# Rnnext = (met['Kd'][i+1]* (1.0 - svf) * (1.0-albedo))	 + ((emiss*(met['Ld'][i+1]   - (cs.cs['sb']*(Ta_srfn+273.15)**4)))*(1.0-svf)) #/ 2.
 //				# Rnstar = 0.5*(Rnnext - Rnprev)	
+			
+//			System.out.println("rncalc" + " " + surf +  " " + i+ " " + Ta_srfp + " " + Ta_srf + " " + Ta_srfn + " " + metKd0 + " " + metLd0 + " " + metKdPlus1 + " " + metLdPlus1 + " " + metKdMinus1 + " " + metLdMinus1 );
+			System.out.println("rncalc" + " " + surf +  " " + i + " " + mod_ts.get(2) + " " + mod_ts.get(1) + " " + mod_ts.get(0) + " " + svf );
+
 		}
 
 			

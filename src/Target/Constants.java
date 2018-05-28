@@ -68,7 +68,7 @@ public class Constants
 	public static double cs_Lv = 2.43*(Math.pow(10,6))	;		//## the latent heat of vaporisation (MJ Kg^-1)
 
 	public static double cs_z_URef = 	10.;  //# BOM reference height
-	public static double cs_z_TaRef = 3. ;  //# air temperature measurement height
+	public static double cs_z_TaRef = 2. ;  //# air temperature measurement height
 	public static double cs_z0m = 1.; //## roughness length, used in new Ta module.
 	public static double cs_zavg = 4.5 ;//# average building height in domain
 

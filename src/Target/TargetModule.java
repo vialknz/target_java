@@ -23,7 +23,7 @@ public class TargetModule
 //	private TreeMap<String,Double> Tb_rurCache=new TreeMap<String,Double>();
 //	private TreeMap<String,Double> calcLoopCache=new TreeMap<String,Double>();
 	private double Tb_rur_prev=0.0;
-	private double Ri_rur_prev=0.0;
+//	private double Ri_rur_prev=0.0;
 	
 	private RnCalcNew rnCalcNew = new RnCalcNew();
 	private Lumps lumps = new Lumps();
@@ -92,9 +92,9 @@ public class TargetModule
 	private static final int MOD_DATA_VEG_INDEX = 5;
 	private static final int MOD_DATA_DRY_INDEX = 6;
 	private static final int MOD_DATA_IRR_INDEX = 7;
-	private static final int MOD_DATA_TSOIL_INDEX = 8;
-	private static final int MOD_DATA_AVG_INDEX = 9;
-	private static final int MOD_DATA_DATE_INDEX = 10;
+//	private static final int MOD_DATA_TSOIL_INDEX = 8;
+//	private static final int MOD_DATA_AVG_INDEX = 9;
+//	private static final int MOD_DATA_DATE_INDEX = 10;
 	
 	
 			
@@ -160,7 +160,7 @@ public class TargetModule
 		//ArrayList<Double> mod_rslts_prev = new ArrayList<Double>();
 		
 		// # parse dates for input met file using format defined in control file
-		String run = cfm.getValue("run_name");                           
+//		String run = cfm.getValue("run_name");                           
 		// # model run name 
 		String tmstp = cfm.getValue("timestep");                            
 		// # time step (minutes)
@@ -173,7 +173,7 @@ public class TargetModule
 		
 
 		// ## the date/time that the simulation starts
-		Date date1 = cfm.getDateValue("date1");
+//		Date date1 = cfm.getDateValue("date1");
    
 		//  ## the date/time for period of interest (i.e. before this will not be saved)
 		Date date2 = cfm.getDateValue("date2");
@@ -212,7 +212,7 @@ public class TargetModule
 	        // # begin looping through the met forcing data file
 		    for (int i=0;i<nt;i++)
 	        {
-                long t10 = System.currentTimeMillis();
+//                long t10 = System.currentTimeMillis();
                 
 	            if (! (i == met_data_all.size()-1))
 	            {
@@ -285,12 +285,14 @@ public class TargetModule
 		                prevTsRef2.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf2)]);
 		                prevTsRef2.add(mod_data_ts_[i-3][9][getSurfIndex(ref_surf2)]);
 	                }
-	                TreeMap<String,Double> rad_rur1  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf1,Dats,prevTsRef1,i,1.0);  // # creates dictionary with radiation variables for current timestep and surface type
+//	                System.out.println("rncalc_new rad_rur1");
+//	                TreeMap<String,Double> rad_rur1  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf1,Dats,prevTsRef1,i,1.0);  // # creates dictionary with radiation variables for current timestep and surface type
 //	                System.out.println(i + " " + rad_rur1.toString()); 
 	            
+	                System.out.println("rncalc_new rad_rur2");
 	                TreeMap<String,Double> rad_rur2  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf2,Dats,prevTsRef2,i,1.0); // # creates dictionary with radiation variables for current timestep and surface type                             
 	                //##################### ENG BALANCE for "reference" site #######################
-	                TreeMap<String,Double> eng_bals_rur1=lumps.lumps(rad_rur1,cfm,met_d,ref_surf1,Dats,i);            // # creates dictionary with energy balance for current timestep and surface type
+//	                TreeMap<String,Double> eng_bals_rur1=lumps.lumps(rad_rur1,cfm,met_d,ref_surf1,Dats,i);            // # creates dictionary with energy balance for current timestep and surface type
 	                TreeMap<String,Double> eng_bals_rur2=lumps.lumps(rad_rur2,cfm,met_d,ref_surf2,Dats,i);            // # creates dictionary with energy balance for current timestep and surface type
 	                //##################### CALC LST for "reference" site #########################
 	                if (i < 1)
@@ -304,21 +306,21 @@ public class TargetModule
 		                prevTmRefForce2.add(mod_data_tm_[i-1][9][getSurfIndex(ref_surf2)]);
 	                }
 
-	                ArrayList<Double> prevTsRefForce2 = new ArrayList<Double>();
-	                TreeMap<String,Double> Ts_stfs_rur1 =forceRestore.Ts_calc_surf(eng_bals_rur1,cfm,prevTsRef1,prevTmRefForce2, Dats,ref_surf1,i) ;  // # creates dictionary with surface temperature for current timestep and surface type
+//	                ArrayList<Double> prevTsRefForce2 = new ArrayList<Double>();
+//	                TreeMap<String,Double> Ts_stfs_rur1 =forceRestore.Ts_calc_surf(eng_bals_rur1,cfm,prevTsRef1,prevTmRefForce2, Dats,ref_surf1,i) ;  // # creates dictionary with surface temperature for current timestep and surface type
 	                TreeMap<String,Double> Ts_stfs_rur2 =forceRestore.Ts_calc_surf(eng_bals_rur2,cfm,prevTsRef2,prevTmRefForce2, Dats,ref_surf2,i);   // # creates dictionary with surface temperature for current timestep and surface type  
 	                
 	                double Ts_stfs_rur = Ts_stfs_rur2.get(ForceRestore.TS_KEY); 
 	                
 	                //### these are the parameters for calculating Tb_rur and httc_rur - may need to add a method for calculating these from 
 	                // #  canopy displacement height (m)
-	                double dcan_rur = 0.01;  
+//	                double dcan_rur = 0.01;  
 	                // #  Roughness lenght for momentum (m)
 	                double z0m_rur = 0.45;
 	                // #  Roughness lenght for heat (m)
 	                double z0h_rur = z0m_rur/10.;
 
-	                double z_Hx3 = maxW * 3.0; // # height of Tb (3 x max building height)  -  this is the height of the main Tb value 
+//	                double z_Hx3 = maxW * 3.0; // # height of Tb (3 x max building height)  -  this is the height of the main Tb value 
 	                double z_Hx2  = maxH * 2.0; // # height of Tb (2 x max building height) - this is the secondary height used for Tb above canyon 
 	                
 	                double z_TaRef = Constants.cs_z_TaRef;  // # height of air temperature measurements (usually 2 m)
@@ -332,7 +334,7 @@ public class TargetModule
 	                double uTopHeightMinimumValue = 0.1;
 	                double uTopHeight = Math.max(metWS0 * ((Math.log(z_TaRef/z0m_rur))/(Math.log(z_Uref/z0m_rur))),uTopHeightMinimumValue);  //## convert to wind speed for Utop height using log profile.         CHECK initial extroplation is based on log profile (alternative is to use Fm from prev time step)
 	                mod_U_TaRef[i]=uTopHeight;
-//	                System.out.println("uTopHeight " + " " +  metWS0 + " " +z_TaRef + " " + z0m_rur + " " +z_Uref+ " " + z0m_rur  + " " + uTopHeight);
+	                System.out.println("uTopHeight " + " " +  metWS0 + " " +z_TaRef + " " + z0m_rur + " " +z_Uref  + " " + uTopHeight);
 	                
 	                //####### calculate Richardson's number and heat transfer coefficient for rural site 
 	                double Ri_rur = sfcRi.sfc_ri(z_TaRef-z0m_rur,ref_ta,Tlow_surf,mod_U_TaRef[i]);   //## calculate Richardson's number for Rural site   
@@ -421,13 +423,17 @@ public class TargetModule
 	                //# always use iterative solution for rural Tb
 	                
 	                //###### Begin calculating modelled variables for 10 different SVF values... 
-	                for (int vf=0;vf<=10;vf++)
+	                for (int vf=0;vf<10;vf++)
 	                {
 	                    double svfg = (vf+1)/10.0;
 	                    for (String surf : surfs)
 	                    {
 	                    	// # cycle through surface type for current timestep
-	                    	if ( !(surf.equals(WATR_KEY) || surf.equals(VEG_KEY)) )
+	                    	if ( surf.equals(WATR_KEY) || surf.equals(VEG_KEY) )
+	                    	{
+	                    		//do nothing
+	                    	}
+	                    	else
 	                        {
 	                    		ArrayList<Double> prevTsRef = new ArrayList<Double>();	
 	                    		if (i<1)
@@ -465,6 +471,7 @@ public class TargetModule
 	        	                	prevTmRefForce.add(mod_data_tm_[i-1][9][getSurfIndex(surf)]);
 	        	                }
 	        	                
+	        	                System.out.println("rncalc_new rad 470");
 	                    		TreeMap<String,Double> rad = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                    		// # creates dictionary with radiation variables for current timestep and surface type                             
 	                            //##################### ENG BALANCE non-water #######################
@@ -482,6 +489,7 @@ public class TargetModule
 	                            mod_data_qe_[i][vf][getSurfIndex(surf)] = eng_bals.get(Lumps.QE_KEY);
 	                            mod_data_qg_[i][vf][getSurfIndex(surf)] = eng_bals.get(Lumps.QG_KEY);
 	                            mod_data_rn_[i][vf][getSurfIndex(surf)] = rad.get(RnCalcNew.RN_KEY);
+	                            System.out.println("mod_data_ts_[i][vf][getSurfIndex(surf)]" + " " + mod_data_ts_[i][vf][getSurfIndex(surf)] + " " + i + " " + vf + " " + surf);
 	                        }
 	                        if (surf.equals(WATR_KEY))
 	                        {
@@ -511,6 +519,7 @@ public class TargetModule
 		        	                prevTsRef.add(mod_data_ts_[i-3][9][getSurfIndex(surf)]);
 	                        	}
 	        	             
+	                        	System.out.println("rncalc_new rad");
 	                        	TreeMap<String,Double> rad  = rnCalcNew.rn_calc_new(cfm,met_d,surf,Dats,prevTsRef,i,svfg);  
 	                        	// # creates dictionary with radiation variables for current timestep and surface type                             
 	                        	TreeMap<String,Double> wtr_stf = tsEbW.ts_EB_W(met_d,cfm,mod_data_ts_,mod_data_tm_,Dats,i,rad,vf); 
@@ -547,20 +556,40 @@ public class TargetModule
 	                for (int grid=0;grid< lc_data.size();grid++)
 	                {
 	                    counter+=1;
-	                    long t0 = System.currentTimeMillis();
+//	                    long t0 = System.currentTimeMillis();
 	                    TreeMap<Integer,Double> for_tab = calcLoop(lc_data,grid,counter,i,met_d,mod_data_ts_
 	                    		,cfm,z_Uref,z_Hx2,Tb_rur,dte,mod_U_TaRef[i],UTb,previousTacValues, httc_rur) ;         
 //	                    System.out.println(for_tab.toString());
-	                    long t1 = System.currentTimeMillis();
+//	                    long t1 = System.currentTimeMillis();
 	                    //mod_rslts_prev.add(for_tab.get(FOR_TAB_Tac_INDEX));
 //	                    System.out.println("for_tab.get(FOR_TAB_Tac_INDEX)="+for_tab.get(FOR_TAB_Tac_INDEX));
 	                    timestepsTacValues.add(for_tab.get(FOR_TAB_Tac_INDEX));
 	                    mod_rslts.add(for_tab);
+	                    if (grid == 0)
+	                    {
+	                    	System.out.println(for_tab.toString());
+	                    	System.out.println(
+	                    			//for_tab.get(0) + ", " + 
+	                    						for_tab.get(1) + ", " + 
+	                    						for_tab.get(2) + ", " + 
+	                    						for_tab.get(3) + ", " + 
+	                    						for_tab.get(4) + ", " + 
+	                    						for_tab.get(5) + ", " + 
+	                    						//for_tab.get(6) + ", " + 
+	                    						for_tab.get(7) + ", " + 
+	                    						for_tab.get(8) + ", " + 
+	                    						for_tab.get(9) + ", " + 
+	                    						for_tab.get(10) + ", " + 
+	                    						for_tab.get(11) 
+	                    			);
+//	                    	System.exit(1);
+	                    }
+	                    if (i == 10)
+	                    {
+	                    	System.exit(1);
+	                    }
+	                    
 
-	                    // # need yd_actual, TM, lat
-	                    // # hardcoded for now
-	                    //TODO
-	                    //double lat = -37.8136;
 	                    double lat = latEdge;
 	                    
 	            	    Calendar calendar = Calendar.getInstance();
@@ -609,7 +638,7 @@ public class TargetModule
 	                		latEdge, latResolution, lonEdge, lonResolution);
 	            }
      
-                long t11 = System.currentTimeMillis();
+//                long t11 = System.currentTimeMillis();
 //                System.out.println("int i=0;i<met_data_all.size() loop takes " + (t11-t10) + " " + new Date(System.currentTimeMillis()));
 	            
 	        }	                        
@@ -628,9 +657,9 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 {
 	ArrayList<Object> met0 = met_d.get(i);	
 	double metTa0 = (double)met0.get(MetData.Ta);
-	double metKd0 = (double)met0.get(MetData.Kd);
+//	double metKd0 = (double)met0.get(MetData.Kd);
 	double metWS0 = (double)met0.get(MetData.WS);
-	double metRH0 = (double)met0.get(MetData.RH);
+//	double metRH0 = (double)met0.get(MetData.RH);
 	   
 
     //# create dictionary for raw LC inputs
@@ -649,7 +678,7 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 //    System.out.println(LC_orig.toString());
     //System.exit(1);
    
-    double Wtree  = (double) lc_stuff.get(LcSort.Wtree_KEY);        // # street width (including area below trees) for grid point 
+//    double Wtree  = (double) lc_stuff.get(LcSort.Wtree_KEY);        // # street width (including area below trees) for grid point 
         
     //# define surface temperature of trees as canyon air temperature     
     if (! (i == 0))
@@ -686,15 +715,16 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 //    System.out.println("LC,2="+LC.toString());
 //    System.exit(1);
 
-    double svfgA = Math.pow((1.0+Math.pow((H/Wtree),2)),0.5) - H/Wtree ;     
+//    double svfgA = Math.pow((1.0+Math.pow((H/Wtree),2)),0.5) - H/Wtree ;     
     // # average SVF of the ground
-    double svfwA = 1./2.*(1.+W/H-Math.pow((1.+Math.pow((W/H),2.)),0.5)) ;    
+//    double svfwA = 1./2.*(1.+W/H-Math.pow((1.+Math.pow((W/H),2.)),0.5)) ;    
     // # average SVF of the wall
 
      
     int fw   = (int) lc_stuff.get(LcSort.fw_KEY);     
     //  # integer used to indicate relevant wall SVF - this doesn't get used any more - Ts for walls is stored in "mod_data_ts_[i][9]['wall']"
     int fg   = (int) lc_stuff.get(LcSort.fg_KEY);     
+    
     //  # integer used to indicate relevant ground SVF
 
 //    if (cfm.getValue("use_obs_ws").equals("Y"))
@@ -720,8 +750,8 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     double rs_can   = (Constants.cs_pa*Constants.cs_cpair)/(11.8+(4.2*Ucan));		//## calculate surface resistance (s/m)
     double httc_can = 1.0/rs_can ;                                          //## heat transfer coefficient for the canyon 
 
-    double rs_roof = (Constants.cs_pa*Constants.cs_cpair)/(11.8+(4.2*Uz));
-    double httc_roof = 1.0/rs_roof;
+//    double rs_roof = (Constants.cs_pa*Constants.cs_cpair)/(11.8+(4.2*Uz));
+//    double httc_roof = 1.0/rs_roof;
 
     
     //##### average Ta above canyon and Ta above roof by canyon and roof fraction
@@ -743,7 +773,8 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     double Tacprv;
     double roofTsrfT;
     
-    int roofIndex = getSurfIndex("roof");
+//    int roofIndex = getSurfIndex("roof");
+    int roofIndex = 0;
     int roadIndex = getSurfIndex("road");
     int wallIndex = getSurfIndex("wall");
     int dryIndex = getSurfIndex("dry");
@@ -776,17 +807,30 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     
     //## calculate Richardson's number for roof  
     double Tac_can_roof = ((LCroof/LChorz)*roofTsrfT) + ((LCcan/LChorz)*Tacprv)  ;  
-    //System.out.println("Tac_can_roof="+Tac_can_roof);
+//    System.out.println("Tac_can_roof="+Tac_can_roof);
 
     //## calculate httc for Rural site  
     double Ri_urb_new = sfcRi.sfc_ri(z_Hx2-H-z0m_urb,Tb_rur,Tac_can_roof,Uz);  
 
     TreeMap<String,Double> httcReturn = httc.httc(Ri_urb_new,Uz,z_Hx2-H-z0m_urb,z0m_urb,z0h_urb, met_d,i,Tac_can_roof,Tb_rur); 
-//    System.out.println("Ri_urb_new calcuation "+ " " + Ri_urb_new + " " + Uz + " " + z_Hx2 + " " + H + " " + z0m_urb + " " + z0m_urb + " " + z0h_urb 
-//    		+ " " +  i + " " + Tac_can_roof + " " + Tb_rur);
-//    System.out.println(httcReturn.toString());
+    if (grid == 0)
+    {
+    	System.out.println("Tac_can_roof"+ " " +LCroof+ " " + LChorz + " " +roofTsrfT+ " " +LCcan+ " " +Tacprv);
+//    	print ('Tac_can_roof', LCroof, LChorz, roofTsrfT, LCcan, Tacprv)
+    	
+//        System.out.println("Ri_urb_new calculation "+ " " + Ri_urb_new + " " + Uz + " " + z_Hx2 + " " + H + " " + z0m_urb + " " + z0m_urb + " " + z0h_urb 
+//        		+ " " +  i + " " + Tac_can_roof + " " + Tb_rur);
+//        System.out.println(httcReturn.toString());
+    	System.out.println("Ri_urb_new"+ " " +Ri_urb_new+ " " + (z_Hx2-H-z0m_urb) + " " +Tb_rur+ " " +Tac_can_roof+ " " +Uz);
+//    	print ('Ri_urb_new',Ri_urb_new,z_Hx2-H-z0m_urb,Tb_rur,Tac_can_roof,Uz)
+    }
+
     
-    double httc_urb_new =  httcReturn.get(Httc.HTTC_KEY);      
+    double httc_urb_new =  httcReturn.get(Httc.HTTC_KEY);  
+    if (i == 3 )
+    {
+    	System.out.println("");
+    }
 
     //## calculate Tsurf of the canyon... this inclues walls
     double Tsurf_can  = (mod_data_ts_[i][9][roofIndex]*LC.get(LCData.roof)) 
@@ -797,6 +841,33 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     		+  (mod_data_ts_[i][fg][irrIndex]*LC.get(LCData.irr)) 
     		+ (mod_data_ts_[i][fw][wallIndex]*LC.get(LCData.wall))  
     		+ (mod_data_ts_[i][9][VegIndex]*LC.get(LCData.Veg)) ; 
+    System.out.println(mod_data_ts_[i][fg][roadIndex] + " " + fg);
+    System.out.println("Tsurf_can" + " " + Tsurf_can + " " + i + " "
+     + mod_data_ts_[i][9][roofIndex]
+//    		 + " " +LC.get(LCData.roof)
+    		 + " "
+	+ mod_data_ts_[i][fg][concIndex]
+//			+ " " +LC.get(LCData.conc) 
+			+ " "
+	+  mod_data_ts_[i][fg][roadIndex]
+//			+ " " +LC.get(LCData.road) 
+			+ " "
+	+ mod_data_ts_[i][fg][watrIndex]
+//			+ " " +LC.get(LCData.watr)
+			+ " "
+	+ mod_data_ts_[i][fg][dryIndex]
+//			+ " " +LC.get(LCData.dry) 
+			+ " "
+	+ mod_data_ts_[i][fg][irrIndex]
+//			+ " " +LC.get(LCData.irr)
+			+ " "
+	+ mod_data_ts_[i][fw][wallIndex]
+//			+ " " +LC.get(LCData.wall)
+			+ " " 
+	+ mod_data_ts_[i][9][VegIndex]
+//			+ " " +LC.get(LCData.Veg)
+			);
+    
     //# calculate average horizontal surface temperature (excludes walls) -- Tsurf = 1.0
     ArrayList<Double> LcH  = LC_wRoofAvg ;
     double Tsurf_horz = (mod_data_ts_[i][9][roofIndex]*LcH.get(LCData.roof)) 
@@ -807,6 +878,7 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     		+  (mod_data_ts_[i][fg][irrIndex]*LcH.get(LCData.irr)) 
     		+ (mod_data_ts_[i][9][VegIndex]*LcH.get(LCData.Veg));
     double Tsurf_wall = mod_data_ts_[i][fw][wallIndex];
+    
 
     
 //    ################################################
@@ -860,6 +932,7 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 //    ## we don't calculate Tac if the roof frac is 1.0
     if (LC.get(LCData.roof) > 0.75 )
     {
+    	System.out.println("roof>75" + " " + grid + " " + LC.get(LCData.roof));
         Tac = -999.0;
 //        Tsurf_horz = mod_data_ts_[i][roofIndex][9]*LcH.get(LCData.roof);
         Tsurf_horz = mod_data_ts_[i][9][roofIndex]*LcH.get(LCData.roof);
