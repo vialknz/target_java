@@ -275,8 +275,8 @@ public class TestTargetCD
 			dte   = date1A;
 	        dte   = new Date(dte.getTime() + i*timedelta);  // # current timestep 
 	        
-			
-			returnValues = targetModule.calcLoop(lc_data, grid, counter, i, met_data, mod_data_ts_, cfm, z_Uref, z_Hx2, Tb_rur, dte, mod_U_TaRef, UTb, mod_rslts_prev, httc_rur);
+			targetModule.mod_data_ts_ = mod_data_ts_;
+			returnValues = targetModule.calcLoop(lc_data, grid, counter, i, met_data, cfm, z_Uref, z_Hx2, Tb_rur, dte, mod_U_TaRef, UTb, mod_rslts_prev, httc_rur);
 			System.out.println(returnValues.toString());
 			
 	        //double FID = (double)lc_data.get(grid).get(LCData.FID);

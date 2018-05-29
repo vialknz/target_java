@@ -95,8 +95,6 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 //
 //		see ./documents/Toolkit-2_tech-description.docx for full description of the module
 //
-//		These scripts should run in Windows and Linux - however the gis function (arcpy) can't be used in Linux
-//
 //		Developed in Windows with Python 2.7.12 Anaconda 4.1.1 (32-bit)
 //
 //		Tested with Python 2.7.9 (Linux)
@@ -205,8 +203,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"), date1A, date2);
 		ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 		TargetModule tkmd = new TargetModule(workingDirectory);
-		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, 
-				x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
+		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
 	}
 
 }

@@ -123,7 +123,7 @@ public class RnCalcNew
 //				# Rnstar = 0.5*(Rnnext - Rnprev)	
 			
 //			System.out.println("rncalc" + " " + surf +  " " + i+ " " + Ta_srfp + " " + Ta_srf + " " + Ta_srfn + " " + metKd0 + " " + metLd0 + " " + metKdPlus1 + " " + metLdPlus1 + " " + metKdMinus1 + " " + metLdMinus1 );
-			System.out.println("rncalc" + " " + surf +  " " + i + " " + mod_ts.get(2) + " " + mod_ts.get(1) + " " + mod_ts.get(0) + " " + svf );
+//			System.out.println("rncalc" + " " + surf +  " " + i + " " + mod_ts.get(2) + " " + mod_ts.get(1) + " " + mod_ts.get(0) + " " + svf );
 
 		}
 

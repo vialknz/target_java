@@ -1,0 +1,50 @@
+#---------------------------------------------------------------------------------------------------------
+####### Mawson Main Control File #######
+##### 30m GRID SITES   #####
+
+#---------------------------------------------------------------------------------------------------------
+####### INPUTS #######
+site_name = "Mawson"									             # site name (string)
+run_name   = "Mawson_grid_newSVF_fast_walls1a_newTree_TbRur_Tbcan_N_Y_Y_30min_kent_wall_C5_test1_2xirr"                            # run name (string)
+inpt_met_file =  "Mawson-meteorology_KentTown_30min.csv"				       # input meteorolgical file (i.e. forcing file)
+inpt_lc_file  =  "30m_lc_2xirr_grid.csv"                                    #  input land cover data file
+date_fmt = '%d/%m/%Y %H:%M'                                                      # format of datetime in input met files
+timestep = '1800S'     # define in seconds 
+use solve = 'N'                                         # if set to Y it will  solve (iteratively) Tb above canyon and roof
+include roofs = 'Y'                                       # turn roofs on and off to affect Tac
+direct roofs = 'Y'                                                                  # time step (minutes)
+#---------------------------------------------------------------------------------------------------------
+# dates
+#---------------------------------------------------------------------------------------------------------
+date1A=2011,2,14,0									# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
+date1 =2011,2,15,0									# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
+date2 =2011,2,16,18 									# year,month,day,hour	# end date for validation period
+######################
+
+##### Validation Info ####
+val_ta = 'N'                                                                    ## generate validation plots for Ta?
+val_ts = 'N'                                                                    ## generate validation plots for Ts?
+gis_plot = 'Y'                                                                  ## generated GIS validation plots?
+inpt_obs_file =  'Mawson_obs_30min.csv'							      ## oberved AWS data (for validation)
+inpt_grid_file = '30mGrid.shp'                                                  ## input grid shapefile
+radius=30m
+xyresol=30                                                                     ## grid resoultion
+date1Ts1=2011,2,16,14									            ## year,month,day,hour # start date/time for obs Ts data
+date1Ts2=2011,2,16,16									            ## year,month,day,hour # end   date/time for obs Ts data
+date2Ts1=2011,2,15,2									           ## year,month,day,hour # start date/time for obs Ts data
+date2Ts2=2011,2,15,3									           ## year,month,day,hour # end   date/time for obs Ts data
+Ts_prd1 = 'day'										           # names for Ts test periods
+Ts_prd2 = 'night'						                                  # names for Ts test periods
+STa = '01','02','03','04','05','06','07','08','09','10','11','12','13','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'					                                  ## names for Ts test periods
+########################
+
+
+mod_ldwn = 'N'                                                      # used modelled ldown
+use_obs_ws   	= 'N'									# trigger to activate use of observed ws inputs
+lat=-37.8136
+domainDim=99,99
+latEdge=-37.505054
+lonEdge=144.647901
+latResolution=.00004294
+lonResolution=.0021849
+disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,TsurfHorz,Ucan
