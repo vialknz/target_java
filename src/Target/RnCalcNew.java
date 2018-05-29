@@ -96,8 +96,6 @@ public class RnCalcNew
 				Rnnext = ((metKdPlus1*(1.0-albedo))*svf) + ((emiss*(metLdPlus1 - (cs_sb*Math.pow((Ta_srfn+273.15),4))))*svf);
 				Rnstar = 0.5*(Rnnext - Rnprev);
 				
-//				System.out.println(metKdPlus1 + " " + albedo + " " + svf + " " + emiss + " " + metLdPlus1 + " " + cs_sb + " " + Ta_srfn + " ");
-//				System.out.println(Rn + " " + Rnnext + " " + Rnprev + " not roof");
 			}
 				
 			if (surf.equals("roof"))
@@ -107,8 +105,6 @@ public class RnCalcNew
 				Rnprev = metKdMinus1*(1.0-albedo) + (emiss*(metLdMinus1 - (cs_sb*Math.pow((Ta_srfp+273.15),4))));
 				Rnnext = metKdPlus1*(1.0-albedo) + (emiss*(metLdPlus1 - (cs_sb*Math.pow((Ta_srfn+273.15),4))));
 				Rnstar = 0.5*(Rnnext - Rnprev);
-//				System.out.println(metKdPlus1 + " " + albedo + " " + svf + " " + emiss + " " + metLdPlus1 + " " + cs_sb + " " + Ta_srfn + " ");
-//				System.out.println(" " + Rn + " " + Rnnext + " " + Rnprev + " roof");
 			}
 	            
 //			# if (surf == 'wall'):
@@ -122,10 +118,7 @@ public class RnCalcNew
 //				# Rnnext = (met['Kd'][i+1]* (1.0 - svf) * (1.0-albedo))	 + ((emiss*(met['Ld'][i+1]   - (cs.cs['sb']*(Ta_srfn+273.15)**4)))*(1.0-svf)) #/ 2.
 //				# Rnstar = 0.5*(Rnnext - Rnprev)	
 			
-//			System.out.println("rncalc" + " " + surf +  " " + i+ " " + Ta_srfp + " " + Ta_srf + " " + Ta_srfn + " " + metKd0 + " " + metLd0 + " " + metKdPlus1 + " " + metLdPlus1 + " " + metKdMinus1 + " " + metLdMinus1 );
-//			System.out.println("rncalc" + " " + surf +  " " + i + " " + mod_ts.get(2) + " " + mod_ts.get(1) + " " + mod_ts.get(0) + " " + svf );
-
-		}
+	}
 
 			
 		returnValues.put(RN_KEY, Rn);

@@ -46,7 +46,7 @@ public class NetCdfOutput
 
 	public static void main(String[] args)
 	{
-		// TODO Auto-generated method stub
+		
 //		String loc = "/tmp/testWrite.nc";
 //		int y = 64; //lon
 //		int x = 128; //lat
@@ -60,7 +60,7 @@ public class NetCdfOutput
 //		}
 //		catch (IOException | InvalidRangeException e)
 //		{
-//			// TODO Auto-generated catch block
+//			
 //			e.printStackTrace();
 //		}
 
@@ -499,8 +499,7 @@ public class NetCdfOutput
 			writer = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, filename);
 		}
 		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
+		{			
 			e.printStackTrace();
 		}
 
@@ -565,13 +564,11 @@ public class NetCdfOutput
 			writer.write(lon, Array.factory(lonArray));
 		}
 		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
+		{			
 			e.printStackTrace();
 		}
 		catch (InvalidRangeException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -663,13 +660,11 @@ public class NetCdfOutput
 				writer.write(time, time_origin, timeData);
 			}
 			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
+			{				
 				e.printStackTrace();
 			}
 			catch (InvalidRangeException e)
-			{
-				// TODO Auto-generated catch block
+			{				
 				e.printStackTrace();
 			}
 
@@ -681,8 +676,7 @@ public class NetCdfOutput
 			writer.close();
 		}
 		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
+		{			
 			e.printStackTrace();
 		}
 		
