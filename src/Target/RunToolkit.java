@@ -118,7 +118,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		}
 		else 
 		{
-			controlFileName = "/home/kerryn/Documents/Work/Toolkit2-Runs/Target_python/toolkit2/controlfiles/Mawson/Mawson_stations.txt";
+			controlFileName = "/tmp/test_target/target_java/example/controlfiles/Sunbury1Extreme/Sunbury1Extreme.txt";
 			cfm = new Cfm(controlFileName);
 		}
 		

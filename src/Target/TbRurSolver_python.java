@@ -1,6 +1,7 @@
 package Target;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 
@@ -9,6 +10,7 @@ public class TbRurSolver_python
 	Common common = new Common();
 	private String workingDirectory;
 	public static final double ERROR_RETURN = -9999.;
+	public double innerClassReturnValue;
 
 	public static void main(String[] args)
 	{
@@ -75,29 +77,86 @@ public class TbRurSolver_python
 	public double converge(String i, String dz, String ref_ta, String UTb, String mod_U_TaRef, String Ri_rur)
 	{
 		double ret = ERROR_RETURN;
+//		try
+//		{
+//			String solverLocation = this.workingDirectory + "/../" + "TbRurSolver.py";
+////			System.out.println("solverLocation="+solverLocation);
+//			
+//			solverLocation = findTbRurPython(this.workingDirectory);
+////			System.out.println("Final solverLocation="+solverLocation);
+//			
+//			ProcessBuilder pb = new ProcessBuilder("/usr/bin/python", solverLocation,i,dz,ref_ta,UTb,mod_U_TaRef,Ri_rur);
+////			ProcessBuilder pb = new ProcessBuilder("python","/home/kerryn/git/Target_Java/TbRurSolver.py",
+////					"1","-1.0","21.9","2.63038178","3.05879268","0.24555776");
+//			Process p = pb.start();
+//
+//			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//			String returnValue = in.readLine();
+////			System.out.println(returnValue);
+//			ret = new Double(returnValue).doubleValue();
+////			System.out.println("value is : " + ret);
+//		}
+//		catch (Exception e)
+//		{
+//			System.out.println(e);
+//		}
+//		
+//		
+		
+		
+		
+		
 		try
 		{
+			//System.out.println("Try new version");
 			String solverLocation = this.workingDirectory + "/../" + "TbRurSolver.py";
-//			System.out.println("solverLocation="+solverLocation);
+			//System.out.println("solverLocation="+solverLocation);
 			
 			solverLocation = findTbRurPython(this.workingDirectory);
-//			System.out.println("Final solverLocation="+solverLocation);
+			//System.out.println("Final solverLocation="+solverLocation);
 			
 			ProcessBuilder pb = new ProcessBuilder("/usr/bin/python", solverLocation,i,dz,ref_ta,UTb,mod_U_TaRef,Ri_rur);
 //			ProcessBuilder pb = new ProcessBuilder("python","/home/kerryn/git/Target_Java/TbRurSolver.py",
 //					"1","-1.0","21.9","2.63038178","3.05879268","0.24555776");
-			Process p = pb.start();
+			
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String returnValue = in.readLine();
-//			System.out.println(returnValue);
-			ret = new Double(returnValue).doubleValue();
-//			System.out.println("value is : " + ret);
+		final Process p = pb.start();
+		// then start a thread to read the output.
+		new Thread(new Runnable() 
+		{
+		  public void run() 
+		  {
+		    BufferedReader output = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		    //String line;
+		    System.out.print("Result : ");
+		    try
+			{
+//				while ((line = output.readLine()) != null) 
+//				{
+//				 System.out.println(line);
+//				}
+		    	String returnValue = output.readLine();
+		    	double retValue = new Double(returnValue).doubleValue();
+		    	innerClassReturnValue = retValue;
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  }
+		}).start();
+		p.waitFor();
+
+
 		}
 		catch (Exception e)
 		{
 			System.out.println(e);
 		}
+		ret = innerClassReturnValue;
+		
+		
 		return ret;
 	}
 	

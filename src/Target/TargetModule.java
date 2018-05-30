@@ -358,6 +358,7 @@ public class TargetModule
 	                
 	                //###### Solve Richardson's number eq for "high temperature" aka Tb_rur 
 	                double dz = z_Hx2 - z_TaRef ;
+	                dz = Math.max(dz, 0.01);
 //	                System.out.println("dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = "   + dz + " " + ref_ta + " " + UTb + " " + mod_U_TaRef[i] + " " + i + " " + Ri_rur);
 //	                System.out.println("dz"+dz);
 //	                System.out.println("ref_ta"+ref_ta);
