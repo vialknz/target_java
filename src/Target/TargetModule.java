@@ -396,6 +396,7 @@ public class TargetModule
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
 	                {
 	                	System.out.println("Error with java Tb_rur, returned value=" + Tb_rur);
+	                	System.out.println("Called with " +i+" "+ dz+" "+ ref_ta+" "+ UTb+" "+ mod_U_TaRef[i]+" "+ Ri_rur+" ");
 	                	Tb_rur = Tb_rur_prev;
 	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
 	                }
