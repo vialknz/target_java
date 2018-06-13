@@ -36,7 +36,7 @@ public class TargetModule
 	private UTCI utciInstance = new UTCI();
 	//private TbRurSolver tbRurSolver = new TbRurSolver();
 	private String workingDirectory;
-	private TbRurSolver_python tbRurSolver = new TbRurSolver_python();
+	//private TbRurSolver_python tbRurSolver = new TbRurSolver_python();
 	private TbRurSolver tbRurSolverOld = new TbRurSolver();
 	
 	public static final int FOR_TAB_FID_INDEX = 0;
@@ -370,25 +370,26 @@ public class TargetModule
 	                //System.exit(1);
 	                
 	                double Tb_rur ;
-	                double pythonTbRur=0,javaTbRur=0;
+	                //double pythonTbRur=0;
+	                double javaTbRur=0;
 	                
 	                	                
-	                tbRurSolver.setWorkingDirectory(this.workingDirectory);
-	                Tb_rur = tbRurSolver.converge(" "+i+" ", dz+" ", ref_ta+" ", UTb+" ", mod_U_TaRef[i]+" ", Ri_rur+" ");
+	                //tbRurSolver.setWorkingDirectory(this.workingDirectory);
+	                //Tb_rur = tbRurSolver.converge(" "+i+" ", dz+" ", ref_ta+" ", UTb+" ", mod_U_TaRef[i]+" ", Ri_rur+" ");
 	                
-	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
-	                {
-	                	System.out.println("Error with Python Tb_rur solver, returned value=" + Tb_rur);
-	                	Tb_rur = Tb_rur_prev;
-	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
-	                	//System.exit(1);
-	                }
-	                else
-	                {
-	                	System.out.println("Python Tb_rur=" + "\t" + Tb_rur);
-	                	Tb_rur_prev = Tb_rur;
-	                	pythonTbRur = Tb_rur;
-	                }
+//	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
+//	                {
+//	                	System.out.println("Error with Python Tb_rur solver, returned value=" + Tb_rur);
+//	                	Tb_rur = Tb_rur_prev;
+//	                	System.out.println("using previous Tb_rur=" + Tb_rur_prev);
+//	                	//System.exit(1);
+//	                }
+//	                else
+//	                {
+//	                	System.out.println("Python Tb_rur=" + "\t" + Tb_rur);
+//	                	Tb_rur_prev = Tb_rur;
+//	                	pythonTbRur = Tb_rur;
+//	                }
 	                
 	                //this is the java version of the convergence. Mostly works but not for every case. So, disable for now.
 	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
@@ -407,8 +408,8 @@ public class TargetModule
 	                }
 	                
 	                Tb_rur = Tb_rur - 9.806/1004.67*dz;
-	                System.out.println("Tb_rur difference between python and java=" + (pythonTbRur - javaTbRur));
-	                System.out.println("Tb_rur after="+"\t" +"\t"+ Tb_rur);
+//	                System.out.println("Tb_rur difference between python and java=" + (pythonTbRur - javaTbRur));
+//	                System.out.println("Tb_rur after="+"\t" +"\t"+ Tb_rur);
 	        	                
 	                //# always use iterative solution for rural Tb
 	                
