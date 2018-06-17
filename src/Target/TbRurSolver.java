@@ -25,6 +25,7 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] = 10.39989511;
 		Ri_rur = -0.11332934;
+		//TODO this one
 
 		
 //		('Ok calculating Tb_rur', 0.471325730671747*(-19.612*Thi_tb + 594.2436)/(Thi_tb + 30.3) + 0.103263339976444)
@@ -35,64 +36,65 @@ public class TbRurSolver
 		mod_U_TaRef = new double[1];
 		mod_U_TaRef[0] = 10.39989511;
 		Ri_rur = -0.10326334;
+		//TODO this one
 
 		
-		dz=15.0 ;
-		ref_ta =16.5 ;
-		UTb =  3.975255797000494 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  1.8692621937604166  ;
-		Ri_rur = -1.3626911282063752;
+//		dz=15.0 ;
+//		ref_ta =16.5 ;
+//		UTb =  3.975255797000494 ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  1.8692621937604166  ;
+//		Ri_rur = -1.3626911282063752;
 		//  15.8356754268024
 		
 		//15.0 16.5 3.975255797000494 1.8692621937604166 0 -1.3626911282063752
 		
 		
-		dz=15.0 ;
-		ref_ta =16.8 ;
-		UTb =  6.143577139636226 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  2.8888597534372273 ;
-		Ri_rur = -0.5326357056213218;
+//		dz=15.0 ;
+//		ref_ta =16.8 ;
+//		UTb =  6.143577139636226 ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  2.8888597534372273 ;
+//		Ri_rur = -0.5326357056213218;
 		//   16.1676869029464
 		//  dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = 15.0 16.8 6.143577139636226 2.8888597534372273 7 -0.5326357056213218
 
 		
 
 
-		dz=15.0 ;
-		ref_ta =16.6 ;
-		UTb =  1.8069344530637708 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.8496646334718477 ;
-		Ri_rur = -6.956094923672547;
+//		dz=15.0 ;
+//		ref_ta =16.6 ;
+//		UTb =  1.8069344530637708 ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  0.8496646334718477 ;
+//		Ri_rur = -6.956094923672547;
 		// 15.8958756964009
 		// dz + ref_ta + UTb + mod_U_TaRef[i] + i + Ri_rur = 15.0 16.6 1.8069344530637708 0.8496646334718477 12 -6.956094923672547
 
 		
-		dz=15.0 ;
-		ref_ta =23.5 ;
-		UTb =  0.21266443039771887 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.1  ;
-		Ri_rur = -370.55369919381894;
+//		dz=15.0 ;
+//		ref_ta =23.5 ;
+//		UTb =  0.21266443039771887 ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  0.1  ;
+//		Ri_rur = -370.55369919381894;
 //		//TODO this should be 22.760359533246
 		
-		dz=15.0 ;
-		ref_ta =24.4 ;
-		UTb =  0.21266443039771887 ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.1 ;
-		Ri_rur = -602.7585857212;
+//		dz=15.0 ;
+//		ref_ta =24.4 ;
+//		UTb =  0.21266443039771887 ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  0.1 ;
+//		Ri_rur = -602.7585857212;
 		//  23.1629904161214
 		//  15.0 24.4 0.21266443039771887 0.1 38 -602.7585857212
 		
-		dz=15.0 ;
-		ref_ta =18.4  ;
-		UTb =  1.445547562190818  ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.6797317066551265  ;
-		Ri_rur = -9.705888769990096;
+//		dz=15.0 ;
+//		ref_ta =18.4  ;
+//		UTb =  1.445547562190818  ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  0.6797317066551265  ;
+//		Ri_rur = -9.705888769990096;
 //		 15.0 18.4 1.445547562190818 0.6797317066551265 59 -9.705888769990096
 //		 Python Tb_rur=	17.7014531204627
 		
@@ -103,31 +105,31 @@ public class TbRurSolver
 		
 		
 		
-		dz=15.0 ;
-		ref_ta =20.4  ;
-		UTb =   0.7227737817459052  ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] =  0.33986585363344246   ;
-		Ri_rur = -22.889685313478864;		
+//		dz=15.0 ;
+//		ref_ta =20.4  ;
+//		UTb =   0.7227737817459052  ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] =  0.33986585363344246   ;
+//		Ri_rur = -22.889685313478864;		
 //		15.0 20.4 0.7227737817459052 0.33986585363344246 50 -22.889685313478864
 //		Python Tb_rur=	19.9397973578936
 		//TODO
 		
-		dz=15.0 ;
-		ref_ta =19.6   ;
-		UTb =   0.7227737817459055   ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] = 0.33986585363344246  ;
-		Ri_rur = -29.853963929463763;	
+//		dz=15.0 ;
+//		ref_ta =19.6   ;
+//		UTb =   0.7227737817459055   ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] = 0.33986585363344246  ;
+//		Ri_rur = -29.853963929463763;	
 //		15.0 19.6 0.7227737817459055 0.33986585363344246 51 -29.853963929463763
 //		Python Tb_rur=	19.0252892485087
 		
-		dz=15.0 ;
-		ref_ta =18.7   ;
-		UTb =   0.7227737817459053   ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] = 0.33986585363344246   ;
-		Ri_rur =  -36.639661688103196;	
+//		dz=15.0 ;
+//		ref_ta =18.7   ;
+//		UTb =   0.7227737817459053   ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] = 0.33986585363344246   ;
+//		Ri_rur =  -36.639661688103196;	
 //		15.0 18.7 0.7227737817459053 0.33986585363344246 56 -36.639661688103196
 //		Python Tb_rur=	18.0292827501739
 		
@@ -153,18 +155,18 @@ public class TbRurSolver
 //		 Python Tb_rur=	17.4651588495703
 		
 		
-		dz=15.0 ;
-		ref_ta =18.2    ;
-		UTb =   0.21266443039771887    ;
-		mod_U_TaRef = new double[1];
-		mod_U_TaRef[0] = 0.1    ;
-		Ri_rur =  -477.5169573455006;	
+//		dz=15.0 ;
+//		ref_ta =18.2    ;
+//		UTb =   0.21266443039771887    ;
+//		mod_U_TaRef = new double[1];
+//		mod_U_TaRef[0] = 0.1    ;
+//		Ri_rur =  -477.5169573455006;	
 //		15.0 18.2 0.21266443039771887 0.1 60 -477.5169573455006
 //		Python Tb_rur=	17.4651588495703
 		
 		
 		
-		double value = solver.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+		double value = solver.convergeNewVersion(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 		System.out.println(value);
 		
 //		TbRurSolver_python solverPython = new TbRurSolver_python();
@@ -207,6 +209,8 @@ public class TbRurSolver
 //		double Tb_rur_itr = 9.806 * dz * (Thi_tb - ref_ta) * 2.0 / (Thi_tb + ref_ta)
 //				/ Math.pow((UTb - mod_U_TaRef[i]), 2.0) - Ri_rur;
 //	}
+	
+	
 	
 	
 	public double converge(double dz, double ref_ta, double UTb, double[] mod_U_TaRef, int i, double Ri_rur)
@@ -340,6 +344,135 @@ public class TbRurSolver
 			}
 			return testValue;
 	}
+	
+	public double convergeNewVersion(double dz, double ref_ta, double UTb, double[] mod_U_TaRef, int i, double Ri_rur)
+	{
+	
+		
+//		double dz=-1.0;
+//		double ref_ta = 21.9;
+//		double UTb = 2.63038178;
+//		double mod_U_TaRef = 3.05879268;
+//		int i=0;
+//		double Ri_rur = 0.24555776;
+		
+//		1 -1.0 21.9 2.63038178 3.05879268 0.24555776
+//		21.7995777279967
+		
+		
+		double lowestNegativeTestResult = -99999.;
+		double lowestPositiveTestResult  = 99999.;
+		double previousNegativeTestValue = 0;
+		double previousPositiveTestValue = 100;
+		double testValue=18.0;
+		
+		
+		//String ExpressionString = generateExpressionStr(dz, ref_ta, UTb, mod_U_TaRef, Ri_rur);
+//		boolean lowRiRur = false;
+//		double previousValue = 0.0;
+//		double testValue = 15.0;
+		
+
+		int count = 0;
+		while (count < ITERATIONS)
+		{
+			testValue = (previousNegativeTestValue + previousPositiveTestValue) / 2.0;
+
+			count ++;
+//			if (count > 1000)
+//			{
+//				break;
+//			}
+			double returnValue = calculateExpression(dz, ref_ta, UTb, mod_U_TaRef[i], Ri_rur, testValue);
+			
+			//converged?
+			if (Math.abs(returnValue) < 1.0E-12)
+			{
+				break;
+			}
+			
+			double testValueDifference = previousNegativeTestValue-previousPositiveTestValue;
+//			if (testValueDifference == 0.0)
+//			{
+//				previousNegativeTestValue = previousNegativeTestValue + 1.0E-13;
+//			}
+			
+			if (returnValue < 0)
+			{
+				if (testValueDifference == 0.0)
+				{
+					previousPositiveTestValue = previousPositiveTestValue-1.;
+				}
+				
+				if ( returnValue > lowestNegativeTestResult)
+				{
+					lowestNegativeTestResult = returnValue;
+					previousNegativeTestValue = testValue;
+					
+				}
+				else
+				{
+//					System.out.println("neg difference="+ testValueDifference );
+					previousNegativeTestValue = previousNegativeTestValue - (testValueDifference/1.000000001);
+				}
+			}
+			else //return value > 0
+			{
+				if (testValueDifference == 0.0)
+				{
+					previousNegativeTestValue = previousNegativeTestValue+1.;
+				}
+				if ( returnValue < lowestPositiveTestResult)
+				{
+					lowestPositiveTestResult = returnValue;
+					previousPositiveTestValue = testValue;
+				}
+				else
+				{
+//					System.out.println("pos difference="+ testValueDifference );
+//					previousPositiveTestValue = testValue - (previousPositiveTestValue + previousNegativeTestValue)/4;
+					previousPositiveTestValue = previousPositiveTestValue + (testValueDifference/1.000000001);
+				}
+			}
+//			System.out.println(count + "\t" + returnValue + "\t" + lowestNegativeTestResult + "\t" + lowestPositiveTestResult + "\t" 
+//					+ testValue + "\t" + previousNegativeTestValue + "\t" + previousPositiveTestValue  );
+			
+			
+		}	
+//			double scale = Math.abs(returnValue/testValue);
+//			double previousValueDifference =  returnValue - previousValue;
+//			double scaleIncrement =  0.01;
+//			if (previousValueDifference < 0)
+//			{
+//				scale = scale * -1.;
+//			}
+//			if (lowRiRur)
+//			{
+//				testValue = getAlternativeIncrement(returnValue, testValue, scaleIncrement, Ri_rur);
+//			}
+//			else 
+//			{
+//				testValue = testValue - (1.0 * scale);		
+//			}
+//			
+//
+//			if (count == ITERATIONS-1)
+//			{
+//				if (lowRiRur && (Math.abs(returnValue) < 1.0E-2))
+//				{
+//					//calling it close enough
+//					break;
+//				}
+//				testValue = ERROR_RETURN;
+//				break;
+//			}
+//			
+//			count ++;
+
+		    System.out.println("result=" + testValue + " iterations=" + count);
+			return testValue;
+	}
+	
 	
 	public double getAlternativeIncrement(double returnValue, double testValue, double scaleIncrement, double Ri_rur)
 	{

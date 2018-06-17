@@ -392,7 +392,7 @@ public class TargetModule
 //	                }
 	                
 	                //this is the java version of the convergence. Mostly works but not for every case. So, disable for now.
-	                Tb_rur = tbRurSolverOld.converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+	                Tb_rur = tbRurSolverOld.convergeNewVersion(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 //	                System.out.println("Tb_rurOld=" + Tb_rur);
 	                if (Tb_rur == TbRurSolver.ERROR_RETURN || Tb_rur == 0.0)
 	                {
