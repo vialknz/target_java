@@ -165,6 +165,17 @@ public class TbRurSolver
 //		Python Tb_rur=	17.4651588495703
 		
 		
+		dz=0.01  ;
+		ref_ta =29.1   ;
+		UTb =   6.381580845822257    ;
+		mod_U_TaRef = new double[1];
+		mod_U_TaRef[0] =5.2911037366041676   ;
+		Ri_rur =    0.19807380438759148;	
+		
+		TbRurSolver_python solverP = new TbRurSolver_python();
+		solverP.setWorkingDirectory("/home/kerryn/git/Target_Java/bin");
+		double Tb_rur = solverP.converge(" "+i+" ", dz+" ", ref_ta+" ", UTb+" ", mod_U_TaRef[i]+" ", Ri_rur+" ");
+		System.out.println(Tb_rur);	
 		
 		double value = solver.convergeNewVersion(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
 		System.out.println(value);
@@ -362,10 +373,10 @@ public class TbRurSolver
 		
 		double lowestNegativeTestResult = -99999.;
 		double lowestPositiveTestResult  = 99999.;
-		double previousNegativeTestValue = 0;
-		double previousPositiveTestValue = 100;
+		double previousNegativeTestValue = -3000;
+		double previousPositiveTestValue = 3000;
 		double testValue=18.0;
-		
+		boolean converged = false;
 		
 		//String ExpressionString = generateExpressionStr(dz, ref_ta, UTb, mod_U_TaRef, Ri_rur);
 //		boolean lowRiRur = false;
@@ -376,10 +387,30 @@ public class TbRurSolver
 		int count = 0;
 		while (count < ITERATIONS)
 		{
-			testValue = (previousNegativeTestValue + previousPositiveTestValue) / 2.0;
+			
+			double testValueDifference = previousNegativeTestValue-previousPositiveTestValue;
+//			if (testValueDifference == 0)
+//			{
+//				if ( calculateExpression(dz, ref_ta, UTb, mod_U_TaRef[i], Ri_rur, testValue) < 0 )
+//				{
+//					testValue = previousNegativeTestValue - (previousNegativeTestValue * 0.5);
+//					previousNegativeTestValue = testValue;
+//				}
+//				else
+//				{
+//					testValue = previousPositiveTestValue + (previousPositiveTestValue * 0.5);
+//					previousPositiveTestValue = testValue;
+//				}
+//			}
+//			else
+//			{
+				testValue = (previousNegativeTestValue + previousPositiveTestValue) / 2.0;
+//			}
+			
+			
 
 			count ++;
-//			if (count > 1000)
+//			if (count > 10000)
 //			{
 //				break;
 //			}
@@ -388,10 +419,11 @@ public class TbRurSolver
 			//converged?
 			if (Math.abs(returnValue) < 1.0E-12)
 			{
+				converged = true;
 				break;
 			}
 			
-			double testValueDifference = previousNegativeTestValue-previousPositiveTestValue;
+			
 //			if (testValueDifference == 0.0)
 //			{
 //				previousNegativeTestValue = previousNegativeTestValue + 1.0E-13;
@@ -399,10 +431,10 @@ public class TbRurSolver
 			
 			if (returnValue < 0)
 			{
-				if (testValueDifference == 0.0)
-				{
-					previousPositiveTestValue = previousPositiveTestValue-1.;
-				}
+//				if (testValueDifference == 0.0)
+//				{
+//					previousPositiveTestValue = previousPositiveTestValue -  (0.01 * previousPositiveTestValue);
+//				}
 				
 				if ( returnValue > lowestNegativeTestResult)
 				{
@@ -418,10 +450,10 @@ public class TbRurSolver
 			}
 			else //return value > 0
 			{
-				if (testValueDifference == 0.0)
-				{
-					previousNegativeTestValue = previousNegativeTestValue+1.;
-				}
+//				if (testValueDifference == 0.0)
+//				{
+//					previousNegativeTestValue = previousNegativeTestValue+ (-.1 *previousNegativeTestValue) ;
+//				}
 				if ( returnValue < lowestPositiveTestResult)
 				{
 					lowestPositiveTestResult = returnValue;
@@ -469,8 +501,20 @@ public class TbRurSolver
 //			
 //			count ++;
 
-		    System.out.println("result=" + testValue + " iterations=" + count);
-			return testValue;
+		    if (converged)
+		    {
+			    System.out.println("result=" + testValue + " iterations=" + count);
+				return testValue;
+		    }
+		    else
+		    {
+		    	System.out.println("ERROR result=" + testValue + " iterations=" + count);
+		    	return converge(dz, ref_ta, UTb, mod_U_TaRef, i, Ri_rur);
+//				return ERROR_RETURN;
+		    }
+
+			
+			
 	}
 	
 	

@@ -150,9 +150,7 @@ public class TargetModule
 	{
 		
 		String[] disableOutput = cfm.getValues("disableOutput");
-		
-		// # parse dates for input met file using format defined in control file
-//		String run = cfm.getValue("run_name");                           
+		                          
 		// # model run name 
 		String tmstp = cfm.getValue("timestep");                            
 		// # time step (minutes)
@@ -162,26 +160,18 @@ public class TargetModule
 		
 		Common common = new Common();
 		String date1ADateStr = common.getYearMonthDayStrFromDate(date1A);
-		
 
-		// ## the date/time that the simulation starts
-//		Date date1 = cfm.getDateValue("date1");
-   
 		//  ## the date/time for period of interest (i.e. before this will not be saved)
 		Date date2 = cfm.getDateValue("date2");
-//		System.out.println(cfm.getDateValue("date2"));
       
 		// ## end date/time of simulation 
 		long tD = (date2.getTime() - date1A.getTime()) ;  
 		// to days    / (1000 * 60 * 60 * 24)
-//		System.out.println(tD);
  
 		//## time difference between start and end date
-
 		//# number of timesteps
 		long ntLong = (tD / 1000) / tmstpInt ;
 		int nt = (int) ntLong -1 ;
-//		System.out.println(nt);
         
 		// #  date range for model period 
 		//# date range for model period (i.e. including spin-up period)
@@ -203,9 +193,7 @@ public class TargetModule
 	        
 	        // # begin looping through the met forcing data file
 		    for (int i=0;i<nt;i++)
-	        {
-//                long t10 = System.currentTimeMillis();
-                
+	        {             
 	            if (! (i == met_data_all.size()-1))
 	            {
 	            	
@@ -412,12 +400,7 @@ public class TargetModule
 //	                System.out.println("Tb_rur after="+"\t" +"\t"+ Tb_rur);
 	        	                
 	                //# always use iterative solution for rural Tb
-	                
-//	                if (i == 3)
-//	                {
-//	                	System.out.println("");
-//	                }
-	                
+	                                
 	                //###### Begin calculating modelled variables for 10 different SVF values... 
 	                for (int vf=0;vf<10;vf++)
 	                {
@@ -552,7 +535,6 @@ public class TargetModule
 	                    TreeMap<Integer,Double> for_tab = calcLoop(lc_data,grid,counter,i,met_d,
 //	                    		mod_data_ts_,
 	                    		cfm,z_Uref,z_Hx2,Tb_rur,dte,mod_U_TaRef[i],UTb,previousTacValues, httc_rur) ;         
-	                    //mod_rslts_prev.add(for_tab.get(FOR_TAB_Tac_INDEX));
 
 	                    timestepsTacValues.add(for_tab.get(FOR_TAB_Tac_INDEX));
 	                    mod_rslts.add(for_tab);
@@ -604,10 +586,6 @@ public class TargetModule
 	}                 
 
 
-
-	     
-
-
 public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int grid,int counter,int i,ArrayList<ArrayList<Object>> met_d,
 //		double[][][] mod_data_ts_,
 		Cfm cfm, double z_Uref, double z_Hx2, double Tb_rur,
@@ -617,10 +595,7 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 {
 	ArrayList<Object> met0 = met_d.get(i);	
 	double metTa0 = (double)met0.get(MetData.Ta);
-//	double metKd0 = (double)met0.get(MetData.Kd);
-	double metWS0 = (double)met0.get(MetData.WS);
-//	double metRH0 = (double)met0.get(MetData.RH);
-	   
+	double metWS0 = (double)met0.get(MetData.WS);   
 
     //# create dictionary for raw LC inputs
     double H      = lc_data.get(grid).get(LCData.H);     //  # building height for grid point
@@ -787,8 +762,7 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 
         }
     }
-//    # roofs are not connected to the canyon at all [this one works well, but means that (green) roofs affect Tac]
-    
+//    # roofs are not connected to the canyon at all [this one works well, but means that (green) roofs affect Tac]   
     if (cfm.getValue("include roofs").equals("N"))
     {
         Tac =  ((mod_data_ts_[i][fg][concIndex]*httc_can*LC.get(LCData.conc)) 
@@ -816,7 +790,6 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     TreeMap<Integer,Double> for_tab = new TreeMap<Integer,Double>();
 
 //    ## append everything to output table #####   
-
         double FID = (double)lc_data.get(grid).get(LCData.FID);
         for_tab.put(FOR_TAB_FID_INDEX, FID);        
         for_tab.put(FOR_TAB_Ucan_INDEX,Ucan);
@@ -835,26 +808,21 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     return for_tab;
 }
         
-public static <T> void fillAndSet(int index, T object, List<T> list) 
-{
-    if (index > (list.size() - 1))
-    {
-        for (int i = list.size(); i < index; i++)
-        {
-            list.add(null);
-        }
-        list.add(object);
-    }
-    else
-    {
-        list.set(index, object);
-    }
- }
-                    
-	        		         
-	
-	
-	
-	
+//public static <T> void fillAndSet(int index, T object, List<T> list) 
+//{
+//    if (index > (list.size() - 1))
+//    {
+//        for (int i = list.size(); i < index; i++)
+//        {
+//            list.add(null);
+//        }
+//        list.add(object);
+//    }
+//    else
+//    {
+//        list.set(index, object);
+//    }
+// }
+         		      
 	
 }
