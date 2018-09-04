@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 
+import Target.HTC.VdiPETCorrected;
+
 public class TargetModule
 {
 	
@@ -16,11 +18,12 @@ public class TargetModule
 		this.workingDirectory = workingDirectory;
 	}
 	
-    public double[][][] mod_data_ts_;
+    public static double[][][] mod_data_ts_;
 	private ArrayList<ArrayList<Double>> previousTacValues = new ArrayList<ArrayList<Double>>();
 
-//	private TreeMap<String,Double> tmrtCache=new TreeMap<String,Double>();
-//	private TreeMap<String,Double> utciCache=new TreeMap<String,Double>();
+	private TreeMap<String,Double> tmrtCache=new TreeMap<String,Double>();
+	private TreeMap<String,Double> utciCache=new TreeMap<String,Double>();
+	private TreeMap<String,Double> petCache=new TreeMap<String,Double>();
 //	private TreeMap<String,Double> Tb_rurCache=new TreeMap<String,Double>();
 //	private TreeMap<String,Double> calcLoopCache=new TreeMap<String,Double>();
 	private double Tb_rur_prev=0.0;
@@ -34,6 +37,9 @@ public class TargetModule
 	private CD cd = new CD();
 	private TsEbW tsEbW = new TsEbW();
 	private UTCI utciInstance = new UTCI();
+	
+	private VdiPETCorrected petInstance = new VdiPETCorrected();
+	
 	//private TbRurSolver tbRurSolver = new TbRurSolver();
 	private String workingDirectory;
 	//private TbRurSolver_python tbRurSolver = new TbRurSolver_python();
@@ -56,6 +62,7 @@ public class TargetModule
 	public static final int FOR_TAB_UTCI_tmrt_INDEX = 1;
 	public static final int FOR_TAB_UTCI_utci_INDEX = 2;
 	public static final int FOR_TAB_UTCI_dte_INDEX = 3;
+	public static final int FOR_TAB_UTCI_PET_INDEX = 4;
 
 	private static final String ROOF_KEY = "roof";
 	private static final String ROAD_KEY = "road";
@@ -148,6 +155,9 @@ public class TargetModule
 			double maxH, double maxW, 
 			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
+		
+		int n = Runtime.getRuntime().availableProcessors();
+		System.out.println(n + " processors available");
 		
 		String[] disableOutput = cfm.getValues("disableOutput");
 		                          
@@ -532,6 +542,12 @@ public class TargetModule
 	                for (int grid=0;grid< lc_data.size();grid++)
 	                {
 	                    counter+=1;
+	                    
+//	                    CalcLoopThread loopThread = new CalcLoopThread(lc_data,grid,counter,i,met_d,
+//	                    		cfm,z_Uref,z_Hx2,Tb_rur,dte,mod_U_TaRef[i],UTb,previousTacValues, httc_rur);
+//	                    loopThread.run();
+//	                    TreeMap<Integer,Double> for_tab = loopThread.getFor_tab();
+	                    
 	                    TreeMap<Integer,Double> for_tab = calcLoop(lc_data,grid,counter,i,met_d,
 //	                    		mod_data_ts_,
 	                    		cfm,z_Uref,z_Hx2,Tb_rur,dte,mod_U_TaRef[i],UTb,previousTacValues, httc_rur) ;         
@@ -548,6 +564,7 @@ public class TargetModule
 	                    
 	                    double tmrt;
 	                    double utci;
+	                    double pet;
 	                    double Tac = for_tab.get(FOR_TAB_Tac_INDEX);
 	                    double Ucan = for_tab.get(FOR_TAB_Ucan_INDEX);
 	                    double Tsurf_can = for_tab.get(FOR_TAB_Tsurf_can_INDEX);
@@ -555,15 +572,56 @@ public class TargetModule
 	                    {
 	                        tmrt = -999.0;
 	                        utci = -999.0;
+	                        pet =  -999.0;
 	                    }
 	                    else
-	                    {
-	                        	                        
-	                        double lup = Constants.cs_sb*Math.pow((metTa0  +273.15),4);
+	                    {   
+	                    	double lup = Constants.cs_sb*Math.pow((metTa0  +273.15),4);	   
+	                    	
+	                    	String tmrtCacheKey = Tac + " " + metRH0+ " " +Ucan+ " " +metKd0+ " " +Tsurf_can+ " " +metLD0+ " " +lup+ " " +yd_actual+ " " +TM+ " " +lat;                       
+	                    	Double tmrtCached = tmrtCache.get(tmrtCacheKey);                    	
+	                    	if (tmrtCached == null)
+	                    	{
+	                    		tmrt = utciInstance.getTmrtForGrid_RH(Tac,metRH0,Ucan,metKd0,Tsurf_can,metLD0,lup,yd_actual,TM,lat);	
+	                    		tmrtCache.put(tmrtCacheKey, tmrt);
+	                    	}
+	                    	else
+	                    	{
+	                    		tmrt = tmrtCached;
+	                    	}
+	                         
+	                        String utciCacheKey = Tac+ " " +Ucan+ " " +metRH0+ " " +tmrt;	                        
+	                      	Double utciCached = utciCache.get(utciCacheKey);
+	                    	if (utciCached == null)
+	                    	{
+	                    		utci = utciInstance.getUTCIForGrid_RH(Tac,Ucan,metRH0,tmrt);
+	                    		utciCache.put(utciCacheKey, utci);
+	                    	}
+	                    	else
+	                    	{
+	                    		utci = utciCached;
+	                    	}
 	                        
-	                        tmrt = utciInstance.getTmrtForGrid_RH(Tac,metRH0,Ucan,metKd0,Tsurf_can,metLD0, lup ,yd_actual, TM, lat);
-	                                          
-	                        utci = utciInstance.getUTCIForGrid_RH(Tac,Ucan,metRH0,tmrt);	                      
+  
+	                		double po = 1013.25;  // atmospheric pressure [hPa]
+	                		double p = 1013.25;  // real pressure [hPa]	                		
+	                		double Tair=Tac;  //air temp in C
+	                		double Tmrt=tmrt;  //tmrt in C
+	                		double v_air=Ucan; //air velocity in m/s 	
+	                		String petCacheKey = po+ " " + p+ " " + Tair+ " " + Tmrt+ " " + v_air;
+	                		
+	                      	Double petCached = petCache.get(petCacheKey);
+	                    	if (petCached == null)
+	                    	{
+//	                    		System.out.println(petCacheKey);
+	                    		pet = petInstance.petCalculationDefault(po, p, Tair, Tmrt, v_air);
+	                    		petCache.put(petCacheKey, pet);
+	                    		
+	                    	}
+	                    	else
+	                    	{
+	                    		pet = petCached;
+	                    	}	                        
 	                    }
 	    	                    
 	                	TreeMap<Integer,Double> for_tab_tmrt_utci = new TreeMap<Integer,Double>();
@@ -573,6 +631,8 @@ public class TargetModule
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_utci_INDEX,utci);
 	                	double dteDouble = (double)dte.getTime();
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_dte_INDEX,dteDouble);
+	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_PET_INDEX,pet);
+	                	
 	                	mod_rslts_tmrt_utci.add(for_tab_tmrt_utci);	          
 	                }
 	                
