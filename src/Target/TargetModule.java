@@ -160,13 +160,20 @@ public class TargetModule
 		System.out.println(n + " processors available");
 		
 		String[] disableOutput = cfm.getValues("disableOutput");
-		                          
+		boolean individualNetcdfFiles = false;
+		String individualNetcdfFilesCfm = cfm.getValue("individualNetcdfFiles");
+		if (individualNetcdfFilesCfm != null && individualNetcdfFilesCfm.equalsIgnoreCase("true"))
+		{
+			individualNetcdfFiles = true;
+		}
+		
 		// # model run name 
 		String tmstp = cfm.getValue("timestep");                            
 		// # time step (minutes)
 		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 //	    ######### DEFINE START AND FINISH DATES HERE ########
 		Date date1A = cfm.getDateValue("date1A");
+		long simulationStartTimeLong = date1A.getTime();
 		
 		Common common = new Common();
 		String date1ADateStr = common.getYearMonthDayStrFromDate(date1A);
@@ -639,6 +646,8 @@ public class TargetModule
 	                previousTacValues.add(timestepsTacValues);
 	                NetCdfOutput netCdfOutput = new NetCdfOutput();
 	                netCdfOutput.setDisabled(disableOutput);
+	                netCdfOutput.setIndividualNetcdfFiles(individualNetcdfFiles);
+	                netCdfOutput.setSimulationStartTimeLong(simulationStartTimeLong);
 	                netCdfOutput.outputNetcdf2(outputFile, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,date1ADateStr,
 	                		latEdge, latResolution, lonEdge, lonResolution);
 	            }	            

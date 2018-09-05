@@ -2,6 +2,7 @@ package Target;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -42,7 +43,11 @@ public class NetCdfOutput
 	private boolean disableTsurfCan = false;
 	private boolean disableTsurfHorz = false;
 	private boolean disableUcan = false;
-
+	
+	private boolean individualNetcdfFiles = false;
+	private long simulationStartTimeLong = 0;
+	
+	Common common = new Common();
 
 	public static void main(String[] args)
 	{
@@ -109,7 +114,6 @@ public class NetCdfOutput
 				case UCAN:
 					disableUcan = true;
 					break;
-					
 			}
 				
 		}
@@ -122,6 +126,33 @@ public class NetCdfOutput
 			double latEdge, double latResolution, double lonEdge, double lonResolution) 
 	{
 		int minutes = (int)timestep / 60;
+
+		if (isIndividualNetcdfFiles())
+		{
+			int minutesDelta = minutes * timeIdx;
+			long currentSimulationTime = simulationStartTimeLong + (minutesDelta*60*1000);
+			
+			Date simulationCurrentDate = new Date(currentSimulationTime);
+		    Calendar calendar = Calendar.getInstance();
+		    calendar.setTime(simulationCurrentDate);
+		    
+		    int day = calendar.get(Calendar.DAY_OF_MONTH);
+		    String dayStr = common.padLeft(day+"", 2, '0');
+		    int month = calendar.get(Calendar.MONTH) + 1;
+		    String monthStr = common.padLeft(month+"", 2, '0');
+		    int year = calendar.get(Calendar.YEAR);
+		    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		    String hourStr = common.padLeft(hour, 2, '0');
+		    int minute = calendar.get(Calendar.MINUTE);
+		    String minuteStr = common.padLeft(minute, 2, '0');
+		    
+		    String currentSimulationTimeStr = year + "-" + monthStr + "-" + dayStr + "_" +hourStr + "" +minuteStr;
+			
+			filename = filename.replace(".nc", "_"
+					+ currentSimulationTimeStr
+					+ ".nc");
+		}
+		
 		NetcdfFileWriter writer = null;
 		try
 		{
@@ -187,7 +218,6 @@ public class NetCdfOutput
 			tsurfCan.addAttribute(new Attribute("long_name", "Surface temperature canyon"));
 			tsurfCan.addAttribute(new Attribute("units", "degC"));
 		}
-
 		
 		Variable tsurfWall = null;
 		if (!disableTsurfWall)
@@ -197,7 +227,6 @@ public class NetCdfOutput
 			tsurfWall.addAttribute(new Attribute("units", "degC"));
 		}
 
-
 		Variable httcUrbNew = null;
 		if (!disableHttcUrbNew)
 		{
@@ -206,7 +235,6 @@ public class NetCdfOutput
 			httcUrbNew.addAttribute(new Attribute("units", "W/(m2•K)"));
 		}
 
-		
 		Variable httcCan = null;
 		if (!disableHttcCan)
 		{
@@ -215,7 +243,6 @@ public class NetCdfOutput
 			httcCan.addAttribute(new Attribute("units", "W/(m2•K)"));
 		}
 
-		
 		Variable tbRur = null;
 		if (!disableTbRur)
 		{
@@ -232,7 +259,6 @@ public class NetCdfOutput
 			modUTaRef.addAttribute(new Attribute("units", "m"));
 		}
 
-		
 		Variable utb = null;
 		if (!disableUtb)
 		{
@@ -247,9 +273,6 @@ public class NetCdfOutput
 			fid.addAttribute(new Attribute("long_name", "fid"));
 			fid.addAttribute(new Attribute("units", "-"));
 		}
-
-
-
 
 		// create the file
 		try
@@ -312,182 +335,188 @@ public class NetCdfOutput
 		int[] time_origin = new int[]
 		{ 0 };
 		
-			timeData.setInt(timeData.getIndex(), timeIdx * minutes);
+		timeData.setInt(timeData.getIndex(), timeIdx * minutes);
 
-			int count = 0;
-			for (int latIdx = 0; latIdx < latDim.getLength(); latIdx++)
+		int count = 0;
+		for (int latIdx = 0; latIdx < latDim.getLength(); latIdx++)
+		{
+			for (int lonIdx = 0; lonIdx < lonDim.getLength(); lonIdx++)
 			{
-				for (int lonIdx = 0; lonIdx < lonDim.getLength(); lonIdx++)
+				TreeMap<Integer,Double> mod_rslts_grid = mod_rslts.get(count);
+				TreeMap<Integer,Double> mod_rslts_tmrt_utci_grid = mod_rslts_tmrt_utci.get(count);
+				
+				double tmrtValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_tmrt_INDEX);
+				double utciValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_utci_INDEX);
+				double petValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_PET_INDEX);
+				double tacValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tac_INDEX);
+				
+				double ucanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Ucan_INDEX);
+				double tsurfHorzValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tsurf_horz_INDEX);
+				double tsurfCanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tsurf_can_INDEX);
+				double tsurfWallValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tsurf_wall_INDEX);					
+//				double dteValue = mod_rslts_grid.get(TargetModule.FOR_TAB_dte_INDEX);
+				double httcUrbNewValue = mod_rslts_grid.get(TargetModule.FOR_TAB_httc_urb_new_INDEX);
+				double httcCanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_httc_can_INDEX);
+				double tbRurValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tb_rur_INDEX);
+				double modUTaRefValue = mod_rslts_grid.get(TargetModule.FOR_TAB_mod_U_TaRef_INDEX);
+				double utbValue = mod_rslts_grid.get(TargetModule.FOR_TAB_UTb_INDEX);	
+				
+				double fidValue = mod_rslts_grid.get(TargetModule.FOR_TAB_FID_INDEX);
+
+				if (tacValue== -999.0)
 				{
-					TreeMap<Integer,Double> mod_rslts_grid = mod_rslts.get(count);
-					TreeMap<Integer,Double> mod_rslts_tmrt_utci_grid = mod_rslts_tmrt_utci.get(count);
-					
-					double tmrtValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_tmrt_INDEX);
-					double utciValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_utci_INDEX);
-					double petValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_PET_INDEX);
-					double tacValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tac_INDEX);
-					
-					double ucanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Ucan_INDEX);
-					double tsurfHorzValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tsurf_horz_INDEX);
-					double tsurfCanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tsurf_can_INDEX);
-					double tsurfWallValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tsurf_wall_INDEX);					
-					double dteValue = mod_rslts_grid.get(TargetModule.FOR_TAB_dte_INDEX);
-					double httcUrbNewValue = mod_rslts_grid.get(TargetModule.FOR_TAB_httc_urb_new_INDEX);
-					double httcCanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_httc_can_INDEX);
-					double tbRurValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tb_rur_INDEX);
-					double modUTaRefValue = mod_rslts_grid.get(TargetModule.FOR_TAB_mod_U_TaRef_INDEX);
-					double utbValue = mod_rslts_grid.get(TargetModule.FOR_TAB_UTb_INDEX);	
-					
-					double fidValue = mod_rslts_grid.get(TargetModule.FOR_TAB_FID_INDEX);
-
-					if (tacValue== -999.0)
-					{
-						tacValue = Double.NaN;
-					}
-					if (tmrtValue== -999.0)
-					{
-						tmrtValue = Double.NaN;
-					}
-					if (utciValue== -999.0)
-					{
-						utciValue = Double.NaN;
-					}
-					
-					if (petValue== -999.0)
-					{
-						petValue = Double.NaN;
-					}
-					
-					if (ucanValue== -999.0)
-					{
-						ucanValue = Double.NaN;
-					}
-					
-					if (tsurfHorzValue== -999.0)
-					{
-						tsurfHorzValue = Double.NaN;
-					}
-					if (tsurfCanValue== -999.0)
-					{
-						tsurfCanValue = Double.NaN;
-					}
-					if (tsurfWallValue== -999.0)
-					{
-						tsurfWallValue = Double.NaN;
-					}
-					if (httcUrbNewValue== -999.0)
-					{
-						httcUrbNewValue = Double.NaN;
-					}
-					if (httcCanValue== -999.0)
-					{
-						httcCanValue = Double.NaN;
-					}
-					if (tbRurValue== -999.0)
-					{
-						tbRurValue = Double.NaN;
-					}
-					if (modUTaRefValue== -999.0)
-					{
-						modUTaRefValue = Double.NaN;
-					}
-					if (utbValue== -999.0)
-					{
-						utbValue = Double.NaN;
-					}
-												
-					tempData.set(0, latIdx, lonIdx, tacValue);
-					tmrtData.set(0, latIdx, lonIdx, tmrtValue);
-					utciData.set(0, latIdx, lonIdx, utciValue);
-					petData.set(0, latIdx, lonIdx, petValue);
-					
-					ucanData.set(0, latIdx, lonIdx, ucanValue);
-					tsurfHorzData.set(0, latIdx, lonIdx, tsurfHorzValue);
-					tsurfCanData.set(0, latIdx, lonIdx, tsurfCanValue);
-					tsurfWallData.set(0, latIdx, lonIdx, tsurfWallValue);
-					httcUrbNewData.set(0, latIdx, lonIdx, httcUrbNewValue);
-					httcCanData.set(0, latIdx, lonIdx, httcCanValue);
-					tbRurData.set(0, latIdx, lonIdx, tbRurValue);
-					modUTaRefData.set(0, latIdx, lonIdx, modUTaRefValue);
-					utbData.set(0, latIdx, lonIdx, utbValue);
-					fidData.set(0, latIdx, lonIdx, fidValue);
-					
-					
-					
-					
-					count ++;
+					tacValue = Double.NaN;
 				}
+				if (tmrtValue== -999.0)
+				{
+					tmrtValue = Double.NaN;
+				}
+				if (utciValue== -999.0)
+				{
+					utciValue = Double.NaN;
+				}
+				
+				if (petValue== -999.0)
+				{
+					petValue = Double.NaN;
+				}
+				
+				if (ucanValue== -999.0)
+				{
+					ucanValue = Double.NaN;
+				}
+				
+				if (tsurfHorzValue== -999.0)
+				{
+					tsurfHorzValue = Double.NaN;
+				}
+				if (tsurfCanValue== -999.0)
+				{
+					tsurfCanValue = Double.NaN;
+				}
+				if (tsurfWallValue== -999.0)
+				{
+					tsurfWallValue = Double.NaN;
+				}
+				if (httcUrbNewValue== -999.0)
+				{
+					httcUrbNewValue = Double.NaN;
+				}
+				if (httcCanValue== -999.0)
+				{
+					httcCanValue = Double.NaN;
+				}
+				if (tbRurValue== -999.0)
+				{
+					tbRurValue = Double.NaN;
+				}
+				if (modUTaRefValue== -999.0)
+				{
+					modUTaRefValue = Double.NaN;
+				}
+				if (utbValue== -999.0)
+				{
+					utbValue = Double.NaN;
+				}
+											
+				tempData.set(0, latIdx, lonIdx, tacValue);
+				tmrtData.set(0, latIdx, lonIdx, tmrtValue);
+				utciData.set(0, latIdx, lonIdx, utciValue);
+				petData.set(0, latIdx, lonIdx, petValue);
+				
+				ucanData.set(0, latIdx, lonIdx, ucanValue);
+				tsurfHorzData.set(0, latIdx, lonIdx, tsurfHorzValue);
+				tsurfCanData.set(0, latIdx, lonIdx, tsurfCanValue);
+				tsurfWallData.set(0, latIdx, lonIdx, tsurfWallValue);
+				httcUrbNewData.set(0, latIdx, lonIdx, httcUrbNewValue);
+				httcCanData.set(0, latIdx, lonIdx, httcCanValue);
+				tbRurData.set(0, latIdx, lonIdx, tbRurValue);
+				modUTaRefData.set(0, latIdx, lonIdx, modUTaRefValue);
+				utbData.set(0, latIdx, lonIdx, utbValue);
+				fidData.set(0, latIdx, lonIdx, fidValue);
+	
+				count ++;
 			}
+		}
 
+		if (isIndividualNetcdfFiles())
+		{
+			time_origin[0] = 0;
+			origin[0] = 0;
+		}
+		else
+		{
 			time_origin[0] = timeIdx;
 			origin[0] = timeIdx;
-			try
+		}
+		
+		try
+		{
+			writer.write(airTemp, origin, tempData);
+			writer.write(tempmrt, origin, tmrtData);
+			writer.write(utci, origin, utciData);
+			writer.write(pet, origin, petData);
+			
+			if (!disableUcan)
 			{
-				writer.write(airTemp, origin, tempData);
-				writer.write(tempmrt, origin, tmrtData);
-				writer.write(utci, origin, utciData);
-				writer.write(pet, origin, petData);
-				
-				if (!disableUcan)
-				{
-					writer.write(ucan, origin, ucanData);
-				}
-				
-				if (!disableTsurfHorz)
-				{
-					writer.write(tsurfHorz, origin, tsurfHorzData);
-				}
-				
-				if (!disableTsurfCan)
-				{
-					writer.write(tsurfCan, origin, tsurfCanData);
-				}
-				
-				if (!disableTsurfWall)
-				{
-					writer.write(tsurfWall, origin, tsurfWallData);
-				}
-				
-				if (!disableHttcUrbNew)
-				{
-					writer.write(httcUrbNew, origin, httcUrbNewData);
-				}
-				
-				if (!disableHttcCan)
-				{
-					writer.write(httcCan, origin, httcCanData);
-				}
-				
-				if (!disableTbRur)
-				{
-					writer.write(tbRur, origin, tbRurData);
-				}
-				
-				if (!disableModUTaRef)
-				{
-					writer.write(modUTaRef, origin, modUTaRefData);
-				}
-				
-				if (!disableUtb)
-				{
-					writer.write(utb, origin, utbData);
-				}
-				
-				if (!disableFid)
-				{
-					writer.write(fid, origin, fidData);
-				}
-				
-				writer.write(time, time_origin, timeData);
+				writer.write(ucan, origin, ucanData);
 			}
-			catch (IOException e)
-			{				
-				e.printStackTrace();
+			
+			if (!disableTsurfHorz)
+			{
+				writer.write(tsurfHorz, origin, tsurfHorzData);
 			}
-			catch (InvalidRangeException e)
-			{				
-				e.printStackTrace();
+			
+			if (!disableTsurfCan)
+			{
+				writer.write(tsurfCan, origin, tsurfCanData);
 			}
+			
+			if (!disableTsurfWall)
+			{
+				writer.write(tsurfWall, origin, tsurfWallData);
+			}
+			
+			if (!disableHttcUrbNew)
+			{
+				writer.write(httcUrbNew, origin, httcUrbNewData);
+			}
+			
+			if (!disableHttcCan)
+			{
+				writer.write(httcCan, origin, httcCanData);
+			}
+			
+			if (!disableTbRur)
+			{
+				writer.write(tbRur, origin, tbRurData);
+			}
+			
+			if (!disableModUTaRef)
+			{
+				writer.write(modUTaRef, origin, modUTaRefData);
+			}
+			
+			if (!disableUtb)
+			{
+				writer.write(utb, origin, utbData);
+			}
+			
+			if (!disableFid)
+			{
+				writer.write(fid, origin, fidData);
+			}
+			
+			writer.write(time, time_origin, timeData);
+		}
+		catch (IOException e)
+		{				
+			e.printStackTrace();
+		}
+		catch (InvalidRangeException e)
+		{				
+			e.printStackTrace();
+		}
 
 		try
 		{
@@ -498,6 +527,30 @@ public class NetCdfOutput
 			e.printStackTrace();
 		}
 		
+	}
+
+
+	public boolean isIndividualNetcdfFiles()
+	{
+		return individualNetcdfFiles;
+	}
+
+
+	public void setIndividualNetcdfFiles(boolean individualNetcdfFiles)
+	{
+		this.individualNetcdfFiles = individualNetcdfFiles;
+	}
+
+
+	public long getSimulationStartTimeLong()
+	{
+		return simulationStartTimeLong;
+	}
+
+
+	public void setSimulationStartTimeLong(long simulationStartTimeLong)
+	{
+		this.simulationStartTimeLong = simulationStartTimeLong;
 	}
 
 	
