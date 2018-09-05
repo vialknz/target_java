@@ -52,32 +52,9 @@ public class NetCdfOutput
 	public static void main(String[] args)
 	{
 		
-//		String loc = "/tmp/testWrite.nc";
-//		int y = 64; //lon
-//		int x = 128; //lat
-//		NetCdfOutput netCdfOutput = new NetCdfOutput(loc);
-//		//netCdfOutput.process();
-//		//netCdfOutput.createNetcdf(x, y);
-//		
-//		try
-//		{
-//			netCdfOutput.testWriteRecordOneAtaTime3(loc);
-//		}
-//		catch (IOException | InvalidRangeException e)
-//		{
-//			
-//			e.printStackTrace();
-//		}
-
 	}
 	
 
-//	public NetCdfOutput(String location)
-//	{
-//		super();
-//		this.location = location;
-//	}
-	
 	public void setDisabled(String[] disabled)
 	{
 		for (String value : disabled)
@@ -192,8 +169,8 @@ public class NetCdfOutput
 		utci.addAttribute(new Attribute("units", "degC"));
 		
 		Variable pet = writer.addVariable(null, "PET", DataType.DOUBLE, "time lat lon");
-		utci.addAttribute(new Attribute("long_name", "PET temperature"));
-		utci.addAttribute(new Attribute("units", "degC"));
+		pet.addAttribute(new Attribute("long_name", "PET temperature"));
+		pet.addAttribute(new Attribute("units", "degC"));
 		
 		Variable ucan = null;
 		if (!disableUcan)
@@ -359,8 +336,8 @@ public class NetCdfOutput
 				double httcCanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_httc_can_INDEX);
 				double tbRurValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tb_rur_INDEX);
 				double modUTaRefValue = mod_rslts_grid.get(TargetModule.FOR_TAB_mod_U_TaRef_INDEX);
-				double utbValue = mod_rslts_grid.get(TargetModule.FOR_TAB_UTb_INDEX);	
-				
+				double utbValue = mod_rslts_grid.get(TargetModule.FOR_TAB_UTb_INDEX);
+     				
 				double fidValue = mod_rslts_grid.get(TargetModule.FOR_TAB_FID_INDEX);
 
 				if (tacValue== -999.0)
