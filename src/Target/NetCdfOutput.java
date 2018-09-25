@@ -106,8 +106,8 @@ public class NetCdfOutput
 
 		if (isIndividualNetcdfFiles())
 		{
-			int minutesDelta = minutes * timeIdx;
-			long currentSimulationTime = simulationStartTimeLong + (minutesDelta*60*1000);
+			long minutesDelta = minutes * timeIdx;
+			long currentSimulationTime = simulationStartTimeLong + (minutesDelta*60L*1000L);
 			
 			Date simulationCurrentDate = new Date(currentSimulationTime);
 		    Calendar calendar = Calendar.getInstance();
