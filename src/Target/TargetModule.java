@@ -194,7 +194,7 @@ public class TargetModule
 		//# date range for model period (i.e. including spin-up period)
 		// # this is a dictionary with all the date/time information 
 
-		int timedelta = tmstpInt*1000;
+		long timedelta = tmstpInt*1000;
 		
 		mod_data_ts_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
 		double[][][] mod_data_tm_ = new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
@@ -208,6 +208,7 @@ public class TargetModule
 		double[] mod_cd = new double[nt];
 		double[] mod_U_TaRef = new double[nt];
 	        
+		long date1ALong = date1A.getTime();
 	        // # begin looping through the met forcing data file
 		    for (int i=0;i<nt;i++)
 	        {             
@@ -226,11 +227,12 @@ public class TargetModule
 	                
 	            	ArrayList<TreeMap<Integer,Double>> mod_rslts_tmrt_utci =new ArrayList<TreeMap<Integer,Double>>();
 	                //############ Met variables for each time step (generate dataframe) ##########
-	                Date dte   = date1A;
-	                dte   = new Date(dte.getTime() + i*timedelta);  // # current timestep 
+//	                Date dte   = date1A;
+	            	long timedeltaAddition = i*timedelta;
+	                Date dte   = new Date(date1ALong + timedeltaAddition);  // # current timestep 
 	                Dats.put("dte", dte);
 	                ArrayList<ArrayList<Object>> met_d = met_data_all ;
-	                System.out.println( "\t"+"\t"+"\t"+"\t"+dte + " " + i);
+	                System.out.println( "\t"+"\t"+"\t"+"\t"+dte + " " + i + " " + timedeltaAddition);
 	                
 	                //## BEGIN CALCULATION OF Tb_rur
 	                String ref_surf1 = LCData.DRY_SURF;
