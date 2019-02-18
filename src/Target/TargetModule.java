@@ -151,8 +151,8 @@ public class TargetModule
 			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
 		
-		int n = Runtime.getRuntime().availableProcessors();
-		System.out.println(n + " processors available");
+//		int n = Runtime.getRuntime().availableProcessors();
+//		System.out.println(n + " processors available");
 		
 		String[] disableOutput = cfm.getValues("disableOutput");
 		boolean individualNetcdfFiles = false;
@@ -167,17 +167,18 @@ public class TargetModule
 		// # time step (minutes)
 		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 //	    ######### DEFINE START AND FINISH DATES HERE ########
-		Date date1A = cfm.getDateValue("date1A");
-		long simulationStartTimeLong = date1A.getTime();
+		// this variable is now called SpinUp in the config file
+		Date spinUp = cfm.getDateValue("SpinUp");
+		long simulationStartTimeLong = spinUp.getTime();
 		
 		Common common = new Common();
-		String date1ADateStr = common.getYearMonthDayStrFromDate(date1A);
+		String spinUpDateStr = common.getYearMonthDayStrFromDate(spinUp);
 
 		//  ## the date/time for period of interest (i.e. before this will not be saved)
-		Date date2 = cfm.getDateValue("date2");
+		Date endDate = cfm.getDateValue("EndDate");
       
 		// ## end date/time of simulation 
-		long tD = (date2.getTime() - date1A.getTime()) ;  
+		long tD = (endDate.getTime() - spinUp.getTime()) ;  
 		// to days    / (1000 * 60 * 60 * 24)
  
 		//## time difference between start and end date
@@ -203,7 +204,7 @@ public class TargetModule
 		double[] mod_cd = new double[nt];
 		double[] mod_U_TaRef = new double[nt];
 	        
-		long date1ALong = date1A.getTime();
+		long spinUpLong = spinUp.getTime();
 	        // # begin looping through the met forcing data file
 		    for (int i=0;i<nt;i++)
 	        {             
@@ -223,7 +224,7 @@ public class TargetModule
 	            	ArrayList<TreeMap<Integer,Double>> mod_rslts_tmrt_utci =new ArrayList<TreeMap<Integer,Double>>();
 	                //############ Met variables for each time step (generate dataframe) ##########
 	            	long timedeltaAddition = i*timedelta;
-	                Date dte   = new Date(date1ALong + timedeltaAddition);  // # current timestep 
+	                Date dte   = new Date(spinUpLong + timedeltaAddition);  // # current timestep 
 	                Dats.put("dte", dte);
 	                ArrayList<ArrayList<Object>> met_d = met_data_all ;
 	                System.out.println( "\t"+"\t"+"\t"+"\t"+dte + " " + i + " " + timedeltaAddition);
@@ -581,7 +582,7 @@ public class TargetModule
 	                netCdfOutput.setDisabled(disableOutput);
 	                netCdfOutput.setIndividualNetcdfFiles(individualNetcdfFiles);
 	                netCdfOutput.setSimulationStartTimeLong(simulationStartTimeLong);
-	                netCdfOutput.outputNetcdf2(outputFile, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,date1ADateStr,
+	                netCdfOutput.outputNetcdf2(outputFile, x, y, mod_rslts, mod_rslts_tmrt_utci,i,tmstpInt,spinUpDateStr,
 	                		latEdge, latResolution, lonEdge, lonResolution);
 	            }	            
 	        }	                        

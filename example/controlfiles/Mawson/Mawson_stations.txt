@@ -16,9 +16,9 @@ direct roofs = 'Y'                                       # turn roofs on and off
 #--------------------------------------------------------------------------------------------------------
 # dates
 #---------------------------------------------------------------------------------------------------------
-date1A=2011,2,14,0									# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
-date1 =2011,2,15,0									# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
-date2 =2011,2,16,18 									# year,month,day,hour	# end date for validation period
+SpinUp=2011,2,14,0									# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
+StartDate =2011,2,15,0									# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
+EndDate =2011,2,16,18 									# year,month,day,hour	# end date for validation period
 ######################
 
 ##### Validation Info ####

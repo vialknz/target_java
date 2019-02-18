@@ -47,7 +47,7 @@ public class ForceRestore
 		String tmstp = cfm.getValue("timestep");                            // # time step (minutes)
 		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 		Date dte = Dats.get("dte");
-		Date date1A = Dats.get("date1A");
+		Date date1A = Dats.get("SpinUp");
 		int timedelta = 2*tmstpInt*1000;
 		
 	    if (dte.getTime() <= date1A.getTime() +  timedelta  )

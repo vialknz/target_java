@@ -36,9 +36,9 @@ direct roofs = 'Y'
 #---------------------------------------------------------------------------------------------------------
 # dates 
 #---------------------------------------------------------------------------------------------------------
-date1A=2009,2,5,0									# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
-date1 =2009,2,5,12									# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
-date2 =2009,2,7,23
+SpinUp=2009,2,5,0									# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
+StartDate =2009,2,5,12									# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
+EndDate =2009,2,7,23
 ######################
 ##### Validation Info ####
 val_ta = 'N'                                                                    ## generate validation plots for Ta?
@@ -106,10 +106,10 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		
 //		System.out.println(controlTextFile);
 		
-		for (String filepathelement : controlFileNameSplit)
-		{
-			System.out.println(filepathelement);
-		}
+//		for (String filepathelement : controlFileNameSplit)
+//		{
+//			System.out.println(filepathelement);
+//		}
 		
 
 		String controlTextFileSubpath = File.separator
@@ -143,14 +143,14 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 
 		//		######### DEFINE START AND FINISH DATES HERE ########
 		
-		Date date1A = cfm.getDateValue("date1A");
-		Date date1 = cfm.getDateValue("date1");
-		Date date2 = cfm.getDateValue("date2");
+		Date spinUp = cfm.getDateValue("SpinUp");
+		Date startDate = cfm.getDateValue("StartDate");
+		Date endDate = cfm.getDateValue("EndDate");
 
 		TreeMap<String,Date> Dats = new TreeMap<String,Date>();
-		Dats.put("date1A", date1A);
-		Dats.put("date1", date1);
-		Dats.put("date2", date2);
+		Dats.put("SpinUp", spinUp);
+		Dats.put("StartDate", startDate);
+		Dats.put("EndDate", endDate);
 		
 		String lcFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/LC/" + cfm.getValue("inpt_lc_file");
 	
@@ -160,7 +160,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		double maxW = lcDataClass.getMaxW();
 
 		String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
-		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"), date1A, date2);
+		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"), spinUp, endDate);
 		ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 		TargetModule tkmd = new TargetModule(workingDirectory);
 		tkmd.rootDirectory = rootDir;

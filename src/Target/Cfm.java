@@ -37,7 +37,7 @@ public class Cfm
 			String[] subSplitLine = splitLine[0].split("=");
 			String key = subSplitLine[0].trim();
 			String value = subSplitLine[1].trim().replaceAll("'", "").replaceAll("\"", "");
-			System.out.println(key + " " + value);
+//			System.out.println(key + " " + value);
 			cfmData.put(key, value);
 			
 		}

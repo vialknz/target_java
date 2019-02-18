@@ -50,9 +50,9 @@ public class RnCalcNew
 		double Rnstar = 0.;
 		
 		Date dte = Dats.get("dte");
-		Date date1A = Dats.get("date1A");
+		Date spinUp = Dats.get("SpinUp");
 				
-		if (dte.getTime() == date1A.getTime())
+		if (dte.getTime() == spinUp.getTime())
 		{
 			//# intial values set to 0.
 			Rn	   = 0.;
