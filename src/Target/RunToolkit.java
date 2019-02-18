@@ -104,7 +104,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		int lengthOfSplit = controlFileNameSplit.length;
 		String controlTextFile = controlFileNameSplit[lengthOfSplit-1];
 		
-		System.out.println(controlTextFile);
+//		System.out.println(controlTextFile);
 		
 		for (String filepathelement : controlFileNameSplit)
 		{
@@ -121,16 +121,15 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		
 		controlTextFileSubpath = controlFileName.replace(controlTextFile, "");
 		
-		System.out.println(controlTextFileSubpath);
+//		System.out.println(controlTextFileSubpath);
 
 		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
 		rootDir = controlTextFileSubpath + ".."  + File.separator + ".."  + File.separator;
 		
-		System.out.println(rootDir);
+//		System.out.println(rootDir);
 	
-		String outputFile = rootDir + "/output/" + cfm.getValue("site_name") + "/" + cfm.getValue("site_name") + ".nc";
-		common.createDirectory(rootDir + "/output/" + cfm.getValue("site_name") + "/");
-		
+		String outputFile = rootDir + "/output/" + cfm.getValue("site_name") + "/" + cfm.getValue("run_name") + ".nc";
+		common.createDirectory(rootDir + "/output/" + cfm.getValue("site_name") + "/");	
 		
 		lonResolution = cfm.getDoubleValue("lonResolution");
 		latResolution = cfm.getDoubleValue("latResolution");

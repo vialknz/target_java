@@ -5,10 +5,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.TreeMap;
 
-import Target.HTC.VdiPETCorrected;
+//import Target.HTC.VdiPETCorrected;
 
 public class TargetModule
 {
@@ -37,7 +36,7 @@ public class TargetModule
 	private TsEbW tsEbW = new TsEbW();
 	private UTCI utciInstance = new UTCI();
 	
-	private VdiPETCorrected petInstance = new VdiPETCorrected();
+//	private VdiPETCorrected petInstance = new VdiPETCorrected();
 	
 	private String workingDirectory;
 	public String rootDirectory ;
@@ -549,19 +548,20 @@ public class TargetModule
 	                		double Tair=Tac;  //air temp in C
 	                		double Tmrt=tmrt;  //tmrt in C
 	                		double v_air=Ucan; //air velocity in m/s 	
-	                		String petCacheKey = po+ " " + p+ " " + Tair+ " " + Tmrt+ " " + v_air;
 	                		
-	                      	Double petCached = petCache.get(petCacheKey);
-	                    	if (petCached == null)
-	                    	{
-	                    		pet = petInstance.petCalculationDefault(po, p, Tair, Tmrt, v_air);
-	                    		petCache.put(petCacheKey, pet);
-	                    		
-	                    	}
-	                    	else
-	                    	{
-	                    		pet = petCached;
-	                    	}	                        
+	                		// PET is experimental and hasn't been added yet
+//	                		String petCacheKey = po+ " " + p+ " " + Tair+ " " + Tmrt+ " " + v_air;	                		
+//	                      	Double petCached = petCache.get(petCacheKey);
+//	                    	if (petCached == null)
+//	                    	{
+//	                    		pet = petInstance.petCalculationDefault(po, p, Tair, Tmrt, v_air);
+//	                    		petCache.put(petCacheKey, pet);
+//	                    		
+//	                    	}
+//	                    	else
+//	                    	{
+//	                    		pet = petCached;
+//	                    	}	                        
 	                    }
 	    	                    
 	                	TreeMap<Integer,Double> for_tab_tmrt_utci = new TreeMap<Integer,Double>();
@@ -571,7 +571,7 @@ public class TargetModule
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_utci_INDEX,utci);
 	                	double dteDouble = (double)dte.getTime();
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_dte_INDEX,dteDouble);
-	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_PET_INDEX,pet);
+//	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_PET_INDEX,pet);
 	                	
 	                	mod_rslts_tmrt_utci.add(for_tab_tmrt_utci);	          
 	                }

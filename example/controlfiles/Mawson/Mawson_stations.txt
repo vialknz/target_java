@@ -5,9 +5,9 @@
 #---------------------------------------------------------------------------------------------------------
 ####### INPUTS #######
 site_name = "Mawson"									             # site name (string)
-run_name   = "Mawson_newSVF_fast_walls1a_newTree_TbRur_Tbcan_N_Y_Y_30min_kent_wall_C5_test1"                            # run name (string)
+run_name   = "MawsonExample"                            # run name (string)
 inpt_met_file =  "Mawson-meteorology_KentTown_30min.csv"				       # input meteorolgical file (i.e. forcing file)
-inpt_lc_file  =  "25m-radius-stations_LC.csv"                                    #  input land cover data file
+inpt_lc_file  =  "100m_lc_grid.csv"                                    #  input land cover data file
 date_fmt = '%d/%m/%Y %H:%M'                                                      # format of datetime in input met files
 timestep = '1800S'     # define in seconds 
 use solve = 'N'                                         # if set to Y it will  solve (iteratively) Tb above canyon and roof
@@ -42,10 +42,10 @@ mod_ldwn = 'N'                                                      # used model
 use_obs_ws   	= 'N'									# trigger to activate use of observed ws inputs
 lat=-37.8136
 domainDim=9,3
-latEdge=-37.505054
-lonEdge=144.647901
-latResolution=.00004294
-lonResolution=.0021849
+latEdge=-34.79829
+lonEdge=138.79829
+latResolution=0.00088
+lonResolution=0.00110
 disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,TsurfHorz,Ucan
 
 

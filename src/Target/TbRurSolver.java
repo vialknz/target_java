@@ -503,7 +503,7 @@ public class TbRurSolver
 
 		    if (converged)
 		    {
-			    System.out.println("result=" + testValue + " iterations=" + count);
+//			    System.out.println("result=" + testValue + " iterations=" + count);
 				return testValue;
 		    }
 		    else

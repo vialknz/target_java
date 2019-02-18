@@ -168,9 +168,9 @@ public class NetCdfOutput
 		utci.addAttribute(new Attribute("long_name", "UTCI temperature"));
 		utci.addAttribute(new Attribute("units", "degC"));
 		
-		Variable pet = writer.addVariable(null, "PET", DataType.DOUBLE, "time lat lon");
-		pet.addAttribute(new Attribute("long_name", "PET temperature"));
-		pet.addAttribute(new Attribute("units", "degC"));
+//		Variable pet = writer.addVariable(null, "PET", DataType.DOUBLE, "time lat lon");
+//		pet.addAttribute(new Attribute("long_name", "PET temperature"));
+//		pet.addAttribute(new Attribute("units", "degC"));
 		
 		Variable ucan = null;
 		if (!disableUcan)
@@ -291,7 +291,7 @@ public class NetCdfOutput
 		ArrayDouble.D3 tempData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
 		ArrayDouble.D3 utciData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
 		ArrayDouble.D3 tmrtData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
-		ArrayDouble.D3 petData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
+//		ArrayDouble.D3 petData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
 		
 		ArrayDouble.D3 ucanData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
 		ArrayDouble.D3 tsurfHorzData = new ArrayDouble.D3(1, latDim.getLength(), lonDim.getLength());
@@ -324,7 +324,7 @@ public class NetCdfOutput
 				
 				double tmrtValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_tmrt_INDEX);
 				double utciValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_utci_INDEX);
-				double petValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_PET_INDEX);
+//				double petValue = mod_rslts_tmrt_utci_grid.get(TargetModule.FOR_TAB_UTCI_PET_INDEX);
 				double tacValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Tac_INDEX);
 				
 				double ucanValue = mod_rslts_grid.get(TargetModule.FOR_TAB_Ucan_INDEX);
@@ -353,10 +353,10 @@ public class NetCdfOutput
 					utciValue = Double.NaN;
 				}
 				
-				if (petValue== -999.0)
-				{
-					petValue = Double.NaN;
-				}
+//				if (petValue== -999.0)
+//				{
+//					petValue = Double.NaN;
+//				}
 				
 				if (ucanValue== -999.0)
 				{
@@ -399,7 +399,7 @@ public class NetCdfOutput
 				tempData.set(0, latIdx, lonIdx, tacValue);
 				tmrtData.set(0, latIdx, lonIdx, tmrtValue);
 				utciData.set(0, latIdx, lonIdx, utciValue);
-				petData.set(0, latIdx, lonIdx, petValue);
+//				petData.set(0, latIdx, lonIdx, petValue);
 				
 				ucanData.set(0, latIdx, lonIdx, ucanValue);
 				tsurfHorzData.set(0, latIdx, lonIdx, tsurfHorzValue);
@@ -432,7 +432,7 @@ public class NetCdfOutput
 			writer.write(airTemp, origin, tempData);
 			writer.write(tempmrt, origin, tmrtData);
 			writer.write(utci, origin, utciData);
-			writer.write(pet, origin, petData);
+//			writer.write(pet, origin, petData);
 			
 			if (!disableUcan)
 			{
