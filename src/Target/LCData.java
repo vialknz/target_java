@@ -79,28 +79,28 @@ public class LCData
 			line = line.trim();
 			String[] splitLine = line.split(",");
 			ArrayList<Double> dataLine = new ArrayList<Double>();
-			//System.out.println(line);
+
 			
 			double roofValue = new Double(splitLine[roof]).doubleValue();
-			//roofTotal += roofValue;
+
 			
 			double roadValue = new Double(splitLine[road]).doubleValue();
-			//roadTotal += roadValue;
+
 			
 			double watrValue = new Double(splitLine[watr]).doubleValue();
-			//watrTotal += watrValue;
+
 			
 			double concValue = new Double(splitLine[conc]).doubleValue();
-			//concTotal += concValue;
+
 			
 			double VegValue = new Double(splitLine[Veg]).doubleValue();
-			//vegTotal += VegValue;
+
 			
 			double dryValue = new Double(splitLine[dry]).doubleValue();
-			//dryTotal += dryValue;
+
 			
 			double irrValue = new Double(splitLine[irr]).doubleValue();
-			//irrTotal += irrValue;
+
 			
 			double hValue = new Double(splitLine[H]).doubleValue();
 			if (hValue > maxH)
@@ -126,7 +126,7 @@ public class LCData
 			dataLine.add(hValue);
 			dataLine.add(wValue);
 			dataLine.add(wall);
-			//System.out.println(dataLine.toString());
+
 			
 			lcDataArrays.add(dataLine);
 			
@@ -146,74 +146,7 @@ public class LCData
 		return this.maxW;
 	}
 
-//	public double getVegTotal()
-//	{
-//		return vegTotal;
-//	}
-//
-//	public void setVegTotal(double vegTotal)
-//	{
-//		this.vegTotal = vegTotal;
-//	}
-//
-//	public double getRoadTotal()
-//	{
-//		return roadTotal;
-//	}
-//
-//	public void setRoadTotal(double roadTotal)
-//	{
-//		this.roadTotal = roadTotal;
-//	}
-//
-//	public double getWatrTotal()
-//	{
-//		return watrTotal;
-//	}
-//
-//	public void setWatrTotal(double watrTotal)
-//	{
-//		this.watrTotal = watrTotal;
-//	}
-//
-//	public double getConcTotal()
-//	{
-//		return concTotal;
-//	}
-//
-//	public void setConcTotal(double concTotal)
-//	{
-//		this.concTotal = concTotal;
-//	}
-//
-//	public double getDryTotal()
-//	{
-//		return dryTotal;
-//	}
-//
-//	public void setDryTotal(double dryTotal)
-//	{
-//		this.dryTotal = dryTotal;
-//	}
-//
-//	public double getIrrTotal()
-//	{
-//		return irrTotal;
-//	}
-//
-//	public void setRoofTotal(double roofTotal)
-//	{
-//		this.roofTotal = roofTotal;
-//	}
-//	public double getRoofTotal()
-//	{
-//		return roofTotal;
-//	}
-//
-//	public void setIrrTotal(double irrTotal)
-//	{
-//		this.irrTotal = irrTotal;
-//	}
+
 	
 
 }

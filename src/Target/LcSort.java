@@ -63,15 +63,13 @@ public class LcSort
 	    }
 	                        
 	    double LCgrndSum = LC.get(LCData.road) + LC.get(LCData.watr) + LC.get(LCData.conc) + LC.get(LCData.dry) + LC.get(LCData.irr);
-//	    System.out.println(LC.get(LCData.road) +" "+ LC.get(LCData.watr) +" "+ LC.get(LCData.conc) +" "+ LC.get(LCData.dry) +" "+ LC.get(LCData.irr));
-//	    System.out.println("LCgrndSum "+ LCgrndSum);
+
 	    		
 	    //# this part add the surface below trees...
 	    
 	    if (LCgrndSum > 0.)
 	    {
-//	    	System.out.println("LCData.road, LC.get(LCData.road)+((LC.get(LCData.road)/LCgrndSum)*LC.get(LCData.Veg)) "
-//	           + (LC.get(LCData.road)+((LC.get(LCData.road)/LCgrndSum)*LC.get(LCData.Veg))) );
+
 	    	LC.set(LCData.road, LC.get(LCData.road)+((LC.get(LCData.road)/LCgrndSum)*LC.get(LCData.Veg)));
 	    	LC.set(LCData.watr, LC.get(LCData.watr)+((LC.get(LCData.watr)/LCgrndSum)*LC.get(LCData.Veg)) );
 	    	LC.set(LCData.conc, LC.get(LCData.conc)+((LC.get(LCData.conc)/LCgrndSum)*LC.get(LCData.Veg)) );
@@ -83,7 +81,7 @@ public class LcSort
 	    	LC.set(LCData.conc, LC.get(LCData.conc) + LC.get(LCData.Veg) );
 	    }
 	        
-		//ArrayList<Double> LC_woRoofAvg = new ArrayList<Double>();
+
 		List<Double> LC_woRoofAvg = new ArrayList<Double>(Arrays.asList(new Double[LC.size()]));
 		Collections.copy(LC_woRoofAvg, LC);
 	    //## copy of LC without roofs 
@@ -96,36 +94,17 @@ public class LcSort
 	    double wall_area = 2.*(H/W)*(1.-LC.get(LCData.roof));
 	    
 	    
-		//ArrayList<Double> LC_woRoofAvgN = new ArrayList<Double>();
 	    ArrayList<Double> LC_woRoofAvgN = new ArrayList<Double>(Arrays.asList(new Double[LC.size()]));
 		Collections.copy(LC_woRoofAvgN, LC);
 		
-		//ArrayList<Double> LC_wRoofAvg = new ArrayList<Double>();
+
 		ArrayList<Double> LC_wRoofAvg = new ArrayList<Double>(Arrays.asList(new Double[LC.size()]));
 		Collections.copy(LC_wRoofAvg, LC);
 		//## copy of LC without roofs 
 	    
 		LC.set(LCData.wall, wall_area);
 	    
-		//ArrayList<Double> LC_woRoofAvg = new ArrayList<Double>();
-		//Collections.copy(LC_woRoofAvg, LC);
-	    //## copy of LC without roofs 
-	    
-	    
-	    //#Acanyon = LC_canyon['road']+LC_canyon['watr']+LC_canyon['conc']+LC_canyon['dry']+LC_canyon['irr']+LC_canyon['Veg'] # plan area of canyon
-	    
-	    //#LC_canyon['roof'] = LC['roof']/Acanyon
-	    //#LC_canyon['road']  = LC['road']/Acanyon
-	    //#LC_canyon['watr'] = LC['watr']/Acanyon
-	    //#LC_canyon['conc'] = LC['conc']/Acanyon
-	    //#LC_canyon['dry'] = LC['dry']/Acanyon
-	    //#LC_canyon['irr'] = LC['irr']/Acanyon
-	    //#LC_canyon['Veg'] = LC['Veg']/Acanyon
-	    //#LC_canyon['wall'] = LC['wall']/Acanyon
-
-
-	        
-	//# is the above correct??? need to work this out.        
+       
 	    if (!(LC_woRoofAvgN.get(LCData.roof) > 0.99))
 	    {
 	    	LC_woRoofAvgN.set(LCData.roof, 0.0);
@@ -134,7 +113,7 @@ public class LcSort
 	    double LC_woRoofAvgNSum = sumSurfaces(LC_woRoofAvgN);
 	    if (! (LC_woRoofAvgNSum == 0.))
 	    {
-	        //LC1sum = sum(LC_woRoofAvgN.values());
+
 	    	double value = LC_woRoofAvgN.get(LCData.road);	    	
 	    	value = LC_woRoofAvgN.get(LCData.road) ;
 	    	LC_woRoofAvgN.set(LCData.road, value/LC_woRoofAvgNSum);
@@ -154,24 +133,16 @@ public class LcSort
 	    	value = LC_woRoofAvgN.get(LCData.watr);
 	    	LC_woRoofAvgN.set(LCData.watr, value/LC_woRoofAvgNSum);
 	    	
-//	        for (key, value in LC_woRoofAvgN.iteritems())
-//	        {
-//	        	
-//	            LC_woRoofAvgN[key] = value/LC_woRoofAvgNSum;
-//	        }
+
 	    }
 	    LC_woRoofAvgN.set(LCData.wall, wall_area);
 	            
 	            
 	    double LC_wRoofAvgSum = sumSurfaces(LC_wRoofAvg);
-	    //System.out.println("LC_wRoofAvgSum="+LC_wRoofAvgSum);
+
 	    if (! (LC_wRoofAvgSum == 0.))
 	    {
-	        //LCsum = sum(LC_wRoofAvg.values());
-//	        for (key, value in LC_wRoofAvg.iteritems())
-//	        {
-//	            LC_wRoofAvg[key] = value/LCsum;
-//	        }
+
 	        
 	    	double value = LC_wRoofAvg.get(LCData.road);	
 	    	
@@ -281,7 +252,6 @@ public class LcSort
 	        fw = 9;
 	    }
 	                          
-//	    return {'LC':LC, 'LC_woRoofAvg':LC_woRoofAvg, 'LC_woRoofAvgN':LC_woRoofAvgN,  'LC_wRoofavg':LC_wRoofAvg,'H':H,'W':W, 'Wtree':Wtree, 'fw':fw,'fg':fg}
 	    
 	    returnValues.put(LC_KEY, LC);
 	    returnValues.put(LC_woRoofAvg_KEY, LC_woRoofAvg);

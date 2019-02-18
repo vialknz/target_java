@@ -21,15 +21,7 @@ public class MetData
 	public final static int Kd=5;
 	public final static int Ld=6;
 	
-	public static void main(String[] args)
-	{
 
-		
-		String mod_ldown="Y";
-		// TODO Auto-generated method stub
-		String file = "/home/kerryn/Documents/Work/Toolkit2-Runs/Sunbury3ExtremeB/input/Sunbury3ExtremeB/MET/Sunbury3ExtremeB.csv";
-		MetData metdata = new MetData(file, mod_ldown);
-	}
 	
 	public MetData(String file, String mod_ldown)
 	{
@@ -101,7 +93,7 @@ public class MetData
 			
 			if (startDate != null)
 			{
-				//System.out.println(d.getTime() + " "  + d.toString());
+
 				if ( d.getTime() <  startDate.getTime() )
 				{
 					continue;
@@ -110,17 +102,14 @@ public class MetData
 				{
 					continue;
 				}
-				//System.out.println("Used these");
+	
 			}
 			
 
 			
 			
 			double ws = new Double(splitLine[WS]).doubleValue();
-//			if (ws == 0.0)
-//			{
-//				ws = 10.1;
-//			}
+
 			dataLine.add(d );
 			dataLine.add( new Double(splitLine[Ta]).doubleValue());
 			dataLine.add( new Double(splitLine[RH]).doubleValue());
@@ -138,7 +127,7 @@ public class MetData
 			}
 			dataLine.add( ldownDouble);
 
-			//System.out.println(dataLine.toString());
+
 			
 			metDataArrays.add(dataLine);
 			

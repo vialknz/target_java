@@ -49,8 +49,6 @@ public class RnCalcNew
 		double Rnnext = 0.;
 		double Rnstar = 0.;
 		
-//		String tmstp = cfm.getValue("timestep");                            // # time step (minutes)
-//		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 		Date dte = Dats.get("dte");
 		Date date1A = Dats.get("date1A");
 				
@@ -63,14 +61,8 @@ public class RnCalcNew
 			Rnstar = 0.;
 		}
 		else
-		{   //  mod_ts= new double[met_data_all.size()][numberOfVf][numberOfSurfaces];
-//			TreeMap<String,Double> modTsMinus3 = mod_ts.get(i-3);
-//			TreeMap<String,Double> modTsMinus2 = mod_ts.get(i-2);
-//			TreeMap<String,Double> modTsMinus1 = mod_ts.get(i-1);			
-			
-//			double Ta_srfp = (double)modTsMinus3.get(surf);			//# "previous" modelled T_surf (3 timesteps back)
-//			double Ta_srf	= (double)modTsMinus2.get(surf);			//# "current" modelled T_Surf (2 time steps back)
-//			double Ta_srfn = (double)modTsMinus1.get(surf);			//# "next" modelled T_Surf (1 time steps back)
+		{   
+
 			
 			double Ta_srfp = mod_ts.get(2);			//# "previous" modelled T_surf (3 timesteps back)
 			double Ta_srf	= mod_ts.get(1);			//# "current" modelled T_Surf (2 time steps back)
@@ -106,17 +98,7 @@ public class RnCalcNew
 				Rnnext = metKdPlus1*(1.0-albedo) + (emiss*(metLdPlus1 - (cs_sb*Math.pow((Ta_srfn+273.15),4))));
 				Rnstar = 0.5*(Rnnext - Rnprev);
 			}
-	            
-//			# if (surf == 'wall'):
-//
-//				# Ta_srfp = mod_ts[surf][i-3]			# "previous" modelled T_surf (3 timesteps back)
-//				# Ta_srf	= mod_ts[surf][i-2]			# "current" modelled T_Surf (2 time steps back)
-//				# Ta_srfn = mod_ts[surf][i-1]			# "next" modelled T_Surf (1 time steps back)
-//
-//				# Rn	   = (met['Kd'][i]  * (1.0 - svf) * (1.0-albedo))	 + ((emiss*(met['Ld'][i]	 - (cs.cs['sb']*(Ta_srf+273.15)**4)))*(1.0-svf))	# / 2. # modified version of eq 11 Loridan et al. (2011)
-//				# Rnprev = (met['Kd'][i-1]* (1.0 - svf) * (1.0-albedo))	 + ((emiss*(met['Ld'][i-1]   - (cs.cs['sb']*(Ta_srfp+273.15)**4)))*(1.0-svf)) #/ 2.
-//				# Rnnext = (met['Kd'][i+1]* (1.0 - svf) * (1.0-albedo))	 + ((emiss*(met['Ld'][i+1]   - (cs.cs['sb']*(Ta_srfn+273.15)**4)))*(1.0-svf)) #/ 2.
-//				# Rnstar = 0.5*(Rnnext - Rnprev)	
+	            	
 			
 	}
 
@@ -125,7 +107,6 @@ public class RnCalcNew
 		returnValues.put(RNPREV_KEY, Rnprev);
 		returnValues.put(RNSTAR_KEY, Rnstar);
 		
-		//return {'Rn':Rn,'Rnprev':Rnprev, 'Rnstar':Rnstar}
 		return returnValues;
 }
 }

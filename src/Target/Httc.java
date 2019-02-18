@@ -21,12 +21,7 @@ public class Httc
 		TreeMap<String,Double> returnValues = new TreeMap<String,Double>();
 
 		double Fh;
-//	    # inputs
-//	    # real Ri,u,z,z0m,z0h
-//	    # outputs
-//	    # real httc_out,Fh
-//	    # other variables
-//	    # real R,mu,Cstarh,ph,lnzz0m,lnzz0h,aa,Ch
+
 		
 		ArrayList<Object> met0 = met.get(i);			
 		double metTa0 = (double)met0.get(MetData.Ta);
@@ -61,16 +56,10 @@ public class Httc
 	        Fh=lnzz0m/lnzz0h*(1.-9.4*Ri/(1.+Ch*Math.pow((Math.abs(Ri)),(0.5))));
 	    }
 
-	    
-//	    #Fh=9.806*cs.cs['z_TaRef']*(Tlow-Thi)*2/(Tlow+Thi)/u**2
-	    
-//	    #httc_out=u*aa/R*Fh *rho*met['P'][i]
-	    double httc_out=u*aa/R*Fh; //#*rho*met['P'][i]
+	    double httc_out=u*aa/R*Fh; 
 
 	    
-//	    #print u,aa,Fh,rho,lnzz0m,lnzz0h, Ch
 
-//	    return{'httc':httc_out, 'Fh':Fh}
 	    returnValues.put(HTTC_KEY,httc_out);
 	    returnValues.put(FH_KEY,Fh);
 	    return returnValues;

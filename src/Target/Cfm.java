@@ -11,13 +11,6 @@ public class Cfm
 	private Common common = new Common();
 	private TreeMap<String,String> cfmData = new TreeMap<String,String>();
 
-	public static void main(String[] args)
-	{
-		String filename = "/home/kerryn/Documents/Work/Toolkit2-Runs/Sunbury3ExtremeB/controlfiles/Sunbury3ExtremeB/Sunbury3ExtremeB.txt";
-		Cfm cfm = new Cfm(filename);
-		//System.out.println( cfm.getValue("date1"));
-	}
-
 	public Cfm(String configFileName)
 	{
 		super();
@@ -31,20 +24,17 @@ public class Cfm
 		for (String line : cfmFile)
 		{
 			line = line.trim();
-			//System.out.println(line);
 			if (line.length() < 1)
 			{
 				continue;
 			}
 			String[] splitLine = line.split("#");
-			//System.out.println(splitLine.toString());
 			if (splitLine.length < 1 || splitLine[0].length() < 1 )
 			{
 				continue;
 			}
 			
 			String[] subSplitLine = splitLine[0].split("=");
-			//System.out.println(subSplitLine[0] + " " + subSplitLine[1]);
 			String key = subSplitLine[0].trim();
 			String value = subSplitLine[1].trim().replaceAll("'", "").replaceAll("\"", "");
 			System.out.println(key + " " + value);
@@ -76,8 +66,7 @@ public class Cfm
 	public Date getDateValue(String key)
 	{
 		String dateStr = cfmData.get(key);
-		//System.out.println(key + " " + dateStr) ;
-		//String formatStr = cfmData.get("date_fmt");
+
 		String[] dateStrSplit = dateStr.split(",");
 		//  year,month,day,hour
 		Integer year = new Integer( dateStrSplit[0]).intValue();

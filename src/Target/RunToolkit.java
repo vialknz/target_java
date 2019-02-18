@@ -7,24 +7,11 @@ import java.util.TreeMap;
 
 public class RunToolkit
 {
-//	//domain dimension and resolution of each grid
-//	public double latEdge = -34.81425315;
-//	public double latResolution = .00004294;
-//	public double lonEdge = 138.6066486;
-//	public double lonResolution = .0021849;	
-//	//location to save output
-//    //public String loc = "/tmp/testWrite.nc";
-//    //domain dimensions
-//	public int y = 344; //lon
-//	public int x = 235; //lat
-	
 	public double latEdge = 0;
 	public double latResolution = 0;
 	public double lonEdge = 0;
 	public double lonResolution = 0;
-	//location to save output
-    //public String loc = "/tmp/testWrite.nc";
-    //domain dimensions
+
 	public int y = 0; //lon
 	public int x = 0; //lat
 	
@@ -89,25 +76,15 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		
 //		This is the main script that runs the toolkit air temperature module 
 //
-//		Developed by Ashley Broadbent, Andrew Coutts, and Matthias Demuzere.
-//
-//		This script should be run from the ./scripts directory
-//
+//		Developed by Ashley Broadbent, Andrew Coutts, Matthias Demuzere, and Kerry Nice
 //		see ./documents/Toolkit-2_tech-description.docx for full description of the module
-//
-//		Developed in Windows with Python 2.7.12 Anaconda 4.1.1 (32-bit)
-//
-//		Tested with Python 2.7.9 (Linux)
+//      converted to Java 8
 	}
 	 public void run(String[] args)
 	 {
-//		 System.out.println(System.getProperty("user.dir"));
 		 workingDirectory = System.getProperty("user.dir");
-		 
-		 //System.out.println(args[0]);
-//		 System.exit(1);
-		 
-		String controlFileName;
+ 
+		String controlFileName=null;
 		Cfm cfm = null;  //control file data structure
 		//### This is the dictionary that contains all the control file information 
 		if (args.length > 0)
@@ -117,8 +94,8 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		}
 		else 
 		{
-			controlFileName = "/tmp/test_target/target_java/example/controlfiles/Sunbury1Extreme/Sunbury1Extreme.txt";
-			cfm = new Cfm(controlFileName);
+			System.out.println("Usage: Target.RunToolkit /pathto/ControlFile.txt");
+			System.exit(1);
 		}
 		
 		//handle both unix and windows paths
@@ -160,39 +137,24 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		lonEdge = cfm.getDoubleValue("lonEdge");
 		latEdge = cfm.getDoubleValue("latEdge");
 		
-		// 344,235
 		String domainDim=cfm.getValue("domainDim");
 		String[] domainDimSplit = domainDim.split(",");
 		y=new Integer(domainDimSplit[0]).intValue();
 		x=new Integer(domainDimSplit[1]).intValue();
 
-		// # parse dates for input met file using format defined in control file
-		//String dateparse = cfm.getValue("date_fmt");
-		                       
-		//String run = cfm.getValue("run_name"); // # model run name 
-
-		//String tmstp = cfm.getValue("timestep"); // # time step (seconds)
-		//int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 		//		######### DEFINE START AND FINISH DATES HERE ########
 		
 		Date date1A = cfm.getDateValue("date1A");
 		Date date1 = cfm.getDateValue("date1");
 		Date date2 = cfm.getDateValue("date2");
-		//long tD = (date2.getTime() - date1A.getTime()) ;  // to days    / (1000 * 60 * 60 * 24)
-		//long nt = (tD / 1000) / tmstpInt ;
+
 		TreeMap<String,Date> Dats = new TreeMap<String,Date>();
 		Dats.put("date1A", date1A);
 		Dats.put("date1", date1);
 		Dats.put("date2", date2);
 		
-		//String rootDir = "..";
-		//rootDir = "/home/kerryn/Documents/Work/Toolkit2-Runs/Sunbury3ExtremeB";
 		String lcFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/LC/" + cfm.getValue("inpt_lc_file");
-//		String domainDim = cfm.getValue("domainDim");
-//		String[] domainDimArray = domainDim.split(",");
-//		int xDim = new Integer(domainDimArray[0]).intValue();
-//		int yDim = new Integer(domainDimArray[1]).intValue();
-		
+	
 		LCData lcDataClass = new LCData(lcFilename);
 		ArrayList<ArrayList<Double>> lc_data = lcDataClass.getlcData();
 		double maxH = lcDataClass.getMaxH();

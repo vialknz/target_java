@@ -33,10 +33,7 @@ public class SimpleWater
 //	    TM   =  The average soil (ground) temperature below TSOIL layer 
 //	        
 //	    
-//	"""
 
-//	from datetime import  timedelta
-//	import math	
 	
 	public static final String TSW_KEY = "TsW";
 	public static final String TSOIL_KEY = "TSOIL";
@@ -99,11 +96,11 @@ public class SimpleWater
 			double modTsMinus1TSOIL = (double)modTsMinus1.get("TSOIL");
 			TreeMap<String,Object> modTmMinus1 = mod_tm.get(i-1);	
 			double modTmMinus1Watr = (double)modTmMinus1.get("watr");
-			//double modTmMinus1TSOIL = (double)modTmMinus1.get("TSOIL");
+
 			
 			ArrayList<Object> met0 = met_d.get(i);			
 			double metTa0 = (double)met0.get(MetData.Ta);
-			//double metP0 = (double)met0.get(MetData.P);
+
 			double metKd0 = (double)met0.get(MetData.Kd);
 			double metWS0 = (double)met0.get(MetData.WS);
 			double metRH0 = (double)met0.get(MetData.RH);
@@ -136,8 +133,6 @@ public class SimpleWater
 	        tM = modTmMinus1Watr + (delta_Tm*timedelta);
 	    }
 
-
-	    //return {"TsW":Tw1, "TSOIL":Tsoil, 'QeW': LEw, 'QhW': Hs, 'QgW':Gw , 'TM':tM}
 	    
 	    returnValues.put(TSW_KEY,Tw1);
 	    returnValues.put(TSOIL_KEY,Tsoil);

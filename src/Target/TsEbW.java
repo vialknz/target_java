@@ -6,14 +6,9 @@ import java.util.TreeMap;
 
 public class TsEbW
 {
-//	"""
-//
+
 //	calculates the energy balance and surface temperature for water
-//
-//	"""
-//
-//	from datetime import  timedelta
-//	import math	
+
 	public static final String TSW_KEY = "TsW";
 	public static final String TSOIL_KEY = "TSOIL";
 	public static final String QEW_KEY = "QeW";
@@ -52,11 +47,11 @@ public class TsEbW
 	    else
 	    {
 			double rn = rad.get(RnCalcNew.RN_KEY);
-			//double rnstar = rad.get(RnCalcNew.RNSTAR_KEY);
+
 			
 			ArrayList<Object> met0 = met_d.get(i);			
 			double metTa0 = (double)met0.get(MetData.Ta);
-			//double metP0 = (double)met0.get(MetData.P);
+
 			double metKd0 = (double)met0.get(MetData.Kd);
 			double metWS0 = (double)met0.get(MetData.WS);
 			double metRH0 = (double)met0.get(MetData.RH);
@@ -74,12 +69,9 @@ public class TsEbW
 			double cs_dw = Constants.cs_dW;
 			double cs_ww = Constants.cs_ww;
 			double cs_lv = Constants.cs_Lv;
+
 			
-			//TreeMap<String,Object> modTsMinus3 = mod_ts.get(i-3);
-			//TreeMap<String,Object> modTsMinus2 = mod_ts.get(i-2);
-			
-			
-			//TreeMap<String,Double> modTsMinus1 = mod_ts[i-1][vf][surfIndex];	
+
 			double modTsMinus1Watr = mod_ts[i-1][vf][TargetModule.getSurfIndex("watr")];	
 			double modTsMinus1TSOIL = mod_ts[i-1][vf][TargetModule.getSurfIndex("TSOIL")];
 			double modTmMinus1Watr = mod_tm[i-1][vf][TargetModule.getSurfIndex("watr")];
@@ -90,7 +82,6 @@ public class TsEbW
 	        Hs  =  cs_pa * (cs_cp*1000000.)*cs_hv *metWS0* (metTa0 - modTsMinus1Watr)	;		//# The sensible heat flux is given by Martinez et al. (2006)
 	                
 	        Gw      = -cs_c_watr * cs_kw * ((modTsMinus1TSOIL-modTsMinus1Watr)/cs_zw)	;				//# the convective heat flux at the bottom of the water layer (and into the soil below)
-	        //double Gwpls   = -cs_c_watr * cs_kw * ((modTsMinus1TSOIL-modTsMinus1Watr)/cs_zw) + ((metKd0*(1-0.08))-Sab);					//# the convective heat flux at the bottom of the water layer (and into the soil below)
 	        
 	        double dlt_soil = ((2/(cs_c_soilW*cs_dw)*Gw))-(cs_ww*(modTsMinus1TSOIL-modTmMinus1Watr));				//# force restore calc -- change soil temperature change 
 	        Tsoil = modTsMinus1TSOIL+(dlt_soil*tmstpInt);											//# soil layer temperature (C)
@@ -113,8 +104,6 @@ public class TsEbW
 	        
 	    }
 
-
-//	    return {"TsW":Tw1, "TSOIL":Tsoil, 'QeW': LEw, 'QhW': Hs, 'QgW':Gw , 'TM':tM}
 	    returnValues.put(TSW_KEY,Tw1);
 	    returnValues.put(TSOIL_KEY,Tsoil);
 	    returnValues.put(QEW_KEY,LEw);
