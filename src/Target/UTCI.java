@@ -389,13 +389,14 @@ public double fTmrtB(double Ta, double Tg, double ws)
 	double WF;
 	if (WF1 > WF2) 
 	{
+		// if the wind speed is low
 		WF = WF1 ;
 	}
 	else 
 	{
 		WF = WF2;
 	}
-	double fTmrtB = 100 * Math.pow((Math.pow(((Tg + 273) / 100), 4) + WF * (Tg - Ta)), 0.25) - 273;
+	double fTmrtB = 100 * Math.pow((Math.pow(((Tg + 273.15) / 100), 4) + WF * (Tg - Ta)), 0.25) - 273.15;
 	return fTmrtB;
 }
 
@@ -422,7 +423,10 @@ public double fMRTmod(double Ta, double solar)
 		solardirect = 0;
 		solardiffuse = solar;
 	}
-	double fMRTmod = Math.pow((0.97 * Math.pow((Ta + 273.2), 4 )+ 0.7 * solardiffuse / (0.97 * 0.0000000567) + 0.32 * 0.7 * solardirect / (0.97 * 0.0000000567)), 0.25) - 273.2;
+	double fMRTmod = Math.pow(
+			(0.97 * Math.pow((Ta + 273.2), 4 )
+					+ 0.7 * solardiffuse / (0.97 * 0.0000000567) 
+			 + 0.32 * 0.7 * solardirect / (0.97 * 0.0000000567)), 0.25) - 273.2;
 	return fMRTmod;
 }
 
@@ -1406,56 +1410,21 @@ public double fTg_withdiam(double Ta, double relh, double speed, double solar, d
 				fTg4 = ERROR_RETURN;
 				return fTg4;
 			}
-
-			double Tref = 0.5 * (Tglobe_prev + Tair); // # Evaluate properties
-														// at the average
-														// temperature
+			// # Evaluate properties at the average temperature
+			double Tref = 0.5 * (Tglobe_prev + Tair); 
 
 			double h = h_sphere_in_air(Tref, Pair, speed, speedMin);
-			// #a=area * 0.5 * emis_globe * stefanb * (emisAtmValue * Tair**4 +
-			// emis_sfc * TsfcK**4 )
-			double a = area * 0.5 * emis_globe * (lIn + lOut); // # term for
-																// energy gained
-																// by globe due
-																// to thermal
-																// radiation
-																// from atm and
-																// surface
-			double b = area * 0.5 * (1 - alb_globe) * (1 - fdir) * solar; // #
-																			// term
-																			// for
-																			// energy
-																			// gained
-																			// due
-																			// to
-																			// diffuse
-																			// irradiance
-			double c = area * 0.25 * (1 - alb_globe) * fdir * solar / cza; // #
-																			// term
-																			// for
-																			// energy
-																			// gained
-																			// due
-																			// to
-																			// direct
-																			// irradiance
-			double d = area * 0.5 * (1 - alb_globe) * alb_sfc * solar; // # term
-																		// for
-																		// solar
-																		// irradiance
-																		// reflected
-																		// from
-																		// the
-																		// surface
-																		// that
-																		// is
-																		// absorbed
-																		// by
-																		// the
-																		// globe
-			double e = area * h * (Tglobe_prev - Tair); // # term for energy
-														// lost from the globe
-														// due to convection
+			// #a=area * 0.5 * emis_globe * stefanb * (emisAtmValue * Tair**4 +  emis_sfc * TsfcK**4 )
+			// # term for energy gained by globe due to thermal radiation from atm and surface
+			double a = area * 0.5 * emis_globe * (lIn + lOut); 
+			// term for energy gained due to diffuse irradiance
+			double b = area * 0.5 * (1 - alb_globe) * (1 - fdir) * solar; 
+			// term for energy gained due to direct irradiance
+			double c = area * 0.25 * (1 - alb_globe) * fdir * solar / cza;
+			// # term for solar irradiance reflected from the surface that is absorbed by the globe														
+			double d = area * 0.5 * (1 - alb_globe) * alb_sfc * solar; 
+			// # term for energy lost from the globe due to convection
+			double e = area * h * (Tglobe_prev - Tair); 
 			// #print *,'a,b,c,d,e',a,b,c,d,e
 
 			Tglobe = Math.pow(((a + b + c + d - e) / (area * emis_globe * stefanb)), 0.25);
@@ -1777,7 +1746,313 @@ public double fUTCI2(double Ta,
       return fUTCI;
 
 }
+
+public double Tmrt_sstr(double Ta, double Kdown, double ea)
+{
+	 // Input variables:
+    // dsm = digital surface model
+    // scale = height to pixel size (2m pixel gives scale = 0.5)
+    // header = ESRI Ascii Grid header
+    // sizey,sizex = no. of pixels in x and y
+    // svf,svfN,svfW,svfE,svfS = SVFs for building and ground
+    // svfveg,svfNveg,svfEveg,svfSveg,svfWveg = Veg SVFs blocking sky
+    // svfaveg,svfEaveg,svfSaveg,svfWaveg,svfNaveg = Veg SVFs blocking buildings
+    // vegdem = Vegetation canopy DSM
+    // vegdem2 = Vegetation trunk zone DSM
+    // albedo_b = buildings
+   
+  
+    // ewall = Emissivity of building walls
+
+    // altitude = Sun altitude (degree)
+    // azimuth = Sun azimuth (degree)
+    // zen = Sun zenith angle (radians)
+    // jday = day of year
+    // usevegdem = use vegetation scheme
+    // onlyglobal = calculate dir and diff from global
+    // buildings = Boolena grid to identify building pixels
+    // location = geographic location
+    // height = height of measurements point
+    // psi = 1 - Transmissivity of shortwave through vegetation
+    // output = output settings
+    // fileformat = fileformat of output grids
+    // landcover = use landcover scheme !!!NEW IN 2015a!!!
+    // sensorheight = Sensorheight of wind sensor
+    // lc_grid = grid with landcoverclasses
+    // lc_class = table with landcover properties
+    // dectime = decimal time
+    // altmax = maximum sun altitude
+    // dirwalls = aspect of walls
+    // walls = one pixel row outside building footprints
+    
+	// cyl = consider man as cylinder instead of cube
+	// absK = human absorption coefficient for shortwave radiation
+	double absK = 0.7;
+	// absL = human absorption coefficient for longwave radiation
+	double absL = 0.97;
+    // Fside = The angular factors between a person and the surrounding surfaces
+    // Fup = The angular factors between a person and the surrounding surfaces
 	
+	int cyl = 1;
+	
+	double alb_sfc = SurfAlbedo;
+    double alb_globe = 0.05;
+    double emis_globe = 0.95;
+    double emis_sfc = 0.999;
+    double Kup = Kdown * (1.0-alb_sfc);
+
+    // %Instrument offset in degrees
+    double t = 0.;
+
+    // %Stefan Bolzmans Constant
+    double SBC = 5.67051e-8;
+    
+//    // Find sunrise decimal hour - new from 2014a
+//    double SNUP = daylen.daylen_(jday, latitude);
+
+//    // Vapor pressure
+//    double ea = 6.107 * Math.pow(10, ((7.5 * Ta) / (237.3 + Ta))) * (RH / 100.);
+
+//    // Determination of clear - sky emissivity from Prata (1996)
+//    double msteg = 46.5 * (ea / (Ta + 273.15));
+//    double esky = (1 - (1 + msteg) * Math.exp(-(Math.pow((1.2 + 3.0 * msteg), 0.5) ))) + elvis;  // -0.04 old error from Jonsson et al.2006
+
+	
+//    // // // // // // // Calculation of shortwave daytime radiative fluxes // // // // // // //
+//    double Kdown = radI * shadow * Math.sin(altitude * (Math.PI / 180)) + radD * svfbuveg + albedo_b * (1 - svfbuveg) 
+//    		*  (radG * (1 - F_sh) + radD * F_sh);
+	
+	double Sstr;
+	double Knorth=0,Keast=0,Ksouth=0,Kwest=0;
+	double Lnorth=0,Least=0,Lsouth=0,Lwest=0;
+	double Fup = 1.0;
+//	double Fdown = 1.0;
+	double Fside = 0.0;
+	double KsideI = 0.0;
+	
+//	! Prata's clear sky formula (QJRMS 1996)
+	double Ldown=(1.-(1.+46.5*ea/Ta)*Math.exp(-(Math.pow((1.2+3.*46.5*ea/Ta),(0.5)) )))*SBC*Math.pow(Ta,4);
+	double Lup = emis_sfc * SBC * Math.pow(Ta +273.15,4);
+	
+	Knorth=Kdown;
+	Keast=Kdown;
+	Ksouth=Kdown;
+	Kwest=Kdown;
+	Lnorth=Ldown;
+	Least=Ldown;
+	Lsouth=Ldown;
+	Lwest=Ldown;
+	
+    // // // // Calculation of radiant flux density and Tmrt // // // //
+    if (cyl == 1)  // Human body considered as an cyliner
+    {
+        Sstr = absK * (KsideI + (Kdown + Kup) * Fup + (Knorth + Keast + Ksouth + Kwest) * Fside) 
+        	 + absL * (Ldown * Fup + Lup * Fup + Lnorth * Fside + Least * Fside + Lsouth * Fside + Lwest * Fside);
+    }
+    else // Human body considered as a standing cube
+    {
+        Sstr = absK * ((Kdown + Kup) * Fup + (Knorth + Keast + Ksouth + Kwest) * Fside) 
+        	 + absL * (Ldown * Fup + Lup * Fup + Lnorth * Fside + Least * Fside + Lsouth * Fside + Lwest * Fside);
+    }
+
+	
+	double Tmrt = Math.sqrt(Math.sqrt((Sstr / (absL * SBC)))) - 273.2;
+	return Tmrt;
+}
+
+public double calcTmrt(double kd, double ld, double ku, double lu)
+{
+    double downAngular = 0.5;
+    double upAngular = 0.5;
+    double AbsorbCoeffSW=0.7;
+    double EmmisHumanBody=0.97;
+    double k = kd * downAngular + ku * upAngular;
+    double l = ld * downAngular + lu * upAngular;
+    double s = AbsorbCoeffSW * k + EmmisHumanBody * l;
+    double tmrt = ( Math.pow((s / (EmmisHumanBody * 5.67E-8) ),0.25) ) -273.15;
+    return tmrt;
+}
+
+//https://github.com/mostaphaRoudsari/ladybug/blob/master/src/Ladybug_Thermal%20Comfort%20Indices.py
+public double meanRadiantTemperature(double Ta, double mrt, double Tdp, double rh, double ws, double SR, 
+		double N, double Tground, double Rprim, double vapourPressure, double Epot, double age, double sex, 
+		double heightCM, double heightM, double weight, double bodyPosition, double Icl, double ac, 
+		double acclimated, double M, double activityDuration, double HRrates, double dehydrationRiskRates, double climate)
+{
+//    # inputs: (Ta, Tground, Rprim, e, N):
+//    # formula by Man-ENvironment heat EXchange model (MENEX_2005)
+	double SBC = 5.67051e-8;
+	// incoming long-wave radiation emitted from the sky hemisphere, in W/m2
+    double La = 5.5*(1e-8) *(Math.pow((273.15 + Ta),4)) *(0.82 - 0.25*(Math.pow(10,(-0.094*0.75*vapourPressure)))) 
+    		* (1 + 0.22*(Math.pow((N/10),2.75))) ; 
+ // outgoing long-wave radiation emitted by the ground, in W/m2
+    double Lg = 5.5 *(1e-8) * (Math.pow((273.15 + Tground),4));  
+ // in C
+    double MRT = (Math.pow(((Rprim + 0.5*Lg + 0.5*La) / (0.95*SBC)),0.25)) - 273.15 ;     
+//    MRT = (((Rprim + 0.5*Lg + 0.5*La) / (0.95*5.667*(10**(-8))))**(0.25)) - 273 # in C
+    
+    return MRT;
+}
+
+//    		https://github.com/mostaphaRoudsari/ladybug/blob/master/src/Ladybug_Thermal%20Comfort%20Indices.py
+public double meanRadiantTemperature2(double Ta, double Tground, double Rprim, double e, double N)
+	{
+//    # formula by Man-ENvironment heat EXchange model (MENEX_2005)
+	double SBC = 5.67051e-8;
+	// incoming long-wave radiation emitted from the sky hemisphere, in W/m2
+    double La = 5.5*(Math.pow(10,-8)) *(Math.pow((273.15 + Ta),4)) *(0.82 - 0.25*(Math.pow(10,(-0.094*0.75*e)))) 
+    		* (1 + 0.22*(Math.pow((N/10),2.75)));  
+ // outgoing long-wave radiation emitted by the ground, in W/m2
+    double Lg = 5.5 *(1e-8) * (Math.pow((273.15 + Tground),4));  
+ // in C
+    double MRT = (Math.pow(((Rprim + 0.5*Lg + 0.5*La) / (0.95*SBC)),0.25)) - 273;  
+//    MRT = (((Rprim + 0.5*Lg + 0.5*La) / (0.95*5.667*(10**(-8))))**(0.25)) - 273 # in C
+    
+    return MRT;
+	}
+
+public double ladybugTmrt(double Ta, double Kglob, double e)
+{
+	double latitude = -37.4;
+	double longitude = 104.0;
+	double timeZone = 10;
+	int month = 1;
+	int day = 1;
+	int hour = 12;
+	double Tmrt;
+	double ac = 37;
+	double solarAltitudeD = noaaSolarCalculator(latitude, longitude, timeZone, month, day, hour);
+	double hSl = solarAltitudeD;
+	double Rprim = solarRadiationNudeMan(Kglob, hSl, ac);
+	double N = 6;
+	double Tground = groundTemperature(Ta, N);
+//	double e; //vapour pressure
+	
+	Tmrt = meanRadiantTemperature2(Ta, Tground, Rprim, e, N);
+	
+	return Tmrt;
+}
+
+/// ac = 37  # default in %, medium colored clothes
+/// Tground = groundTemperature(TaL[valueIndex], NL[valueIndex])  # in C
+/// solarZenithD, solarAzimuthD, solarAltitudeD = noaaSolarCalculator(latitude, longitude, timeZone, months[listIndex], days[listIndex], hours[listIndex])  # in degrees
+/// Rprim = solarRadiationNudeMan(SRL[valueIndex], solarAltitudeD, ac)  # in W/m2
+//  https://raw.githubusercontent.com/mostaphaRoudsari/ladybug/master/src/Ladybug_Thermal%20Comfort%20Indices.py
+public double solarRadiationNudeMan(double Kglob, double hSl, double ac)
+{
+	double Rprim=0.;
+//    # formula from: Bioclimatic principles of recreation and tourism in Poland, 2nd edition, Blazejczyk, Kunert, 2011 (MENEX_2005 model)
+    double Kt = Kglob / (-0.0015*(Math.pow(hSl,3)) + 0.1796*(Math.pow(hSl,2)) + 9.6375*hSl - 11.9);
+    
+    double ac_ = 1 - 0.01*ac;
+    
+//    # Rprim - solar radiation absorbed by nude man (W/m2)
+    if (hSl <= 12)
+    {
+        Rprim = ac_*(0.0014*(Math.pow(Kglob,2)) + 0.476*Kglob - 3.8);
+    }
+    else if (hSl > 12 && Kt <= 0.8)
+    {
+        Rprim = 0.2467*ac_*(Math.pow(Kglob,0.9763));
+    }
+    else if (hSl > 12 && Kt >0.8 && Kt <=1.05)
+    {
+        Rprim = 3.6922*ac_*(Math.pow(Kglob,0.5842));
+    }
+	else if (hSl > 12 && Kt > 1.05 && Kt <=1.2)
+	{
+        Rprim = 43.426*ac_*(Math.pow(Kglob,0.2326));
+	}
+	else if (hSl > 12 && Kt >1.2)
+	{
+        Rprim = 8.9281*ac_*(Math.pow(Kglob,0.4861));
+	}
+        
+    if (Rprim < 0)
+    {
+        Rprim = 0;
+    }
+    
+    return Rprim;
+   }
+
+
+
+//if (len(N) == 0) or (N[0] == None):
+//    NL = [6]  # default 6 tens, continental humid climate
+//elif (len(N) == 8767) and (type(N[0]) == System.String):
+//    # the totalSkyCover_ input contains annual data from "Import Epw" component and not 8767 numerical values
+//    NL = N[7:]
+//elif (len(N) > 0) and (len(N) < 8767):
+//    NL = [float(N[i])  for i in range(len(N))]
+public double groundTemperature(double Ta, double N)
+{
+	double Tground=0;
+//    # formula from: Assessment of bioclimatic differentiation of Poland. Based on the human heat balance, Geographia Polonica, Matzarakis, Blazejczyk, 2007
+    double N100 = N *10; //converting weather data totalSkyCover from 0 to 10% to 0 to 100%
+    
+    if ((N100 == 0) || (N100 >= 80))
+    {
+        Tground = Ta;
+    }
+    else if ((N100 < 80) && (Ta >= 0))
+    {
+        Tground = 1.25*Ta;
+    }
+    else if ((N100 < 80) && (Ta < 0))
+    {
+        Tground = 0.9*Ta;
+    }
+    
+    return Tground;
+}
+
+public double noaaSolarCalculator(double latitude, double longitude, double timeZone, int month, int day, int hour)
+{
+	Common common = new Common();
+//    # by NOAA Earth System Research Laboratory
+//    # NOAA defines longitude and time zone as positive to the west:
+    timeZone = -timeZone;
+    longitude = -longitude;
+//    int DOY = int(lb_preparation.getJD(month, day));
+    int DOY = common.getDayOfYearFromDayAndMonth(2012, day, month);
+    int minute = 0;  // default
+    int second = 0;  // default
+    double gamma = (2*Math.PI)/365*(DOY-1+((hour-12)/24));
+    double eqtime = 229.18*(0.000075 + 0.001868*Math.cos(gamma) - 0.032077*Math.sin(gamma) - 0.014615*Math.cos(2*gamma) 
+    		- 0.040849*Math.sin(2*gamma));
+    double declAngle = 0.006918 - 0.399912*Math.cos(gamma) + 0.070257*Math.sin(gamma) - 0.006758*Math.cos(2*gamma) 
+    	+ 0.000907*Math.sin(2*gamma) - 0.002697*Math.cos(3*gamma) + 0.00148*Math.sin(3*gamma);
+    double time_offset = eqtime-4*longitude+60*timeZone;
+    double tst = hour *60 + minute + second / 60 + time_offset;
+    double solarHangle = (tst / 4) - 180;
+    
+//    # solar zenith angle
+    double solarZenithR = Math.acos(Math.sin(Math.toRadians(latitude)) * Math.sin(declAngle) 
+    		+ Math.cos(Math.toRadians(latitude)) * Math.cos(declAngle) * Math.cos(Math.toRadians(solarHangle)));
+    double solarZenithD = Math.toDegrees(solarZenithR);
+    if (solarZenithD > 90)
+    {
+        solarZenithD = 90;
+    }
+    else if (solarZenithD < 0)
+    {
+        solarZenithD = 0;
+    }
+    
+//    # solar altitude angle
+    double solarAltitudeD = 90 - solarZenithD;
+    
+//    # solar azimuth angle
+    double solarAzimuthR = - (Math.sin(Math.toRadians(latitude)) * Math.cos(solarZenithR) 
+    		- Math.sin(declAngle)) / (Math.cos(Math.toRadians(latitude)) * Math.sin(solarZenithR));
+    solarAzimuthR = Math.acos(solarAzimuthR);
+    double solarAzimuthD = Math.toDegrees(solarAzimuthR);
+    
+//    return solarZenithD, solarAzimuthD, solarAltitudeD;
+    return solarAltitudeD;
+}
+
 
 }
 

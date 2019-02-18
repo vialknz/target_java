@@ -104,7 +104,6 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 //		 System.out.println(System.getProperty("user.dir"));
 		 workingDirectory = System.getProperty("user.dir");
 		 
-
 		 //System.out.println(args[0]);
 //		 System.exit(1);
 		 
@@ -203,6 +202,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"), date1A, date2);
 		ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 		TargetModule tkmd = new TargetModule(workingDirectory);
+		tkmd.rootDirectory = rootDir;
 		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
 	}
 

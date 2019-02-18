@@ -66,7 +66,7 @@ public class MetData
 			line = line.trim();
 			String[] splitLine = line.split(",");
 			ArrayList<Object> dataLine = new ArrayList<Object>();
-			//System.out.println(line);
+			System.out.println(line);
 			
 			String datetimeStr = splitLine[datetime];
 			String[] datetimeStrSplit = datetimeStr.split(" ");

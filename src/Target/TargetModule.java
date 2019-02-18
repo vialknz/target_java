@@ -42,6 +42,7 @@ public class TargetModule
 	
 	//private TbRurSolver tbRurSolver = new TbRurSolver();
 	private String workingDirectory;
+	public String rootDirectory ;
 	//private TbRurSolver_python tbRurSolver = new TbRurSolver_python();
 	private TbRurSolver tbRurSolverOld = new TbRurSolver();
 	
@@ -479,7 +480,7 @@ public class TargetModule
 	                            TreeMap<String,Double> Ts_stfs =forceRestore.Ts_calc_surf(eng_bals,cfm,prevTsRef,prevTmRefForce, Dats,surf,i);   // # creates dictionary with surface temperature for current timestep and surface type
 	                           // ################################################################################
 	                            //### append modelled data to dataframes below... 
-	                                                      
+	                                                   
 	                            mod_data_ts_[i][vf][getSurfIndex(surf)] = Ts_stfs.get(ForceRestore.TS_KEY);
 	                            mod_data_tm_[i][vf][getSurfIndex(surf)] = Ts_stfs.get(ForceRestore.TM_KEY) ;                
 	                            mod_data_qh_[i][vf][getSurfIndex(surf)] = eng_bals.get(Lumps.QH_KEY);
@@ -592,7 +593,12 @@ public class TargetModule
 	                    	if (tmrtCached == null)
 	                    	{
 	                    		tmrt = utciInstance.getTmrtForGrid_RH(Tac,metRH0,Ucan,metKd0,Tsurf_can,metLD0,lup,yd_actual,TM,lat);	
+//	                    		System.out.println("Tmrt=" + tmrt + " for " + tmrtCacheKey);
 	                    		tmrtCache.put(tmrtCacheKey, tmrt);
+	                    		String tmrtOutput = tmrt + "," + Tac + "," + metRH0+ "," +Ucan+ "," +metKd0+ "," +Tsurf_can+ "," +metLD0+ "," +lup+ "," +yd_actual+ "," +TM+ "," +lat;                       
+		                    	
+	                    		common.appendFile(tmrtOutput, rootDirectory + "/" + "tmrtOutput.csv");
+	                    		
 	                    	}
 	                    	else
 	                    	{

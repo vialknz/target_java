@@ -1,8 +1,10 @@
 package Target;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -1372,7 +1374,72 @@ public class Common
 		// TODO Auto-generated constructor stub
 	}
 	
+	public TreeMap<String,ArrayList<String>> readCSVFile(String file, String sepCharacter)
+	{
+		// whitespace is "\\s+"
+		String[] header = null;
+		TreeMap<String,ArrayList<String>> arrayOfFileContents = new TreeMap<String,ArrayList<String>>();
+		ArrayList<String> fileContents = readTextFileToArray(file);
+		for (int i=0;i<fileContents.size();i++)
+		{
+			String line = fileContents.get(i);
+			String[] lineSplit = line.split(sepCharacter,-1);
+			if (i==0)
+			{
+				header = new String[lineSplit.length];
+				for (int j=0;j<lineSplit.length;j++)
+				{
+					header[j] = lineSplit[j];
+				}	
+				continue;
+			}
+			for (int j=0;j<lineSplit.length;j++)
+			{
+				ArrayList<String> item = arrayOfFileContents.get(header[j]);
+				if (item == null)
+				{
+					item = new ArrayList<String>();
+				}
+				item.add(lineSplit[j]);
+				arrayOfFileContents.put(header[j], item);
+			}
+		}
+		return arrayOfFileContents;
+		
+	}
+	
 	final static Charset ENCODING = StandardCharsets.UTF_8;
+	
+	public void appendFile(String text, String filename)
+	{
+		BufferedWriter bw = null;
+
+		try
+		{
+			// APPEND MODE SET HERE
+			bw = new BufferedWriter(new FileWriter(filename, true));
+			bw.write(text);
+			bw.newLine();
+			bw.flush();
+		}
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+		finally
+		{ // always close the file
+			if (bw != null)
+				try
+				{
+					bw.close();
+				}
+				catch (IOException ioe2)
+				{
+					// just ignore it
+				}
+		} // end try/catch/finally
+
+	}
 	
    public ArrayList<String> readLargerTextFileAlternateToArray(String aFileName) 
    {
