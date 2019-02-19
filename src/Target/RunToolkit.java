@@ -22,48 +22,45 @@ public class RunToolkit
 	/*
 	config file should include (although none of the validation info section is used in this version):
 	
-####### Sunbury extreme summer Main Control File #######
+#---------------------------------------------------------------------------------------------------------
+####### Example Main Control File #######
+#--------------------------------------------------------------------------------------------------------
 ####### INPUTS #######
-site_name = "Sunbury3ExtremeB"									             # site name (string)
-run_name   = "Sunbury3ExtremeB"                                               # run name (string)
-inpt_met_file =  "Sunbury3ExtremeB.csv"				       # input meteorolgical file (i.e. forcing file)
-inpt_lc_file  =  "Sunbury3ExtremeB_LC.csv"                                    #  input land cover data file
-date_fmt = '%d/%m/%Y %H:%M'                                                      # format of datetime in input met files
-timestep = '1800S'     # define in seconds
-use solve = 'N'                                         # if set to Y it will  solve (iteratively) Tb above canyon and roof
-include roofs = 'Y'                                       # turn roofs on and off to affect Tac
-direct roofs = 'Y'                                                                 
+site_name = "Mawson"					 # site name (string)
+run_name   = "MawsonExample"                             # run name (string)
+inpt_met_file =  "Mawson-meteorology_KentTown_30min.csv"	# input meteorolgical file (i.e. forcing file)
+inpt_lc_file  =  "100m_lc_grid.csv"                      #  input land cover data file
+date_fmt = '%d/%m/%Y %H:%M'                              # format of datetime in input met files
+timestep = '1800S'                                       # define in seconds 
+include roofs = 'Y'                                      # turn roofs on and off to affect Tac
+direct roofs = 'Y'                                       # turn roofs on and off to affect Tac
+#--------------------------------------------------------------------------------------------------------
+# dates
 #---------------------------------------------------------------------------------------------------------
-# dates 
-#---------------------------------------------------------------------------------------------------------
-SpinUp=2009,2,5,0									# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
-StartDate =2009,2,5,12									# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
-EndDate =2009,2,7,23
+SpinUp=2011,2,14,0					# year,month,day,hour	#start date for simulation (should be a minimum of 24 hours prior to date1)
+StartDate =2011,2,15,0					# year,month,day,hour	## the date/time for period of interest (i.e. before this will not be saved)
+EndDate =2011,2,16,18 					# year,month,day,hour	# end date for validation period
 ######################
-##### Validation Info ####
-val_ta = 'N'                                                                    ## generate validation plots for Ta?
-val_ts = 'N'                                                                    ## generate validation plots for Ts?
-gis_plot = 'N'                                                                  ## generated GIS validation plots?
-inpt_obs_file =  'Preston_obs_30min.csv'							      ## oberved AWS data (for validation)
-inpt_grid_file = '30mGrid.shp'                                                  ## input grid shapefile
-radius=30m                                                                      ## grid resoultion 
-date1Ts1=2011,2,16,14									            ## year,month,day,hour # start date/time for obs Ts data 
-date1Ts2=2011,2,16,16									            ## year,month,day,hour # end   date/time for obs Ts data
-date2Ts1=2011,2,15,2									           ## year,month,day,hour # start date/time for obs Ts data 
-date2Ts2=2011,2,15,3									           ## year,month,day,hour # end   date/time for obs Ts data
-Ts_prd1 = 'day'										           # names for Ts test periods
-Ts_prd2 = 'night'						                                  # names for Ts test periods
-STa = '01','02','03','04','05','06','07','08','09','10','11','12','13','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'					                                  ## names for Ts test periods
-########################
-mod_ldwn = 'N'                                                      # used modelled ldown
-use_obs_ws   	= 'N'									# trigger to activate use of observed ws inputs
+
+mod_ldwn = 'N'             # use modelled ldown
 lat=-37.8136
-domainDim=344,235
-latEdge=-37.505054
-lonEdge=144.647901
-latResolution=.00004294
-lonResolution=.0021849
-disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,TsurfHorz,Ucan   # these variables will not be output in the netcdf
+domainDim=9,3
+latEdge=-34.79829
+lonEdge=138.79829
+latResolution=0.00088
+lonResolution=0.00110
+disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,TsurfHorz,Ucan
+
+#override default parameters, remove '#' comment to use
+#z0m_rur=0.45
+#z_URef=10.0
+#z_TaRef=2.0
+#zavg=4.5
+#### options for reference surfaces are Veg, road, watr, conc, dry, irr, and roof
+#ref_surf1=dry
+#ref_surf2=conc
+
+	 
 	 
 	 */
 

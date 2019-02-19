@@ -60,10 +60,10 @@ public class Lumps
 		String tmstp = cfm.getValue("timestep");                            // # time step (minutes)
 		int tmstpInt = new Integer( tmstp.replaceAll("S", "").replaceAll("'", "") ).intValue();
 		Date dte = Dats.get("dte");
-		Date date1A = Dats.get("SpinUp");
+		Date spinUp = Dats.get("SpinUp");
 		int timedelta = 2*tmstpInt*1000;
 		
-	    if (dte.getTime() <= date1A.getTime() +  timedelta  )
+	    if (dte.getTime() <= spinUp.getTime() +  timedelta  )
 	    {
 	        Qh=0.;
 	        Qe=0.;

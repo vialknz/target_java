@@ -148,7 +148,8 @@ public class TargetModule
 
 	public void modelRun(Cfm cfm, ArrayList<ArrayList<Double>> lc_data, ArrayList<ArrayList<Object>> met_data_all, TreeMap<String,Date> Dats,
 			double maxH, double maxW, 
-			int x, int y, double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
+			int x, int y, 
+			double latEdge, double latResolution, double lonEdge, double lonResolution, String outputFile)
 	{
 		
 //		int n = Runtime.getRuntime().availableProcessors();
@@ -224,14 +225,26 @@ public class TargetModule
 	            	ArrayList<TreeMap<Integer,Double>> mod_rslts_tmrt_utci =new ArrayList<TreeMap<Integer,Double>>();
 	                //############ Met variables for each time step (generate dataframe) ##########
 	            	long timedeltaAddition = i*timedelta;
-	                Date dte   = new Date(spinUpLong + timedeltaAddition);  // # current timestep 
+	            	// # current timestep 
+	                Date dte   = new Date(spinUpLong + timedeltaAddition);  
 	                Dats.put("dte", dte);
 	                ArrayList<ArrayList<Object>> met_d = met_data_all ;
-	                System.out.println( "\t"+"\t"+"\t"+"\t"+dte + " " + i + " " + timedeltaAddition);
+	                System.out.println(dte + " " + i );
 	                
 	                //## BEGIN CALCULATION OF Tb_rur
 	                String ref_surf1 = LCData.DRY_SURF;
 	                String ref_surf2 = LCData.CONC_SURF;
+	                
+	                //override these values if they are in the control file
+	                if (cfm.getValue("ref_surf1")!=null)
+	                {
+	                	ref_surf1=cfm.getValue("ref_surf1").trim();	                	
+	                }
+	                if (cfm.getValue("ref_surf2")!=null)
+	                {
+	                	ref_surf2=cfm.getValue("ref_surf2").trim();	                	
+	                }
+	                
 	                //## radiation balance
 	                
 	                ArrayList<Double> prevTsRef1 = new ArrayList<Double>();	
@@ -278,10 +291,11 @@ public class TargetModule
 		                prevTsRef2.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf2)]);
 		                prevTsRef2.add(mod_data_ts_[i-3][9][getSurfIndex(ref_surf2)]);
 	                }
-	            
-	                TreeMap<String,Double> rad_rur2  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf2,Dats,prevTsRef2,i,1.0); // # creates dictionary with radiation variables for current timestep and surface type                             
+	                // # creates dictionary with radiation variables for current timestep and surface type  
+	                TreeMap<String,Double> rad_rur2  = rnCalcNew.rn_calc_new(cfm,met_d, ref_surf2,Dats,prevTsRef2,i,1.0);                            
 	                //##################### ENG BALANCE for "reference" site #######################
-	                TreeMap<String,Double> eng_bals_rur2=lumps.lumps(rad_rur2,cfm,met_d,ref_surf2,Dats,i);            // # creates dictionary with energy balance for current timestep and surface type
+	                // # creates dictionary with energy balance for current timestep and surface type
+	                TreeMap<String,Double> eng_bals_rur2=lumps.lumps(rad_rur2,cfm,met_d,ref_surf2,Dats,i);            
 	                //##################### CALC LST for "reference" site #########################
 	                if (i < 1)
 	                {
@@ -299,19 +313,37 @@ public class TargetModule
 	                double Ts_stfs_rur = Ts_stfs_rur2.get(ForceRestore.TS_KEY); 
 	                
 	                //### these are the parameters for calculating Tb_rur and httc_rur 
-	                // #  Roughness lenght for momentum (m)
-	                double z0m_rur = 0.45;
-	                // #  Roughness lenght for heat (m)
+	                // #  Roughness length for momentum (m)
+	                double z0m_rur = Constants.z0m_rur;
+	                //override these values if they are in the control file
+	                if (cfm.getValue("z0m_rur")!=null)
+	                {
+	                	z0m_rur=new Double(cfm.getValue("z0m_rur")).doubleValue();
+	                }
+	                
+	                // #  Roughness length for heat (m)
 	                double z0h_rur = z0m_rur/10.;
 
-	                double z_Hx2  = maxH * 2.0; // # height of Tb (2 x max building height) - this is the secondary height used for Tb above canyon 
-	                
-	                double z_TaRef = Constants.cs_z_TaRef;  // # height of air temperature measurements (usually 2 m)
-	                double z_Uref  = Constants.cs_z_URef;   // # height of reference wind speed measurement (usually 10 m)
-	                
-	                double Tlow_surf = Ts_stfs_rur ;      // # surface temperature at rural (reference) site
-	                
-	                double ref_ta = metTa0;       // # observed air temperature
+	                // # height of Tb (2 x max building height) - this is the secondary height used for Tb above canyon 
+	                double z_Hx2  = maxH * 2.0; 
+	                // # height of air temperature measurements (usually 2 m)
+	                double z_TaRef = Constants.cs_z_TaRef;  
+	                //override these values if they are in the control file
+	                if (cfm.getValue("z_TaRef")!=null)
+	                {
+	                	z_TaRef=new Double(cfm.getValue("z_TaRef")).doubleValue();
+	                }
+	                // # height of reference wind speed measurement (usually 10 m)
+	                double z_Uref  = Constants.cs_z_URef;   
+	                //override these values if they are in the control file
+	                if (cfm.getValue("z_URef")!=null)
+	                {
+	                	z_Uref=new Double(cfm.getValue("z_URef")).doubleValue();
+	                }
+	                // # surface temperature at rural (reference) site
+	                double Tlow_surf = Ts_stfs_rur ;      
+	                // # observed air temperature
+	                double ref_ta = metTa0;       
 	                
 	                //####### DEFINE REFERENCE WIND SPEED RURAL #######
 	                double uTopHeightMinimumValue = 0.1;
@@ -319,7 +351,8 @@ public class TargetModule
 	                mod_U_TaRef[i]=uTopHeight;
 	                
 	                //####### calculate Richardson's number and heat transfer coefficient for rural site 
-	                double Ri_rur = sfcRi.sfc_ri(z_TaRef-z0m_rur,ref_ta,Tlow_surf,mod_U_TaRef[i]);   //## calculate Richardson's number for Rural site   
+	                  //## calculate Richardson's number for Rural site   
+	                double Ri_rur = sfcRi.sfc_ri(z_TaRef-z0m_rur,ref_ta,Tlow_surf,mod_U_TaRef[i]);   
 
 	                TreeMap<String,Double> httc_rural = httc.httc(Ri_rur,mod_U_TaRef[i],z_TaRef-z0m_rur,z0m_rur,z0h_rur, met_d,i,Tlow_surf,ref_ta) ;      //## calculate httc for Rural site           
 	                double httc_rur = httc_rural.get(Httc.HTTC_KEY);
@@ -633,16 +666,25 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
 
     
     //## convert to wind speed for, top of the canopy, using log profile.
-    double Hz  = Math.max(H, Constants.cs_zavg);
+    double zAve = Constants.cs_zavg;
+    if (cfm.getValue("zavg")!=null)
+    {
+    	zAve=new Double(cfm.getValue("zavg")).doubleValue();
+    }
+    double Hz  = Math.max(H, zAve);
+    
     double z0m_urb = 0.1 * Hz;  // ## urban roughness length momentum [CHECK]
     double z0h_urb = z0m_urb/10.0; // ##  urban roughness lenght heat [CHECK]
 
     double Uz = Math.max(metWS0 * ((Math.log(Hz/z0m_urb))/(Math.log(z_Uref/z0m_urb))),0.1);
     //## calculate wind speed in the canyon - I used the wind speed from log profile here not the "stability" calculated wind speed
     double lcStuffWTree = (double) lc_stuff.get(LcSort.Wtree_KEY);
-    double Ucan     = Uz*Math.exp(-0.386*(Hz/lcStuffWTree)); // # [CHECK] which forcing wind speed height should we use for this? currently using 3xH                
-    double rs_can   = (Constants.cs_pa*Constants.cs_cpair)/(11.8+(4.2*Ucan));		//## calculate surface resistance (s/m)
-    double httc_can = 1.0/rs_can ;                                          //## heat transfer coefficient for the canyon 
+    // # forcing wind speed height, currently using 3xH   
+    double Ucan     = Uz*Math.exp(-0.386*(Hz/lcStuffWTree));   
+    //## calculate surface resistance (s/m)
+    double rs_can   = (Constants.cs_pa*Constants.cs_cpair)/(11.8+(4.2*Ucan));		
+    //## heat transfer coefficient for the canyon 
+    double httc_can = 1.0/rs_can ;                                          
 
     
     //##### average Ta above canyon and Ta above roof by canyon and roof fraction

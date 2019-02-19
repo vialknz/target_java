@@ -5,17 +5,14 @@ import java.util.TreeMap;
 
 public class Constants
 {
-//	"""
+
 //	this is a dictionary of constants used by the air temperature module
-//
-//	"""
-//
-//	import math
 
-	//cs = {}
 
-	public static double cs_karman    = 0.4; 		//# von Karman constant
-	public static double cs_sb        = 5.67E-8;	//# Stefan-Boltzman constant, W/m2/K4
+	//# von Karman constant
+	public static double cs_karman    = 0.4; 	
+	//# Stefan-Boltzman constant, W/m2/K4
+	public static double cs_sb        = 5.67E-8;	
 	//# albedos
 	public static TreeMap<String,Double> cs_alb  = new TreeMap<String,Double>() 
 	{{this.put("roof", 0.15); this.put("wall", 0.15); this.put("road", 0.08); this.put("watr", 0.10); this.put("conc",0.20); this.put("dry",0.19); 
@@ -54,26 +51,41 @@ public class Constants
 
 	public static double cs_dW       = Math.sqrt((2. * cs_K.get("soilW") /(2.*Math.PI / 86400.)));
 	public static double cs_ww   =     (2.*Math.PI / 86400.);
-	public static double cs_Kw 	      = 6.18*Math.pow(10,(-7));  		//## eddy diffusivity of water (m^2 s^-1) - [used for the water Ts part.]
-	public static double cs_cp     = 0.001013;  		//##  specific heat of air (J / kg C)
-	public static double cs_e      = 0.622 ;			//## Unitless - ratio of molecular weight of water to dry air
-	public static double cs_pa     = 1.2 	;		//## density of dry air (1.2 kg m-3)
+	//## eddy diffusivity of water (m^2 s^-1) - [used for the water Ts part.]
+	public static double cs_Kw 	      = 6.18*Math.pow(10,(-7));  	
+	//##  specific heat of air (J / kg C)
+	public static double cs_cp     = 0.001013;  	
+	//## Unitless - ratio of molecular weight of water to dry air
+	public static double cs_e      = 0.622 ;
+	//## density of dry air (1.2 kg m-3)
+	public static double cs_pa     = 1.2;		
+	//# heat capacity of air
+	public static double cs_cpair=1004.67;   
+	//## bulk transfer coefficient for water energy balance modelled
+	public static double cs_hv = 1.4*(Math.pow(10,(-3)));	
+	//## amount of radiation immediately absorbed by the first layer of water (set to 0.45) (martinez et al., 2006).
+	public static double cs_betaW  = 0.45 ;			
+	//## depth of the water layer (m)
+	public static double cs_zW = 0.3;	
+	//## extinction coefficient after Subin et al., (2012)
+	public static double cs_NW  = (1.1925*Math.pow(cs_zW,(-0.424)))	;
+	//## the latent heat of vaporisation (MJ Kg^-1)
+	public static double cs_Lv = 2.43*(Math.pow(10,6))	;		
 
-	public static double cs_cpair=1004.67;   //# heat capacity of air
+	//# BOM reference height
+	public static double cs_z_URef = 	10.;  
+	//# air temperature measurement height
+	public static double cs_z_TaRef = 2. ;  
+	//## roughness length, used in new Ta module.
+	public static double cs_z0m = 1.; 
+	//# average building height in domain
+	public static double cs_zavg = 4.5 ;
 
-	public static double cs_hv = 1.4*(Math.pow(10,(-3)))	;	//## bulk transfer coefficient for water energy balance modelled
-	public static double cs_betaW  = 0.45 ;			//## amount of radiation immediately absorbed by the first layer of water (set to 0.45) (martinez et al., 2006).
-	public static double cs_zW = 0.3;			//## depth of the water layer (m)
-	public static double cs_NW  = (1.1925*Math.pow(cs_zW,(-0.424)))	;//## extinction coefficient after Subin et al., (2012)
-	public static double cs_Lv = 2.43*(Math.pow(10,6))	;		//## the latent heat of vaporisation (MJ Kg^-1)
-
-	public static double cs_z_URef = 	10.;  //# BOM reference height
-	public static double cs_z_TaRef = 2. ;  //# air temperature measurement height
-	public static double cs_z0m = 1.; //## roughness length, used in new Ta module.
-	public static double cs_zavg = 4.5 ;//# average building height in domain
-
-	public static double cs_res = 30.; //# horizontal resolutoin of the model  
+	 //# horizontal resolution of the model  
+	public static double cs_res = 30.;
 	
+    // #  Roughness length for momentum (m)
+	public static double z0m_rur = 0.45;
 	
 	public static TreeMap<String,ArrayList<Double>> cs_LUMPS1  = new TreeMap<String,ArrayList<Double>>() 
 	{{this.put("roof", new ArrayList<Double>() {{this.add(0.12);this.add(0.24);this.add(-4.5);}}); 
