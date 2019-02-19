@@ -20,20 +20,20 @@ public class RunToolkit
 	
 	
 	/*
-	config file should include (although none of the validation info section is used in this version):
+	config file should include:
 	
 #---------------------------------------------------------------------------------------------------------
 ####### Example Main Control File #######
 #--------------------------------------------------------------------------------------------------------
 ####### INPUTS #######
-site_name = "Mawson"					 # site name (string)
-run_name   = "MawsonExample"                             # run name (string)
-inpt_met_file =  "Mawson-meteorology_KentTown_30min.csv"	# input meteorolgical file (i.e. forcing file)
-inpt_lc_file  =  "100m_lc_grid.csv"                      #  input land cover data file
-date_fmt = '%d/%m/%Y %H:%M'                              # format of datetime in input met files
-timestep = '1800S'                                       # define in seconds 
-include roofs = 'Y'                                      # turn roofs on and off to affect Tac
-direct roofs = 'Y'                                       # turn roofs on and off to affect Tac
+site_name=Mawson				     # site name (string)
+run_name=MawsonExample                               # run name (string)
+inpt_met_file=Mawson-meteorology_KentTown_30min.csv	# input meteorolgical file (i.e. forcing file)
+inpt_lc_file=100m_lc_grid.csv                        #  input land cover data file
+date_fmt=%d/%m/%Y %H:%M                              # format of datetime in input met files
+timestep=1800S                                       # define in seconds 
+include roofs=Y                                      # turn roofs on and off to affect Tac
+direct roofs=Y                                       # turn roofs on and off to affect Tac
 #--------------------------------------------------------------------------------------------------------
 # dates
 #---------------------------------------------------------------------------------------------------------
@@ -42,9 +42,9 @@ StartDate =2011,2,15,0					# year,month,day,hour	## the date/time for period of 
 EndDate =2011,2,16,18 					# year,month,day,hour	# end date for validation period
 ######################
 
-mod_ldwn = 'N'             # use modelled ldown
+mod_ldwn=N             # use modelled ldown
 lat=-37.8136
-domainDim=9,3
+domainDim=32,31
 latEdge=-34.79829
 lonEdge=138.79829
 latResolution=0.00088
@@ -59,6 +59,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 #### options for reference surfaces are Veg, road, watr, conc, dry, irr, and roof
 #ref_surf1=dry
 #ref_surf2=conc
+
 
 	 
 	 
