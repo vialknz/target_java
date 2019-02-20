@@ -14,7 +14,7 @@ public class TargetModule
 	
 	public TargetModule(String workingDirectory)
 	{
-		this.workingDirectory = workingDirectory;
+//		this.workingDirectory = workingDirectory;
 	}
 	
     public static double[][][] mod_data_ts_;
@@ -38,8 +38,6 @@ public class TargetModule
 	
 //	private VdiPETCorrected petInstance = new VdiPETCorrected();
 	
-	private String workingDirectory;
-	public String rootDirectory ;
 	private TbRurSolver tbRurSolverOld = new TbRurSolver();
 	
 	public static final int FOR_TAB_FID_INDEX = 0;
@@ -232,13 +230,14 @@ public class TargetModule
 	                System.out.println(dte + " " + i );
 	                
 	                //## BEGIN CALCULATION OF Tb_rur
-	                String ref_surf1 = LCData.DRY_SURF;
+	                String ref_surf = LCData.DRY_SURF;
 	                String ref_surf2 = LCData.CONC_SURF;
 	                
 	                //override these values if they are in the control file
-	                if (cfm.getValue("ref_surf1")!=null)
+	                if (cfm.getValue("ref_surf")!=null)
 	                {
-	                	ref_surf1=cfm.getValue("ref_surf1").trim();	                	
+	                	ref_surf=cfm.getValue("ref_surf").trim();	
+	                	System.out.println("overrode ref_surf as " + ref_surf);
 	                }
 	                if (cfm.getValue("ref_surf2")!=null)
 	                {
@@ -263,7 +262,7 @@ public class TargetModule
 	                }
 	                else if (i < 2)
 	                {
-	                	prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf1)]);
+	                	prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf)]);
 		                prevTsRef1.add(0.);
 		                prevTsRef1.add(0.);
 		                
@@ -273,8 +272,8 @@ public class TargetModule
 	                }
 	                else if (i < 3)
 	                {
-	                	prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf1)]);
-	                	prevTsRef1.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf1)]);
+	                	prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf)]);
+	                	prevTsRef1.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf)]);
 		                prevTsRef1.add(0.);
 		                
 		                prevTsRef2.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf2)]);
@@ -283,9 +282,9 @@ public class TargetModule
 	                }
 	                else
 	                {
-		                prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf1)]);
-		                prevTsRef1.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf1)]);
-		                prevTsRef1.add(mod_data_ts_[i-3][9][getSurfIndex(ref_surf1)]);
+		                prevTsRef1.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf)]);
+		                prevTsRef1.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf)]);
+		                prevTsRef1.add(mod_data_ts_[i-3][9][getSurfIndex(ref_surf)]);
 		                
 		                prevTsRef2.add(mod_data_ts_[i-1][9][getSurfIndex(ref_surf2)]);
 		                prevTsRef2.add(mod_data_ts_[i-2][9][getSurfIndex(ref_surf2)]);
@@ -304,7 +303,7 @@ public class TargetModule
 	                }
 	                else
 	                {
-		                prevTmRefForce1.add(mod_data_tm_[i-1][9][getSurfIndex(ref_surf1)]);	                
+		                prevTmRefForce1.add(mod_data_tm_[i-1][9][getSurfIndex(ref_surf)]);	                
 		                prevTmRefForce2.add(mod_data_tm_[i-1][9][getSurfIndex(ref_surf2)]);
 	                }
 
@@ -554,10 +553,8 @@ public class TargetModule
 	                    	{
 	                    		tmrt = utciInstance.getTmrtForGrid_RH(Tac,metRH0,Ucan,metKd0,Tsurf_can,metLD0,lup,yd_actual,TM,lat);	
 	                    		tmrtCache.put(tmrtCacheKey, tmrt);
-	                    		String tmrtOutput = tmrt + "," + Tac + "," + metRH0+ "," +Ucan+ "," +metKd0+ "," +Tsurf_can+ "," +metLD0+ "," +lup+ "," +yd_actual+ "," +TM+ "," +lat;                       
-		                    	
-	                    		common.appendFile(tmrtOutput, rootDirectory + "/" + "tmrtOutput.csv");
-	                    		
+//	                    		String tmrtOutput = tmrt + "," + Tac + "," + metRH0+ "," +Ucan+ "," +metKd0+ "," +Tsurf_can+ "," +metLD0+ "," +lup+ "," +yd_actual+ "," +TM+ "," +lat;                       	                    	
+//	                    		common.appendFile(tmrtOutput, rootDirectory + "/" + "tmrtOutput.csv");                    		
 	                    	}
 	                    	else
 	                    	{

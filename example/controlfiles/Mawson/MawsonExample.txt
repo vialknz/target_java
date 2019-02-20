@@ -4,8 +4,9 @@
 ####### INPUTS #######
 site_name=Mawson				     # site name (string)
 run_name=MawsonExample                               # run name (string)
-inpt_met_file=Mawson-meteorology_KentTown_30min.csv	# input meteorolgical file (i.e. forcing file)
-inpt_lc_file=100m_lc_grid.csv                        #  input land cover data file
+inpt_met_file=/home/kerryn/git/Target_Java/example/input/Mawson/MET/Mawson-meteorology_KentTown_30min.csv	# input meteorolgical file (i.e. forcing file)
+inpt_lc_file=/home/kerryn/git/Target_Java/example/input/Mawson/LC/100m_lc_grid.csv                        #  input land cover data file
+output_dir=/home/kerryn/git/Target_Java/example/output/Mawson                 # directory output will be saved in
 date_fmt=%d/%m/%Y %H:%M                              # format of datetime in input met files
 timestep=1800S                                       # define in seconds 
 include roofs=Y                                      # turn roofs on and off to affect Tac
@@ -34,6 +35,5 @@ disableOutput=Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan
 #z_TaRef=2.0
 #zavg=4.5
 #### options for reference surfaces are Veg, road, watr, conc, dry, irr, and roof
-#ref_surf1=dry
-#ref_surf2=conc
+#ref_surf=dry
 

@@ -57,6 +57,20 @@ public class MetData
 			}
 			line = line.trim();
 			String[] splitLine = line.split(",");
+			
+			if (mod_ldown.equals("N") && splitLine.length < 7)
+			{
+				System.out.println(line);
+				System.out.println("Not enough columns in Met data. Required fields: datetime,Ta,RH,WS,P,Kd,Ld");
+				System.exit(1);
+			}
+			else if (splitLine.length < 6)
+			{
+				System.out.println(line);
+				System.out.println("Not enough columns in Met data. Required fields: datetime,Ta,RH,WS,P,Kd");
+				System.exit(1);
+			}
+			
 			ArrayList<Object> dataLine = new ArrayList<Object>();
 //			System.out.println(line);
 			

@@ -28,8 +28,9 @@ public class RunToolkit
 ####### INPUTS #######
 site_name=Mawson				     # site name (string)
 run_name=MawsonExample                               # run name (string)
-inpt_met_file=Mawson-meteorology_KentTown_30min.csv	# input meteorolgical file (i.e. forcing file)
-inpt_lc_file=100m_lc_grid.csv                        #  input land cover data file
+inpt_met_file=/home/kerryn/git/Target_Java/example/input/Mawson/MET/Mawson-meteorology_KentTown_30min.csv	# input meteorolgical file (i.e. forcing file)
+inpt_lc_file=/home/kerryn/git/Target_Java/example/input/Mawson/LC/100m_lc_grid.csv                        #  input land cover data file
+output_dir=/home/kerryn/git/Target_Java/example/output/Mawson                 # directory output will be saved in
 date_fmt=%d/%m/%Y %H:%M                              # format of datetime in input met files
 timestep=1800S                                       # define in seconds 
 include roofs=Y                                      # turn roofs on and off to affect Tac
@@ -49,7 +50,8 @@ latEdge=-34.79829
 lonEdge=138.79829
 latResolution=0.00088
 lonResolution=0.00110
-disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,TsurfHorz,Ucan
+### disabled output options are Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Utb,Tsurfwall,TsurfCan,TsurfHorz,Ucan
+disableOutput=Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan
 
 #override default parameters, remove '#' comment to use
 #z0m_rur=0.45
@@ -57,8 +59,8 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 #z_TaRef=2.0
 #zavg=4.5
 #### options for reference surfaces are Veg, road, watr, conc, dry, irr, and roof
-#ref_surf1=dry
-#ref_surf2=conc
+#ref_surf=dry
+
 
 
 	 
@@ -95,39 +97,10 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 			System.out.println("Usage: Target.RunToolkit /pathto/ControlFile.txt");
 			System.exit(1);
 		}
-		
-		//handle both unix and windows paths
-		String regex = "[/\\\\]";
-		String[] controlFileNameSplit = controlFileName.split(regex);
-		int lengthOfSplit = controlFileNameSplit.length;
-		String controlTextFile = controlFileNameSplit[lengthOfSplit-1];
-		
-//		System.out.println(controlTextFile);
-		
-//		for (String filepathelement : controlFileNameSplit)
-//		{
-//			System.out.println(filepathelement);
-//		}
-		
-
-		String controlTextFileSubpath = File.separator
-				+ controlFileNameSplit[lengthOfSplit-3]
-				+ File.separator
-				+ controlFileNameSplit[lengthOfSplit-2]
-				+ File.separator
-				+ controlFileNameSplit[lengthOfSplit-1];
-		
-		controlTextFileSubpath = controlFileName.replace(controlTextFile, "");
-		
-//		System.out.println(controlTextFileSubpath);
-
-		String rootDir = controlFileName.replaceAll(controlTextFileSubpath, "");
-		rootDir = controlTextFileSubpath + ".."  + File.separator + ".."  + File.separator;
-		
-//		System.out.println(rootDir);
-	
-		String outputFile = rootDir + "/output/" + cfm.getValue("site_name") + "/" + cfm.getValue("run_name") + ".nc";
-		common.createDirectory(rootDir + "/output/" + cfm.getValue("site_name") + "/");	
+				
+		String outputDir = cfm.getValue("output_dir");
+		String outputFile = outputDir + "/" + cfm.getValue("run_name") + ".nc";
+		common.createDirectory(outputDir);	
 		
 		lonResolution = cfm.getDoubleValue("lonResolution");
 		latResolution = cfm.getDoubleValue("latResolution");
@@ -139,8 +112,7 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		y=new Integer(domainDimSplit[0]).intValue();
 		x=new Integer(domainDimSplit[1]).intValue();
 
-		//		######### DEFINE START AND FINISH DATES HERE ########
-		
+		//		######### DEFINE START AND FINISH DATES HERE ########		
 		Date spinUp = cfm.getDateValue("SpinUp");
 		Date startDate = cfm.getDateValue("StartDate");
 		Date endDate = cfm.getDateValue("EndDate");
@@ -150,18 +122,17 @@ disableOutput=Utb,Fid,modUTaRef,TbRur,HttcCan,HttcUrbNew,TsurfWall,TsurfCan,Tsur
 		Dats.put("StartDate", startDate);
 		Dats.put("EndDate", endDate);
 		
-		String lcFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/LC/" + cfm.getValue("inpt_lc_file");
+		String lcFilename = cfm.getValue("inpt_lc_file");
 	
 		LCData lcDataClass = new LCData(lcFilename);
 		ArrayList<ArrayList<Double>> lc_data = lcDataClass.getlcData();
 		double maxH = lcDataClass.getMaxH();
 		double maxW = lcDataClass.getMaxW();
 
-		String metFilename = rootDir + "/input/" + cfm.getValue("site_name") + "/MET/" + cfm.getValue("inpt_met_file");
+		String metFilename =  cfm.getValue("inpt_met_file");
 		MetData metDataClass = new MetData(metFilename, cfm.getValue("mod_ldwn"), spinUp, endDate);
 		ArrayList<ArrayList<Object>> met_data = metDataClass.getMetData();
 		TargetModule tkmd = new TargetModule(workingDirectory);
-		tkmd.rootDirectory = rootDir;
 		tkmd.modelRun(cfm, lc_data, met_data, Dats, maxH, maxW, x, y, latEdge, latResolution, lonEdge, lonResolution, outputFile);
 	}
 
