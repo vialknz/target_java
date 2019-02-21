@@ -592,7 +592,6 @@ public class TargetModule
 	                    				Tair, petSystemreturnValue[VdiPETCorrected.esw2_index]);
 	                    		pet = petReturnValue[VdiPETCorrected.tx_index];
 	                    		petCache.put(petCacheKey, pet);
-//	                    		System.out.println(pet + "=" + petCacheKey);
 	                    	}
 	                    	else
 	                    	{

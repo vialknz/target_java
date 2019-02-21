@@ -2,7 +2,11 @@
 //	https://github.com/stgeorges/ladybug/commit/b0c2ea970252b62d22bf0e35d739db7f385a3f26)
 //
 //	2017.11.10 by Edouard Walther and Quentin Goestschel:
-//		- fixed the error on the reference environment (see paper)
+//		- fixed the error on the reference environment (see paper, https://doi.org/10.1016/j.buildenv.2018.03.054)
+//   https://github.com/eddes/AREP
+// You are free to use them on the condition to cite the authors "E. Walther (AREP) and Q. Goestchel (ENS Paris-Saclay),
+//  after D. Spasic's version". or alternately the article reference 
+//   https://www.sciencedirect.com/science/article/pii/S0360132318301896
 // 	
 // Port to Java by Kerry Nice / September 2018	
 
