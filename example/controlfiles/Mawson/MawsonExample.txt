@@ -10,7 +10,6 @@ output_dir=/home/kerryn/git/Target_Java/example/output/Mawson                 # 
 date_fmt=%d/%m/%Y %H:%M                              # format of datetime in input met files
 timestep=1800S                                       # define in seconds 
 include roofs=Y                                      # turn roofs on and off to affect Tac
-direct roofs=Y                                       # turn roofs on and off to affect Tac
 #--------------------------------------------------------------------------------------------------------
 # dates
 #---------------------------------------------------------------------------------------------------------
@@ -26,8 +25,8 @@ latEdge=-34.79829
 lonEdge=138.79829
 latResolution=0.00088
 lonResolution=0.00110
-### disabled output options are Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Utb,Tsurfwall,TsurfCan,TsurfHorz,Ucan
-disableOutput=Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan
+### disabled output options are Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Utb,Tsurfwall,TsurfCan,TsurfHorz,Ucan,Pet
+disableOutput=Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Pet
 
 #override default parameters, remove '#' comment to use
 #z0m_rur=0.45

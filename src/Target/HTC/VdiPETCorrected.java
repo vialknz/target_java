@@ -1,12 +1,10 @@
-	
-	// 	PET calculation after the LadyBug plugin (retrieved on Djordje Spasic's github :
-	//	https://github.com/stgeorges/ladybug/commit/b0c2ea970252b62d22bf0e35d739db7f385a3f26)
-	//
-	//	2017.11.10 by Edouard Walther and Quentin Goestschel:
-	//		- fixed the error on the reference environment (see paper)
-	// 	
-	// Port to Java by Kerry Nice / September 2018	
-
+// 	PET calculation after the LadyBug plugin (retrieved on Djordje Spasic's github :
+//	https://github.com/stgeorges/ladybug/commit/b0c2ea970252b62d22bf0e35d739db7f385a3f26)
+//
+//	2017.11.10 by Edouard Walther and Quentin Goestschel:
+//		- fixed the error on the reference environment (see paper)
+// 	
+// Port to Java by Kerry Nice / September 2018	
 
 package Target.HTC;
 
@@ -24,19 +22,55 @@ public class VdiPETCorrected
 	public static final int tcl2_index=2;
 	public static final int esw2_index=3;
 	
-
+	// Environment constants  //
+	 // atmospheric pressure [hPa]
+	double po = 1013.25; 
+	 // real pressure [hPa]
+	double p = 1013.25; 
+	// Blood density kg/L
+	double rob = 1.06;  
+	// Blood specific heat [j/kg/k]
+	double cb = 3640.0; 
+	 // Skin emissivity [-]
+	double emsk = 0.99; 
+	// Clothes emissivity [-]
+	double emcl = 0.95;  
+	 // Latent heat of evaporation [J/Kg]
+	double Lvap = 2.42 * Math.pow(10.0, 6.0); 
+	 // Stefan-Boltzmann constant [W/(m2*K^(-4))]
+	double sigm = 5.67 * Math.pow(10.0, -8.0); 
+	 // Air specific heat  [J./kg/K-]
+	double cair = 1010.0; 
+	 // Skin diffusivity
+	double rdsk = 0.79 * Math.pow(10.0, 7.0); 
+	 // Clothes diffusivity
+	double rdcl = 0.0;
+	
+	int sex = 1;
+	double pos = 1;
+	double age = 35;
+	double mbody = 75; // Subject weight[kg]
+	double ht = 1.80; // Subject size[m]
+	double Adu = 0.203*Math.pow(mbody, 0.425)*Math.pow(ht,0.725); //Dubois body area
+	String bodyPosition="standing";
+	double feff = 0.725;
+	String sexStr ="male";
+	
+	// Initialisation of the temperature set values
+	double tc_set=36.6;
+	double tsk_set=34;
+	double tbody_set=0.1*tsk_set+0.9*tc_set;
+	
+	
 	public static void main(String[] args)
 	{
 		VdiPETCorrected pet = new VdiPETCorrected();
+	
+		double Tair=25;  //air temp in C
+		double Tmrt=30;  //tmrt in C
+		double v_air=0.9; //air velocity in m/s
 		
-		double po = 1013.25;  // atmospheric pressure [hPa]
-		double p = 1013.25;  // real pressure [hPa]
-		
-		double Tair=21;  //air temp in C
-		double Tmrt=24;  //tmrt in C
-		double v_air=0.1; //air velocity in m/s
-		
-		double petValue = pet.petCalculationDefault(po, p, Tair, Tmrt, v_air);
+		double petValue = pet.petCalculationDefault(pet.po, pet.p, Tair, Tmrt, v_air);
 		System.out.println("PET value = " + petValue);
 	}
 	
@@ -46,42 +80,12 @@ public class VdiPETCorrected
 		double M_activity=80; // [W]
 		double pvap=12.0; //Imposed value of Pvap
 		
-		// Environment constants  //
-		double rob = 1.06;  // Blood density kg/L
-		double cb = 3640.0;  // Blood specific heat [j/kg/k]
-		double emsk = 0.99;  // Skin emissivity [-]
-		double emcl = 0.95;  // Clothes emissivity [-]
-		double Lvap = 2.42 * Math.pow(10.0, 6.0);  // Latent heat of evaporation [J/Kg]
-		double sigm = 5.67 * Math.pow(10.0, -8.0);  // Stefan-Boltzmann constant [W/(m2*K^(-4))]
-		double cair = 1010.0;  // Air specific heat  [J./kg/K-]
-		double rdsk = 0.79 * Math.pow(10.0, 7.0);  // Skin diffusivity
-		double rdcl = 0.0; // Clothes diffusivity
-
-		int sex = 1;
-		double pos = 1;
-		double age = 35;
-		double mbody = 75; // Subject weight[kg]
-		double ht = 1.80; // Subject size[m]
-		double Adu = 0.203*Math.pow(mbody, 0.425)*Math.pow(ht,0.725); //Dubois body area
-		String bodyPosition="standing";
-		double feff = 0.725;
-		String sexStr ="male";
-
-		// Initialisation of the temperature set values
-		double tc_set=36.6;
-		double tsk_set=34;
-		double tbody_set=0.1*tsk_set+0.9*tc_set;
-		
-		double[] systemReturn  = system(Tair, Tmrt, pvap, v_air, M_activity, icl, bodyPosition, sexStr, 
-				mbody, age, ht, cair, Lvap, p, po, Adu, tsk_set, emcl, sigm, emsk, rob, cb, tbody_set, sex,
-				rdsk, rdcl, tc_set);
+		double[] systemReturn  = system(Tair, Tmrt, pvap, v_air, M_activity, icl );
 		double tc = systemReturn[tcore2_index];
 		double tsk = systemReturn[tsk2_index];
 		double tcl = systemReturn[tcl2_index];
 		double esw_real = systemReturn[esw2_index];
-		double[] petReturn = pet(tc,tsk,tcl,Tair, esw_real,mbody,  ht,  sexStr, 
-				 age,  tbody_set,  Adu,  Lvap,  p,  po,  feff,  cair,
-				 emsk,  sigm,  rdsk,  rdcl,  emcl);
+		double[] petReturn = pet(tc,tsk,tcl,Tair, esw_real  );
 		tsk= petReturn[tsk_index]; 
 		double enbal= petReturn[enbal_index]; 
 		double esw= petReturn[esw_index]; 
@@ -100,37 +104,6 @@ public class VdiPETCorrected
 	
 	public void petCalcuation()
 	{
-			// Input data //
-
-			// Environment constants  //
-			double po = 1013.25;  // atmospheric pressure [hPa]
-			double p = 1013.25;  // real pressure [hPa]
-			double rob = 1.06;  // Blood density kg/L
-			double cb = 3640.0;  // Blood specific heat [j/kg/k]
-			double emsk = 0.99;  // Skin emissivity [-]
-			double emcl = 0.95;  // Clothes emissivity [-]
-			double Lvap = 2.42 * Math.pow(10.0, 6.0);  // Latent heat of evaporation [J/Kg]
-			double sigm = 5.67 * Math.pow(10.0, -8.0);  // Stefan-Boltzmann constant [W/(m2*K^(-4))]
-			double cair = 1010.0;  // Air specific heat  [J./kg/K-]
-			double rdsk = 0.79 * Math.pow(10.0, 7.0);  // Skin diffusivity
-			double rdcl = 0.0; // Clothes diffusivity
-
-			int sex = 1;
-			double pos = 1;
-			double age = 35;
-			double mbody = 75; // Subject weight[kg]
-			double ht = 1.80; // Subject size[m]
-			double Adu = 0.203*Math.pow(mbody, 0.425)*Math.pow(ht,0.725); //Dubois body area
-			String bodyPosition="standing";
-			double feff = 0.725;
-			String sexStr ="male";
-
-			// Initialisation of the temperature set values
-			double tc_set=36.6;
-			double tsk_set=34;
-			double tbody_set=0.1*tsk_set+0.9*tc_set;
-			
-			
 			// real environment
 			double M_activity=80; // [W]
 			double icl=0.9;
@@ -139,16 +112,12 @@ public class VdiPETCorrected
 			double v_air=0.1;
 			double pvap=12.0; //Imposed value of Pvap
 
-			double[] systemReturn  = system(Tair, Tmrt, pvap, v_air, M_activity, icl, bodyPosition, sexStr, 
-					mbody, age, ht, cair, Lvap, p, po, Adu, tsk_set, emcl, sigm, emsk, rob, cb, tbody_set, sex,
-					rdsk, rdcl, tc_set);
+			double[] systemReturn  = system(Tair, Tmrt, pvap, v_air, M_activity, icl );
 			double tc = systemReturn[tcore2_index];
 			double tsk = systemReturn[tsk2_index];
 			double tcl = systemReturn[tcl2_index];
 			double esw_real = systemReturn[esw2_index];
-			double[] petReturn = pet(tc,tsk,tcl,Tair, esw_real,mbody,  ht,  sexStr, 
-					 age,  tbody_set,  Adu,  Lvap,  p,  po,  feff,  cair,
-					 emsk,  sigm,  rdsk,  rdcl,  emcl);
+			double[] petReturn = pet(tc,tsk,tcl,Tair, esw_real );
 			tsk= petReturn[tsk_index]; 
 			double enbal= petReturn[enbal_index]; 
 			double esw= petReturn[esw_index]; 
@@ -165,10 +134,7 @@ public class VdiPETCorrected
 	}
 
 			// calcul de la reaction metabolique
-	public double[] system(double ta, double tmrt, double rh, double v_air, double M, double Icl, String bodyPosition, String sexStr, 
-			double mbody, double age, double ht, double cair, double Lvap, double p, double po, double Adu, double tsk_set, 
-			double emcl, double sigm, double emsk, double rob, double cb, double tbody_set, int sex, 
-			double rdsk, double rdcl, double tc_set)
+	public double[] system(double ta, double tmrt, double rh, double v_air, double M, double Icl )
 	{
 		double[] returnValue = new double[4];
 		double feff=0.0,met_base;
@@ -179,6 +145,7 @@ public class VdiPETCorrected
 		double swm=0.0;
 		double ed=0.0;
 		int index;
+		
 		double vpa=rh; // ACHTUNG
 	    // Area parameters of the body: //
 		if (Icl< 0.03)
@@ -188,7 +155,8 @@ public class VdiPETCorrected
 		double icl = Icl;  // [clo] Clothing level
 		double eta = 0.0; // Body efficiency
 	    // Calculation of the Burton coefficient, k = 0.31 for Hoeppe:
-		double fcl = 1 + (0.31 * icl); // Increasment of the exchange area depending on the clothing level:
+		// Increasment of the exchange area depending on the clothing level:
+		double fcl = 1 + (0.31 * icl); 
 		if (bodyPosition.equals("sitting"))
 		{
 			feff = 0.696;
@@ -207,11 +175,13 @@ public class VdiPETCorrected
 	    // Attribution of internal energy depending on the sex of the subject
 		if (sexStr.equals("male"))
 		{
-			met_base = 3.45 * Math.pow(mbody, 0.75) * (1.0 + 0.004 * (30.0 - age) + 0.01 * (ht * 100.0 / Math.pow(mbody, 1.0 / 3.0) - 43.4));
+			met_base = 3.45 * Math.pow(mbody, 0.75) * (1.0 + 0.004 * (30.0 - age) + 0.01 * 
+					(ht * 100.0 / Math.pow(mbody, 1.0 / 3.0) - 43.4));
 		}
 		else
 		{
-			met_base = 3.19 * Math.pow(mbody, 0.75) * (1.0 + 0.004 * (30.0 - age) + 0.018 * (ht * 100.0 / Math.pow(mbody, 1.0 / 3.0) - 42.1));
+			met_base = 3.19 * Math.pow(mbody, 0.75) * (1.0 + 0.004 * (30.0 - age) + 0.018 * 
+					(ht * 100.0 / Math.pow(mbody, 1.0 / 3.0) - 42.1));
 		}
 	    // Source term : metabolic activity
 		double he = M + met_base;
@@ -228,20 +198,24 @@ public class VdiPETCorrected
 		double Cres = cair * (ta - texp) * rtv;
 
 	    // Latent heat energy loss:
-		double vpexp = 6.11 * Math.pow(10.0, 7.45 * texp / (235.0 + texp)); // Partial pressure of the breathing air
+		// Partial pressure of the breathing air
+		double vpexp = 6.11 * Math.pow(10.0, 7.45 * texp / (235.0 + texp)); 
 		double Eres = 0.623 * Lvap / p * (vpa - vpexp) * rtv;
 		// total breathing heat loss
 		double qresp = (Cres + Eres);
 
 		double[] c = new double[11];
-//				c = [0 for i in range(11)];
+
+		// Core temperature list
 		double[] tcore = new double[7];
-//				tcore = [0 for i in range(7)] ; // Core temperature list
-		double hc = 2.67 + 6.5 * Math.pow(v_air,0.67); //Convection coefficient
-		hc = hc * Math.pow(p / po,0.55); // Correction with pressure
+		//Convection coefficient
+		double hc = 2.67 + 6.5 * Math.pow(v_air,0.67); 
+		// Correction with pressure
+		hc = hc * Math.pow(p / po,0.55); 
 
 	    // Clothed fraction of the body approximation //
-		double rcl = icl / 6.45; // conversion in m2.K/W
+		// conversion in m2.K/W
+		double rcl = icl / 6.45; 
 		double y=0;
 		if (facl > 1.0)
 		{
@@ -267,32 +241,35 @@ public class VdiPETCorrected
 			y = 0.1;
 		}
 	    // calculation of the closing radius depending on the clothing level (6.28 = 2* pi !)
-		double r2 = Adu * (fcl - 1.0 + facl) / (6.28 * ht * y);  // External radius
-		double r1 = facl * Adu / (6.28 * ht * y) ; // Internal radius
+		// External radius
+		double r2 = Adu * (fcl - 1.0 + facl) / (6.28 * ht * y);  
+		// Internal radius
+		double r1 = facl * Adu / (6.28 * ht * y) ; 
 		double di = r2 - r1;
 		// clothed surface
 		double Acl = Adu * facl + Adu * (fcl - 1.0);
 		// skin temperatures
 		for (int j=1;j<=7;j++)	
 		{
-//				for j in range(1, 7):
 			double tsk = tsk_set;
 			int count1 = 0;
-			double tcl = (ta + tmrt + tsk) / 3.0; // Average value between the temperatures to estimate Tclothes
+			// Average value between the temperatures to estimate Tclothes
+			double tcl = (ta + tmrt + tsk) / 3.0; 
 			double enbal2 = 0.0;
 			while (true)
 			{
-//						for count2 in range(1, 100):
 				for (int count2=1;count2<100;count2++)
 				{
 	                // Estimation of the radiation losses
 					double rclo2 = emcl * sigm * (Math.pow(tcl + 273.2, 4.0) - Math.pow(tmrt + 273.2, 4.0)) * feff;
 	                // Calculation of the thermal resistance of the body:
 					double htcl = (6.28 * ht * y * di) / (rcl * Math.log(r2 / r1) * Acl);
-					tsk = (hc * (tcl - ta) + rclo2)/htcl + tcl;  // Skin temperature calculation
+					 // Skin temperature calculation
+					tsk = (hc * (tcl - ta) + rclo2)/htcl + tcl; 
 
 	                // Radiation losses //
-					double Aeffr = Adu * feff;  // Effective radiative area depending on the position of the subject
+					// Effective radiative area depending on the position of the subject
+					double Aeffr = Adu * feff;  
 	                // For bare skin area:
 					double rbare = Aeffr * (1.0 - facl) * emsk * sigm * (Math.pow(tmrt + 273.2, 4.0) - Math.pow(tsk + 273.2,4.0));
 	                // For dressed area:
@@ -328,7 +305,8 @@ public class VdiPETCorrected
 					// cas 2 : Set blood flow + regulation
 					tcore[2] = (h + qresp)/(5.28*Adu + K_blood*6.3/3600.0 / (1.0+0.5*(tsk_set - tsk))) +tsk;
 					// case 3 : Maximum blood flow only
-					tcore[3] = c[0] / (5.28*Adu + K_blood*1.0/40.0) + tsk; //  max flow = 90 [L/m2/h]/3600 <=> 1/40
+				//  max flow = 90 [L/m2/h]/3600 <=> 1/40
+					tcore[3] = c[0] / (5.28*Adu + K_blood*1.0/40.0) + tsk; 
 					// Roots calculation //1
 					if (c[10] >= 0.0) // Numerical safety to avoid negative roots
 					{
@@ -357,16 +335,20 @@ public class VdiPETCorrected
 						swm=0.7 * swm;
 					}
 					double esweat = -swm * Lvap;
-					double hm = 0.633 * hc / (p * cair); // Evaporation coefficient [W/(m^2*Pa)]
+					 // Evaporation coefficient [W/(m^2*Pa)]
+					double hm = 0.633 * hc / (p * cair);
 					double fec = 1.0 / (1.0 + 0.92 * hc * rcl);
-					double emax = hm * (vpa - vpts) * Adu * Lvap * fec; // Max latent flux
-					double wetsk = esweat / emax; // skin wettedness
+					 // Max latent flux
+					double emax = hm * (vpa - vpts) * Adu * Lvap * fec;
+					// skin wettedness
+					double wetsk = esweat / emax; 
 	                // esw: Latent flux depending on w [W.m-2]
 					if (wetsk > 1.0)
 					{
 						wetsk = 1.0;
 					}
-					double eswdif = esweat - emax; // difference between sweating and max capacity
+					// difference between sweating and max capacity
+					double eswdif = esweat - emax; 
 					if (eswdif <= 0.0)
 					{
 						esw = emax;
@@ -379,10 +361,12 @@ public class VdiPETCorrected
 					{
 						esw = 0.0;
 					}
-					ed = Lvap / (rdsk + rdcl) * Adu * (1.0 - wetsk) * (vpa - vpts); // diffusion heat flux
-
-					double vb1 = tsk_set - tsk; // difference for the volume blood flow calculation
-					double vb2 = tcore[j - 1] - tc_set; //  idem
+					 // diffusion heat flux
+					ed = Lvap / (rdsk + rdcl) * Adu * (1.0 - wetsk) * (vpa - vpts);
+					// difference for the volume blood flow calculation
+					double vb1 = tsk_set - tsk; 
+					//  idem
+					double vb2 = tcore[j - 1] - tc_set; 
 					if (vb2 < 0.0)
 					{
 						vb2 = 0.0;
@@ -443,8 +427,6 @@ public class VdiPETCorrected
 			}
 			for (int k=0;k<20;k++)
 			{
-//					for k in range(20):
-//						g100=0;
 				g100=false;
 				if (count1 == 3.0 && (j != 2 && j != 5))
 				{
@@ -530,9 +512,12 @@ public class VdiPETCorrected
 				}
 			}
 			// water loss
-			double ws = swm * 3600.0 * 1000.0; // sweating
-			double wd = ed / Lvap * 3600.0 * (-1000.0); // diffusion = perspiration
-			double wr = Eres / Lvap * 3600.0 * (-1000.0); // respiration latent
+			// sweating
+			double ws = swm * 3600.0 * 1000.0; 
+			// diffusion = perspiration
+			double wd = ed / Lvap * 3600.0 * (-1000.0); 
+			// respiration latent
+			double wr = Eres / Lvap * 3600.0 * (-1000.0); 
 			double wsum = ws + wr + wd;
 			if (j - 3 < 0)
 			{
@@ -553,18 +538,21 @@ public class VdiPETCorrected
 		return returnValue;
 	}
 
-	public double[] pet(double tc,double tsk,double tcl,double ta_init, double esw_real, double mbody, double ht, String sexStr, 
-			double age, double tbody_set, double Adu, double Lvap, double p, double po, double feff, double cair,
-			double emsk, double sigm, double rdsk, double rdcl, double emcl)
+	public double[] pet(double tc,double tsk,double tcl,double ta_init, double esw_real )
 	{
 		double[] returnValue = new double[6];
 		double met_base,esw=0.0,xx=0.0;
 		double enbal=0.0;
+		
 	    // Input variables of the PET reference situation:
-		double icl_ref= 0.9; // clo
-		double M_activity_ref=80; // W
-		double v_air_ref=0.1; // m/s
-		double vpa_ref=12; // hPa
+		// clo
+		double icl_ref= 0.9; 
+		// W
+		double M_activity_ref=80; 
+		// m/s
+		double v_air_ref=0.1; 
+		 // hPa
+		double vpa_ref=12;
 		double icl=icl_ref;
 
 		double tx = ta_init;
@@ -585,9 +573,10 @@ public class VdiPETCorrected
 		}
 		// breathing flow rate
 		double rtv_ref = (M_activity_ref + met_base) * 1.44 * Math.pow(10.0, -6.0);
-
-		double swm = 304.94 * (tbody - tbody_set) * Adu / 3600000.0; //sweating flow rate 
-		double vpts = 6.11 * Math.pow(10.0, 7.45 * tsk / (235.0 + tsk)); // saturated vapour pressure at skin surface
+		//sweating flow rate 
+		double swm = 304.94 * (tbody - tbody_set) * Adu / 3600000.0; 
+		// saturated vapour pressure at skin surface
+		double vpts = 6.11 * Math.pow(10.0, 7.45 * tsk / (235.0 + tsk)); 
 		if (tbody <= tbody_set)
 		{
 			swm = 0.0;
@@ -611,9 +600,12 @@ public class VdiPETCorrected
 	    // Increase of the exchange area depending on the clothing level
 		double fcl = 1 + (0.31 * icl);
 		double Acl = Adu * facl + Adu * (fcl - 1.0);
-		double hm = 0.633 * hc / (p * cair); // Evaporation coefficient [W/(m^2*Pa)]
-		double fec = 1.0 / (1.0 + 0.92 * hc * 0.155*icl_ref); // vapour transfer efficiency for reference clothing
-		double emax = hm * (vpa_ref - vpts) * Adu * Lvap * fec ;// max latetn flux for the reference vapour pressure 12 hPa
+		// Evaporation coefficient [W/(m^2*Pa)]
+		double hm = 0.633 * hc / (p * cair); 
+		// vapour transfer efficiency for reference clothing
+		double fec = 1.0 / (1.0 + 0.92 * hc * 0.155*icl_ref); 
+		// max latetn flux for the reference vapour pressure 12 hPa
+		double emax = hm * (vpa_ref - vpts) * Adu * Lvap * fec ;
 		double wetsk = esweat / emax;
 		// skin wettedness
 		if (wetsk > 1.0)
@@ -645,7 +637,8 @@ public class VdiPETCorrected
 			// convection
 			double cbare = hc * (tx - tsk) * Adu * (1.0 - facl);
 			double cclo = hc * (tx - tcl) * Acl;
-			double csum = cbare + cclo; // Recalculation of the convective losses
+			// Recalculation of the convective losses
+			double csum = cbare + cclo; 
 			// breathing
 			double texp = 0.47 * tx + 21.0;
 			double Cres = cair * (tx - texp) * rtv_ref;

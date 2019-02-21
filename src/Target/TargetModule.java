@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TreeMap;
 
-//import Target.HTC.VdiPETCorrected;
+import Target.HTC.VdiPETCorrected;
 
 public class TargetModule
 {
@@ -36,7 +36,7 @@ public class TargetModule
 	private TsEbW tsEbW = new TsEbW();
 	private UTCI utciInstance = new UTCI();
 	
-//	private VdiPETCorrected petInstance = new VdiPETCorrected();
+	private VdiPETCorrected petInstance = new VdiPETCorrected();
 	
 	private TbRurSolver tbRurSolverOld = new TbRurSolver();
 	
@@ -56,8 +56,8 @@ public class TargetModule
 	public static final int FOR_TAB_UTCI_FID_INDEX = 0;
 	public static final int FOR_TAB_UTCI_tmrt_INDEX = 1;
 	public static final int FOR_TAB_UTCI_utci_INDEX = 2;
-	public static final int FOR_TAB_UTCI_dte_INDEX = 3;
-	public static final int FOR_TAB_UTCI_PET_INDEX = 4;
+	public static final int FOR_TAB_UTCI_PET_INDEX = 3;
+	public static final int FOR_TAB_UTCI_dte_INDEX = 4;
 
 	private static final String ROOF_KEY = "roof";
 	private static final String ROAD_KEY = "road";
@@ -572,27 +572,33 @@ public class TargetModule
 	                    	{
 	                    		utci = utciCached;
 	                    	}
-	                        
-  
-	                		double po = 1013.25;  // atmospheric pressure [hPa]
-	                		double p = 1013.25;  // real pressure [hPa]	                		
+	                                       		
 	                		double Tair=Tac;  //air temp in C
 	                		double Tmrt=tmrt;  //tmrt in C
-	                		double v_air=Ucan; //air velocity in m/s 	
+	                		double v_air=Ucan; //air velocity in m/s 
+	                		double M_activity=80; // [W]
+	                		double icl=0.9; //clothing level
+	                		double rh = metRH0;
 	                		
 	                		// PET is experimental and hasn't been added yet
-//	                		String petCacheKey = po+ " " + p+ " " + Tair+ " " + Tmrt+ " " + v_air;	                		
-//	                      	Double petCached = petCache.get(petCacheKey);
-//	                    	if (petCached == null)
-//	                    	{
-//	                    		pet = petInstance.petCalculationDefault(po, p, Tair, Tmrt, v_air);
-//	                    		petCache.put(petCacheKey, pet);
-//	                    		
-//	                    	}
-//	                    	else
-//	                    	{
-//	                    		pet = petCached;
-//	                    	}	                        
+	                		String petCacheKey = Tair+ " " + Tmrt+ " " + rh+ " " + v_air+ " " + M_activity;	                		
+	                      	Double petCached = petCache.get(petCacheKey);
+	                    	if (petCached == null)
+	                    	{	                    		
+	                    		double[] petSystemreturnValue = petInstance.system(Tair, Tmrt, rh, v_air, M_activity, icl);		
+	                    		double[] petReturnValue = petInstance.pet(petSystemreturnValue[VdiPETCorrected.tcore2_index], 
+	                    				petSystemreturnValue[VdiPETCorrected.tsk2_index], 
+	                    				petSystemreturnValue[VdiPETCorrected.tcl2_index], 
+	                    				Tair, petSystemreturnValue[VdiPETCorrected.esw2_index]);
+	                    		pet = petReturnValue[VdiPETCorrected.tx_index];
+	                    		petCache.put(petCacheKey, pet);
+//	                    		System.out.println(pet + "=" + petCacheKey);
+	                    	}
+	                    	else
+	                    	{
+	                    		pet = petCached;
+	                    	}	
+	                    	
 	                    }
 	    	                    
 	                	TreeMap<Integer,Double> for_tab_tmrt_utci = new TreeMap<Integer,Double>();
@@ -600,10 +606,9 @@ public class TargetModule
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_FID_INDEX,fid);
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_tmrt_INDEX,tmrt);
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_utci_INDEX,utci);
+	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_PET_INDEX,pet);
 	                	double dteDouble = (double)dte.getTime();
 	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_dte_INDEX,dteDouble);
-//	                	for_tab_tmrt_utci.put(FOR_TAB_UTCI_PET_INDEX,pet);
-	                	
 	                	mod_rslts_tmrt_utci.add(for_tab_tmrt_utci);	          
 	                }
 	                
@@ -760,7 +765,7 @@ public TreeMap<Integer,Double> calcLoop(ArrayList<ArrayList<Double>> lc_data,int
     double Tac = -999.0;
     if (cfm.getValue("include roofs").equals("Y"))
     {
-        if (cfm.getValue("direct roofs").equals("Y"))
+        if (Constants.directRoofs)
         {
 //            ## this connects the roofs directly to the canyon via 2 resistances [this one works best]
             Tac =  ((mod_data_ts_[i][fg][concIndex]*httc_can*LC.get(LCData.conc)) 

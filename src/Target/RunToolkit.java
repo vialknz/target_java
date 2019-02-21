@@ -50,8 +50,8 @@ latEdge=-34.79829
 lonEdge=138.79829
 latResolution=0.00088
 lonResolution=0.00110
-### disabled output options are Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Utb,Tsurfwall,TsurfCan,TsurfHorz,Ucan
-disableOutput=Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan
+### disabled output options are Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Utb,Tsurfwall,TsurfCan,TsurfHorz,Ucan,Pet
+disableOutput=Fid,Utb,TsurfWall,TsurfCan,TsurfHorz,Ucan,Pet
 
 #override default parameters, remove '#' comment to use
 #z0m_rur=0.45

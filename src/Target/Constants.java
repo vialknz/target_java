@@ -103,7 +103,7 @@ public class Constants
 	public static TreeMap<String,Double> cs_beta  = new TreeMap<String,Double>() 
 	{{this.put("roof", 3.0); this.put("wall", 3.0); this.put("road",3.0); this.put("conc",3.0); this.put("dry",3.0); this.put("irr",3.0); this.put("Veg",3.0);}};
 	
-
+	public static boolean directRoofs=true;
 
 
 //	#cs['c1'] = 5.3e-13 # emperical constant from Holstag and Van Ulden (1983) used for Ld calcs
